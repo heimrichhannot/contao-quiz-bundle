@@ -43,7 +43,7 @@ $GLOBALS['TL_DCA']['tl_quiz_answer_solving'] = [
         'operations'        => [
             'edit'       => [
                 'label' => &$GLOBALS['TL_LANG']['tl_quiz_answer_solving']['edit'],
-                'href'  => 'table=tl_content',
+                'href'  => 'table=tl_content&ptable=tl_quiz_answer_solving',
                 'icon'  => 'edit.gif',
             ],
             'editheader' => [

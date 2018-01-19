@@ -12,6 +12,13 @@ array_insert($GLOBALS['BE_MOD']['content'], 4, [
 
 
 /**
+ * Frontend modules
+ */
+array_insert($GLOBALS['FE_MOD']['quiz'], 3, [
+    'quiz' => 'HeimrichHannot\QuizBundle\Module\ModuleQuiz',
+]);
+
+/**
  * Models
  */
 $GLOBALS['TL_MODELS']['tl_quiz']                = 'HeimrichHannot\QuizBundle\Model\QuizModel';

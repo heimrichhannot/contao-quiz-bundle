@@ -1,0 +1,8 @@
+parameters:
+  hh.quizbundle.backend.content-table: tl_quiz_question
+  hh.quizbundle.backend.content-ptable: tl_quiz
+services:
+  hh.quiz-bundle.backend.tl_content:
+    class: HeimrichHannot\QuizBundle\Backend\TlContent
+    arguments:
+        - ['%hh.quizbundle.backend.content-table%', '%hh.quizbundle.backend.content-ptable%']

@@ -36,8 +36,9 @@ $lang['stop'][1] = 'Die Antwort-Beschreibung nur bis diesem Tag auf der Webseite
 $lang['title'][0] = 'Titel';
 $lang['title'][1] = 'Geben Sie hier bitte den Titel ein.';
 
+// question
 $lang['solving'][0] = 'Antwort-Beschreibung Eintragen';
-$lang['solving'][1] = 'Geben Sie hier bitte eine Beschreibung ein.';
+$lang['answer'][1]  = 'Geben Sie hier bitte eine Beschreibung ein.';
 
 /**
  * Legends
