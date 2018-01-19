@@ -41,24 +41,40 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = [
             ],
         ],
         'operations'        => [
-            'edit'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz']['edit'],
-                'href'  => 'act=edit',
+            'edit'       => [
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_question']['edit'],
+                'href'  => 'table=tl_content&ptable=tl_quiz_question',
                 'icon'  => 'edit.gif',
             ],
-            'copy'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz']['copy'],
+            'editheader' => [
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_question']['editheader'],
+                'href'  => 'act=edit',
+                'icon'  => 'header.svg',
+            ],
+            'answer'     => [
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_question']['answer'],
+                'href'  => 'table=tl_quiz_answer',
+                'icon'  => 'editor.svg',
+            ],
+            'copy'       => [
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_question']['copy'],
                 'href'  => 'act=copy',
                 'icon'  => 'copy.gif',
             ],
-            'delete' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_quiz']['delete'],
+            'delete'     => [
+                'label'      => &$GLOBALS['TL_LANG']['tl_quiz_question']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
             ],
-            'show'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz']['show'],
+            'toggle'     => [
+                'label'           => &$GLOBALS['TL_LANG']['tl_quiz_question']['toggle'],
+                'icon'            => 'visible.svg',
+                'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+                'button_callback' => ['tl_quiz_question', 'toggleIcon'],
+            ],
+            'show'       => [
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_question']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
             ],
@@ -78,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
         'pid'           => [
-            'foreignKey' => 'tl_quit.id',
+            'foreignKey' => 'tl_quiz.id',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
@@ -242,3 +258,108 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = [
         ],
     ],
 ];
+
+class tl_quiz_question extends \Contao\Backend
+{
+    public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+    {
+        $user = \Contao\BackendUser::getInstance();
+
+        if (strlen(\Contao\Input::get('tid'))) {
+            $this->toggleVisibility(\Contao\Input::get('tid'), (\Contao\Input::get('state') == 1), (@func_get_arg(12) ?: null));
+            $this->redirect($this->getReferer());
+        }
+
+        // Check permissions AFTER checking the tid, so hacking attempts are logged
+        if (!$user->hasAccess('tl_quiz_question::published', 'alexf')) {
+            return '';
+        }
+
+        $href .= '&amp;tid=' . $row['id'] . '&amp;state=' . ($row['published'] ? '' : 1);
+
+        if (!$row['published']) {
+            $icon = 'invisible.svg';
+        }
+
+        return '<a href="' . $this->addToUrl($href) . '" title="' . \StringUtil::specialchars($title) . '"' . $attributes . '>' . \Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"') . '</a> ';
+    }
+
+    public function toggleVisibility($intId, $blnVisible, \DataContainer $dc = null)
+    {
+        $user     = \Contao\BackendUser::getInstance();
+        $database = \Contao\Database::getInstance();
+
+        // Set the ID and action
+        \Contao\Input::setGet('id', $intId);
+        \Contao\Input::setGet('act', 'toggle');
+
+        if ($dc) {
+            $dc->id = $intId; // see #8043
+        }
+
+        // Trigger the onload_callback
+        if (is_array($GLOBALS['TL_DCA']['tl_quiz_question']['config']['onload_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_quiz_question']['config']['onload_callback'] as $callback) {
+                if (is_array($callback)) {
+                    $this->import($callback[0]);
+                    $this->{$callback[0]}->{$callback[1]}($dc);
+                } elseif (is_callable($callback)) {
+                    $callback($dc);
+                }
+            }
+        }
+
+        // Check the field access
+        if (!$user->hasAccess('tl_quiz_question::published', 'alexf')) {
+            throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to publish/unpublish quiz item ID ' . $intId . '.');
+        }
+
+        // Set the current record
+        if ($dc) {
+            $objRow = $database->prepare("SELECT * FROM tl_quiz_question WHERE id=?")->limit(1)->execute($intId);
+
+            if ($objRow->numRows) {
+                $dc->activeRecord = $objRow;
+            }
+        }
+
+        $objVersions = new \Versions('tl_quiz_question', $intId);
+        $objVersions->initialize();
+
+        // Trigger the save_callback
+        if (is_array($GLOBALS['TL_DCA']['tl_quiz_question']['fields']['published']['save_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_quiz_question']['fields']['published']['save_callback'] as $callback) {
+                if (is_array($callback)) {
+                    $this->import($callback[0]);
+                    $blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, $dc);
+                } elseif (is_callable($callback)) {
+                    $blnVisible = $callback($blnVisible, $dc);
+                }
+            }
+        }
+
+        $time = time();
+
+        // Update the database
+        $database->prepare("UPDATE tl_quiz_question_question SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")->execute($intId);
+
+        if ($dc) {
+            $dc->activeRecord->tstamp    = $time;
+            $dc->activeRecord->published = ($blnVisible ? '1' : '');
+        }
+
+        // Trigger the onsubmit_callback
+        if (is_array($GLOBALS['TL_DCA']['tl_quiz_question']['config']['onsubmit_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_quiz_question']['config']['onsubmit_callback'] as $callback) {
+                if (is_array($callback)) {
+                    $this->import($callback[0]);
+                    $this->{$callback[0]}->{$callback[1]}($dc);
+                } elseif (is_callable($callback)) {
+                    $callback($dc);
+                }
+            }
+        }
+
+        $objVersions->create();
+    }
+}
