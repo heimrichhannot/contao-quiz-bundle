@@ -18,6 +18,13 @@ array_insert($GLOBALS['FE_MOD']['quiz'], 3, [
     'quiz' => 'HeimrichHannot\QuizBundle\Module\ModuleQuiz',
 ]);
 
+
+/**
+ * Permissions
+ */
+$GLOBALS['TL_PERMISSIONS'][] = 'quizs';
+$GLOBALS['TL_PERMISSIONS'][] = 'quizp';
+
 /**
  * Models
  */

@@ -27,7 +27,7 @@ namespace HeimrichHannot\QuizBundle\Model;
  * @property string  $start
  * @property string  $stop
  */
-class QuizQuestionModel extends \Model
+class QuizQuestionModel extends \Contao\Model
 {
     protected static $strTable = 'tl_quiz_question';
 }

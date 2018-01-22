@@ -6,3 +6,7 @@ services:
     class: HeimrichHannot\QuizBundle\Backend\TlContent
     arguments:
         - ['%hh.quizbundle.backend.content-table%', '%hh.quizbundle.backend.content-ptable%']
+  huh.quiz.choice.template:
+      class: HeimrichHannot\QuizBundle\Choice\TemplateChoice
+      arguments:
+        - "@contao.framework"
