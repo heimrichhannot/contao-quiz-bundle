@@ -1,0 +1,15 @@
+{#{% if hasText is not empty and hasText is not null %}#}
+        {#<div>#}
+            {#{{ text }}#}
+        {#</div>#}
+    {#{% endif %}#}
+
+<a href="{{ href }}">
+    {% if images.singleSRC|default() %}
+        {{ include('@HeimrichHannotContaoUtils/image.html.twig', images.singleSRC) }}
+    {% endif %}
+    {% if(hasContentElement) %}
+        {{ contentElement|raw }}
+    {% endif %}
+    {{ answerText|raw }}
+</a>

@@ -10,3 +10,19 @@ services:
       class: HeimrichHannot\QuizBundle\Choice\TemplateChoice
       arguments:
         - "@contao.framework"
+  huh.quiz.manager:
+      class: HeimrichHannot\QuizBundle\Manager\QuizManager
+      arguments:
+          - "@contao.framework"
+  huh.quiz.question.manager:
+      class: HeimrichHannot\QuizBundle\Manager\QuizQuestionManager
+      arguments:
+          - "@contao.framework"
+  huh.quiz.answer.manager:
+      class: HeimrichHannot\QuizBundle\Manager\QuizAnswerManager
+      arguments:
+          - "@contao.framework"
+  huh.quiz.answer.solving.manager:
+      class: HeimrichHannot\QuizBundle\Manager\QuizAnswerSolvingManager
+      arguments:
+          - "@contao.framework"

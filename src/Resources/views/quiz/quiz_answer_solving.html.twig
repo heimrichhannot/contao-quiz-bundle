@@ -1,5 +1,9 @@
 <div>
+    {% if images.singleSRC|default() %}
+        {{ include('@HeimrichHannotContaoUtils/image.html.twig', images.singleSRC) }}
+    {% endif %}
+
     {{ answerSolving |raw }}
 
-    <a href="{{ nextUrl }}">Nächste Frage</a>
+    <a href="{{ href }}">Nächste Frage</a>
 </div>

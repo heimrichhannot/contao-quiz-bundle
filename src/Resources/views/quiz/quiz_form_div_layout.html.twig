@@ -1,8 +1,0 @@
-{% form_theme form 'form_div_layout.html.twig' %}
-
-{% block body %}
-    <p class="count">{{ itemsFoundText }}</p>
-    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
-    {{ form_errors(form) }}
-    {{ form_end(form) }}
-{% endblock %}

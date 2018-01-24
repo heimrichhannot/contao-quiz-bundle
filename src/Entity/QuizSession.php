@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class QuizSession
 {
-    const SCORE_NAME = 'score';
+    const SCORE_NAME          = 'score';
+    const USED_QUESTIONS_NAME = 'usedQuestions';
 
     /**
      * Symfony session object.
@@ -83,5 +84,19 @@ class QuizSession
         if ($this->session->has($key)) {
             $this->session->remove($key);
         }
+    }
+
+    /**
+     * increase the score +1
+     */
+    public function increaseScore()
+    {
+        $score = $this->getData(static::SCORE_NAME);
+        if (empty($score)) {
+            $score = 1;
+        } else {
+            $score = $score[0] + 1;
+        }
+        $this->setData(static::SCORE_NAME, [$score]);
     }
 }
