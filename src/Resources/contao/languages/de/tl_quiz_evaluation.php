@@ -5,7 +5,7 @@
  * @license LGPL-3.0-or-later
  */
 
-$lang = &$GLOBALS['TL_LANG']['tl_quiz_score'];
+$lang = &$GLOBALS['TL_LANG']['tl_quiz_evaluation'];
 
 
 /**
@@ -37,16 +37,16 @@ $lang['stop'][1] = 'Die Auswertung nur bis diesem Tag auf der Webseite anzeigen.
 $lang['title'][0] = 'Titel';
 $lang['title'][1] = 'Geben Sie hier bitte den Titel ein.';
 
-$lang['scoreText'] = ['Auswertung hinzufügen', ''];
+$lang['evaluationText'] = ['Auswertung hinzufügen', ''];
 
 /**
  * Legends
  */
-$lang['general_legend'] = 'Allgemeine Einstellungen';
-$lang['publish_legend'] = 'Veröffentlichung';
-$lang['score_legend']   = 'Auswertung';
-$lang['image_legend']   = 'Bild Einstellungen';
-$lang['expert_legend']  = 'Experten Einstellungen';
+$lang['general_legend']    = 'Allgemeine Einstellungen';
+$lang['publish_legend']    = 'Veröffentlichung';
+$lang['evaluation_legend'] = 'Auswertung';
+$lang['image_legend']      = 'Bild Einstellungen';
+$lang['expert_legend']     = 'Experten Einstellungen';
 
 /**
  * Buttons

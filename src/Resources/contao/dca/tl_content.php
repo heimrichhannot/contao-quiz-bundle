@@ -30,6 +30,11 @@ if (Input::get('do') == 'quiz') {
             $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][]                     = \System::getContainer()->get('hh.quiz-bundle.backend.tl_content')->checkPermission('tl_quiz_answer_solving', 'tl_quiz_answer');
             $GLOBALS['TL_DCA']['tl_content']['list']['operations']['toggle']['button_callback'] = ['tl_content_quiz', 'toggleIcon'];
             break;
+        case 'tl_quiz_evaluation';
+            $GLOBALS['TL_DCA']['tl_content']['config']['ptable']                                = 'tl_quiz_evaluation';
+            $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][]                     = \System::getContainer()->get('hh.quiz-bundle.backend.tl_content')->checkPermission('tl_quiz_evaluation', 'tl_quiz');
+            $GLOBALS['TL_DCA']['tl_content']['list']['operations']['toggle']['button_callback'] = ['tl_content_quiz', 'toggleIcon'];
+            break;
     }
 }
 

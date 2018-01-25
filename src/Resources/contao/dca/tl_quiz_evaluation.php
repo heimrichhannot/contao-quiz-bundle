@@ -3,7 +3,7 @@
 \Contao\Controller::loadDataContainer('tl_module');
 \Contao\System::loadLanguageFile('tl_module');
 
-$GLOBALS['TL_DCA']['tl_quiz_score'] = [
+$GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
     'config'      => [
         'dataContainer'     => 'Table',
         'ptable'            => 'tl_quiz',
@@ -42,34 +42,34 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
         ],
         'operations'        => [
             'edit'       => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz_score']['edit'],
-                'href'  => 'table=tl_content&ptable=tl_quiz_answer',
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['edit'],
+                'href'  => 'table=tl_content&ptable=tl_quiz_evaluation',
                 'icon'  => 'edit.gif',
             ],
             'editheader' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz_score']['editheader'],
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['editheader'],
                 'href'  => 'act=edit',
                 'icon'  => 'header.svg',
             ],
             'copy'       => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz_score']['copy'],
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['copy'],
                 'href'  => 'act=copy',
                 'icon'  => 'copy.gif',
             ],
             'delete'     => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_quiz_score']['delete'],
+                'label'      => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
             ],
             'toggle'     => [
-                'label'           => &$GLOBALS['TL_LANG']['tl_quiz_score']['toggle'],
+                'label'           => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['toggle'],
                 'icon'            => 'visible.gif',
                 'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
                 'button_callback' => ['tl_quiz_answer', 'toggleIcon'],
             ],
             'show'       => [
-                'label' => &$GLOBALS['TL_LANG']['tl_quiz_score']['show'],
+                'label' => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
             ],
@@ -77,7 +77,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
     ],
     'palettes'    => [
         '__selector__' => ['addImage', 'overwriteMeta', 'published'],
-        'default'      => '{general_legend},title,author;{score_legend},scoreText;{image_legend},addImage;{expert_legend:hide},cssClass;{publish_legend},published',
+        'default'      => '{general_legend},title,author;{evaluation_legend},evaluationText;{image_legend},addImage;{expert_legend:hide},cssClass;{publish_legend},published',
     ],
     'subpalettes' => [
         'addImage'      => 'singleSRC,size,floating,imagemargin,fullsize,overwriteMeta',
@@ -85,57 +85,57 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
         'published'     => 'start,stop',
     ],
     'fields'      => [
-        'id'            => [
+        'id'             => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
-        'pid'           => [
+        'pid'            => [
             'foreignKey' => 'tl_quiz_question.id',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
-        'tstamp'        => [
+        'tstamp'         => [
             'label' => &$GLOBALS['TL_LANG']['tl_quiz_answer']['tstamp'],
             'sql'   => "int(10) unsigned NOT NULL default '0'",
         ],
-        'dateAdded'     => [
+        'dateAdded'      => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
-        'title'         => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['title'],
+        'title'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['title'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'mandatory' => true],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'published'     => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['published'],
+        'published'      => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['published'],
             'exclude'   => true,
             'filter'    => true,
             'inputType' => 'checkbox',
             'eval'      => ['doNotCopy' => true, 'submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'start'         => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['start'],
+        'start'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['start'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'stop'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['stop'],
+        'stop'           => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['stop'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'author'        => [
-            'label'      => &$GLOBALS['TL_LANG']['tl_quiz_score']['author'],
+        'author'         => [
+            'label'      => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['author'],
             'default'    => BackendUser::getInstance()->id,
             'exclude'    => true,
             'search'     => true,
@@ -148,35 +148,35 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'hasOne', 'load' => 'eager'],
         ],
-        'cssClass'      => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['cssClass'],
+        'cssClass'       => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['cssClass'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'addImage'      => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['addImage'],
+        'addImage'       => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['addImage'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => ['submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'overwriteMeta' => [
+        'overwriteMeta'  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['overwriteMeta'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50 clr'],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'singleSRC'     => [
+        'singleSRC'      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['singleSRC'],
             'exclude'   => true,
             'inputType' => 'fileTree',
             'eval'      => ['fieldType' => 'radio', 'filesOnly' => true, 'extensions' => Config::get('validImageTypes'), 'mandatory' => true],
             'sql'       => "binary(16) NULL",
         ],
-        'alt'           => [
+        'alt'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['alt'],
             'exclude'   => true,
             'search'    => true,
@@ -184,7 +184,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'imageTitle'    => [
+        'imageTitle'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['imageTitle'],
             'exclude'   => true,
             'search'    => true,
@@ -192,7 +192,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'size'          => [
+        'size'           => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['size'],
             'exclude'          => true,
             'inputType'        => 'imageSize',
@@ -203,7 +203,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             },
             'sql'              => "varchar(64) NOT NULL default ''",
         ],
-        'imagemargin'   => [
+        'imagemargin'    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['imagemargin'],
             'exclude'   => true,
             'inputType' => 'trbl',
@@ -211,7 +211,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'eval'      => ['includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'imageUrl'      => [
+        'imageUrl'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['imageUrl'],
             'exclude'   => true,
             'search'    => true,
@@ -219,7 +219,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'eval'      => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'caption'       => [
+        'caption'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['caption'],
             'exclude'   => true,
             'search'    => true,
@@ -227,7 +227,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'eval'      => ['maxlength' => 255, 'allowHtml' => true, 'tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'floating'      => [
+        'floating'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['floating'],
             'default'   => 'above',
             'exclude'   => true,
@@ -237,15 +237,15 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'sql'       => "varchar(12) NOT NULL default ''",
         ],
-        'fullsize'      => [
+        'fullsize'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['fullsize'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => ['tl_class' => 'w50 m12'],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'scoreText'     => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_score']['scoreText'],
+        'evaluationText' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['evaluationText'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'textarea',
@@ -255,7 +255,7 @@ $GLOBALS['TL_DCA']['tl_quiz_score'] = [
     ],
 ];
 
-class tl_quiz_score extends \Contao\Backend
+class tl_quiz_evaluation extends \Contao\Backend
 {
 
     public function listChildren($arrRow)
@@ -305,7 +305,7 @@ class tl_quiz_score extends \Contao\Backend
             case 'delete':
             case 'toggle':
             case 'feature':
-                $objArchive = $database->prepare("SELECT pid FROM tl_quiz_score WHERE id=?")->limit(1)->execute($id);
+                $objArchive = $database->prepare("SELECT pid FROM tl_quiz_evaluation WHERE id=?")->limit(1)->execute($id);
 
                 if ($objArchive->numRows < 1) {
                     throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid quiz_answer item ID ' . $id . '.');
@@ -326,7 +326,7 @@ class tl_quiz_score extends \Contao\Backend
                     throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to access quiz_answer archive ID ' . $id . '.');
                 }
 
-                $objArchive = $database->prepare("SELECT id FROM tl_quiz_score WHERE pid=?")->execute($id);
+                $objArchive = $database->prepare("SELECT id FROM tl_quiz_evaluation WHERE pid=?")->execute($id);
 
                 if ($objArchive->numRows < 1) {
                     throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid quiz_answer archive ID ' . $id . '.');
@@ -360,7 +360,7 @@ class tl_quiz_score extends \Contao\Backend
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (!$user->hasAccess('tl_quiz_score::published', 'alexf')) {
+        if (!$user->hasAccess('tl_quiz_evaluation::published', 'alexf')) {
             return '';
         }
 
@@ -387,8 +387,8 @@ class tl_quiz_score extends \Contao\Backend
         }
 
         // Trigger the onload_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_quiz_score']['config']['onload_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_quiz_score']['config']['onload_callback'] as $callback) {
+        if (is_array($GLOBALS['TL_DCA']['tl_quiz_evaluation']['config']['onload_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_quiz_evaluation']['config']['onload_callback'] as $callback) {
                 if (is_array($callback)) {
                     $this->import($callback[0]);
                     $this->{$callback[0]}->{$callback[1]}($dc);
@@ -399,25 +399,25 @@ class tl_quiz_score extends \Contao\Backend
         }
 
         // Check the field access
-        if (!$user->hasAccess('tl_quiz_score::published', 'alexf')) {
+        if (!$user->hasAccess('tl_quiz_evaluation::published', 'alexf')) {
             throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to publish/unpublish quiz_answer item ID ' . $intId . '.');
         }
 
         // Set the current record
         if ($dc) {
-            $objRow = $database->prepare("SELECT * FROM tl_quiz_score WHERE id=?")->limit(1)->execute($intId);
+            $objRow = $database->prepare("SELECT * FROM tl_quiz_evaluation WHERE id=?")->limit(1)->execute($intId);
 
             if ($objRow->numRows) {
                 $dc->activeRecord = $objRow;
             }
         }
 
-        $objVersions = new \Versions('tl_quiz_score', $intId);
+        $objVersions = new \Versions('tl_quiz_evaluation', $intId);
         $objVersions->initialize();
 
         // Trigger the save_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_quiz_score']['fields']['published']['save_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_quiz_score']['fields']['published']['save_callback'] as $callback) {
+        if (is_array($GLOBALS['TL_DCA']['tl_quiz_evaluation']['fields']['published']['save_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_quiz_evaluation']['fields']['published']['save_callback'] as $callback) {
                 if (is_array($callback)) {
                     $this->import($callback[0]);
                     $blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, $dc);
@@ -430,7 +430,7 @@ class tl_quiz_score extends \Contao\Backend
         $time = time();
 
         // Update the database
-        $database->prepare("UPDATE tl_quiz_score SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")->execute($intId);
+        $database->prepare("UPDATE tl_quiz_evaluation SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")->execute($intId);
 
         if ($dc) {
             $dc->activeRecord->tstamp    = $time;
@@ -438,8 +438,8 @@ class tl_quiz_score extends \Contao\Backend
         }
 
         // Trigger the onsubmit_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_quiz_score']['config']['onsubmit_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_quiz_score']['config']['onsubmit_callback'] as $callback) {
+        if (is_array($GLOBALS['TL_DCA']['tl_quiz_evaluation']['config']['onsubmit_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_quiz_evaluation']['config']['onsubmit_callback'] as $callback) {
                 if (is_array($callback)) {
                     $this->import($callback[0]);
                     $this->{$callback[0]}->{$callback[1]}($dc);

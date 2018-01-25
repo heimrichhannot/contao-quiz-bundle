@@ -15,7 +15,7 @@ use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
 use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 use Contao\Model\Collection;
-use HeimrichHannot\QuizBundle\Model\QuizScoreModel;
+use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
 use HeimrichHannot\Request\Request;
 use Patchwork\Utf8;
 
@@ -45,9 +45,9 @@ class ModuleQuiz extends Module
     protected $answer;
 
     /**
-     * @var string $score
+     * @var string $evaluation
      */
-    protected $score;
+    protected $evaluation;
 
     /**
      * @var string $quiz
@@ -99,7 +99,7 @@ class ModuleQuiz extends Module
         }
 
         if (Request::hasGet('s')) {
-            $this->score = Request::getGet('s');
+            $this->evaluation = Request::getGet('s');
         }
 
         /**
@@ -133,8 +133,8 @@ class ModuleQuiz extends Module
             return $this->Template->quiz = $this->parseAnswerSolving($this->answer);
         }
 
-        if ($this->score) {
-            return $this->Template->quiz = $this->parseQuizScore();
+        if ($this->evaluation) {
+            return $this->Template->quiz = $this->parseQuizEvaluation();
         }
 
         if ($this->question) {
@@ -357,23 +357,23 @@ class ModuleQuiz extends Module
     }
 
     /**
-     * get the quiz score
+     * get the quiz evaluation
      *
      * @return string
      */
-    protected function parseQuizScore()
+    protected function parseQuizEvaluation()
     {
         $score                 = $this->session->getData(QuizSession::SCORE_NAME);
         $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $this->count]);
-        $quizScoreModel        = \System::getContainer()->get('huh.quiz.score.manager')->findPublishedByPid($this->score);
-        if (null == $quizScoreModel) {
-            return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_score.html.twig', $templateData);
+        $quizEvaluationModel   = \System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($this->evaluation);
+        if (null == $quizEvaluationModel) {
+            return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
         }
-        foreach ($quizScoreModel as $item) {
-            $templateData['strTemplate'] .= $this->parseModel($item, $item->scoreText);
+        foreach ($quizEvaluationModel as $item) {
+            $templateData['strTemplate'] .= $this->parseModel($item, $item->evaluationText);
         }
 
-        return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_score.html.twig', $templateData);
+        return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
     }
 
     /**
@@ -384,7 +384,7 @@ class ModuleQuiz extends Module
     protected function parseModel($item, $text)
     {
         $templateData['text']              = $text;
-        $item                              = $this->getContentElementByModel($item, QuizScoreModel::getTable());
+        $item                              = $this->getContentElementByModel($item, QuizEvaluationModel::getTable());
         $templateData['item']              = $item;
         $templateData['hasContentElement'] = $item->hasContentElement;
         $templateData['contentElement']    = $item->contentElement;

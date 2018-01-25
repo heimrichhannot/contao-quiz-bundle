@@ -17,7 +17,6 @@ class InsertTags extends \Frontend
 
     const CURRENT_SCORE = 'huh_quiz_current_score';
 
-
     /**
      * @param $strTag
      *

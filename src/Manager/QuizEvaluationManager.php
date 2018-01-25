@@ -9,9 +9,9 @@ namespace HeimrichHannot\QuizBundle\Manager;
 
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
-use HeimrichHannot\QuizBundle\Model\QuizScoreModel;
+use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
 
-class QuizScoreManager
+class QuizEvaluationManager
 {
     /**
      * @var ContaoFrameworkInterface
@@ -36,12 +36,12 @@ class QuizScoreManager
      * @param mixed $value
      * @param array $options
      *
-     * @return QuizScoreModel|null
+     * @return QuizEvaluationModel|null
      */
     public function findOneBy($column, $value, array $options = [])
     {
-        /** @var QuizScoreModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
+        /** @var QuizEvaluationModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
 
         return $adapter->findOneBy($column, $value, $options);
     }
@@ -53,12 +53,12 @@ class QuizScoreManager
      * @param mixed $value
      * @param array $options
      *
-     * @return \Contao\Model\Collection|QuizScoreModel|null
+     * @return \Contao\Model\Collection|QuizEvaluationModel|null
      */
     public function findBy($column, $value, array $options = [])
     {
-        /** @var QuizScoreModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
+        /** @var QuizEvaluationModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
 
         return $adapter->findBy($column, $value, $options);
     }
@@ -70,12 +70,12 @@ class QuizScoreManager
      * @param integer $intLimit   An optional limit
      * @param array   $arrOptions An optional options array
      *
-     * @return \Model\Collection|QuizScoreModel[]|QuizScoreModel|null A collection of models or null if there are no news
+     * @return \Model\Collection|QuizEvaluationModel[]|QuizEvaluationModel|null A collection of models or null if there are no news
      */
     public function findByPid($intId, $intLimit = 0, array $arrOptions = [])
     {
-        /** @var QuizScoreModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
+        /** @var QuizEvaluationModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
 
         $t          = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
@@ -98,12 +98,12 @@ class QuizScoreManager
      * @param integer $intLimit   An optional limit
      * @param array   $arrOptions An optional options array
      *
-     * @return \Model\Collection|QuizScoreModel[]|QuizScoreModel|null A collection of models or null if there are no news
+     * @return \Model\Collection|QuizEvaluationModel[]|QuizEvaluationModel|null A collection of models or null if there are no news
      */
     public function findPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
     {
-        /** @var QuizScoreModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
+        /** @var QuizEvaluationModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
 
         $t          = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];

@@ -10,12 +10,12 @@ namespace HeimrichHannot\QuizBundle\Model;
 /**
  * @property int    $id
  * @property int    $pid
- * @property string $scoreText
+ * @property string $evaluationText
  * @property string $dateAdded
  * @property string $tstamp
  *
  */
-class QuizScoreModel extends \Contao\Model
+class QuizEvaluationModel extends \Contao\Model
 {
-    protected static $strTable = 'tl_quiz_score';
+    protected static $strTable = 'tl_quiz_evaluation';
 }

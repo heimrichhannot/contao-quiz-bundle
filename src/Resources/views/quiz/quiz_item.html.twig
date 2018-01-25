@@ -1,11 +1,11 @@
 <div>
+    <div class="text">
+        {{ text|raw }}
+    </div>
     {% if images.singleSRC|default() %}
         {{ include('@HeimrichHannotContaoUtils/image.html.twig', images.singleSRC) }}
     {% endif %}
     {% if(hasContentElement) %}
         {{ contentElement|raw }}
     {% endif %}
-    <div class="text">
-        {{ text|raw }}
-    </div>
 </div>

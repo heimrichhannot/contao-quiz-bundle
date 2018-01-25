@@ -6,7 +6,7 @@
 $GLOBALS['TL_DCA']['tl_quiz'] = [
     'config'      => [
         'dataContainer'     => 'Table',
-        'ctable'            => ['tl_quiz_question', 'tl_quiz_score'],
+        'ctable'            => ['tl_quiz_question', 'tl_quiz_evaluation'],
         'enableVersioning'  => true,
         'onsubmit_callback' => [
             ['huh.utils.dca', 'setDateAdded'],
@@ -52,7 +52,7 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             ],
             'quizScore'  => [
                 'label' => &$GLOBALS['TL_LANG']['tl_quiz']['quizScore'],
-                'href'  => 'table=tl_quiz_score',
+                'href'  => 'table=tl_quiz_evaluation',
                 'icon'  => 'editor.svg',
             ],
             'copy'       => [
