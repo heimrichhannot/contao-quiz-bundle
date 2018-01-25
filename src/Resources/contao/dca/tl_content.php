@@ -36,9 +36,6 @@ if (Input::get('do') == 'quiz') {
 /**
  * Provide miscellaneous methods that are used by the data configuration array.
  *
- * @property Contao\News $News
- *
- * @author Leo Feyer <https://github.com/leofeyer>
  */
 class tl_content_quiz extends Backend
 {

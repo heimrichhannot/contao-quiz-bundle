@@ -1,4 +1,4 @@
 <?php $this->extend('block_unsearchable'); ?>
 <?php $this->block('content'); ?>
-<?= $this->form; ?>
+<?= $this->quiz; ?>
 <?php $this->endblock(); ?>

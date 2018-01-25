@@ -64,9 +64,9 @@ class QuizAnswerSolvingManager
     }
 
     /**
-     * Find published news items by their parent ID
+     * Find published answer solving by their parent ID
      *
-     * @param integer $intId      The news archive ID
+     * @param integer $intId      The answer ID
      * @param integer $intLimit   An optional limit
      * @param array   $arrOptions An optional options array
      *
@@ -103,5 +103,38 @@ class QuizAnswerSolvingManager
         }
 
         return \defined('BE_USER_LOGGED_IN') && true === BE_USER_LOGGED_IN;
+    }
+
+    /**
+     * Find one published answer solving by their parent ID
+     *
+     * @param integer $intId      The answer ID
+     * @param integer $intLimit   An optional limit
+     * @param array   $arrOptions An optional options array
+     *
+     * @return \Model\Collection|QuizAnswerSolvingModel[]|QuizAnswerSolvingModel|null A collection of models or null if there are no news
+     */
+    public function findOnePublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
+    {
+        /** @var QuizAnswerSolvingModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizAnswerSolvingModel::class);
+
+        $t          = $adapter->getTable();
+        $arrColumns = ["$t.pid=?"];
+
+        if (!$this->isPreviewMode($arrOptions)) {
+            $time         = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+        }
+
+        if (!isset($arrOptions['order'])) {
+            $arrOptions['order'] = "$t.dateAdded DESC";
+        }
+
+        if ($intLimit > 0) {
+            $arrOptions['limit'] = $intLimit;
+        }
+
+        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
     }
 }

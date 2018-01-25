@@ -341,7 +341,7 @@ class tl_quiz_question extends \Contao\Backend
         $time = time();
 
         // Update the database
-        $database->prepare("UPDATE tl_quiz_question_question SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")->execute($intId);
+        $database->prepare("UPDATE tl_quiz_question SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")->execute($intId);
 
         if ($dc) {
             $dc->activeRecord->tstamp    = $time;

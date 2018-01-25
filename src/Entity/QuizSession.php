@@ -37,9 +37,9 @@ class QuizSession
      * Set the filter data for a given filter key.
      *
      * @param string $key
-     * @param array  $data
+     * @param mixed  $data
      */
-    public function setData(string $key, array $data = [])
+    public function setData(string $key, $data)
     {
         $this->session->set($key, $data);
     }
@@ -49,9 +49,9 @@ class QuizSession
      *
      * @param string $key
      *
-     * @return array
+     * @return mixed
      */
-    public function getData(string $key): array
+    public function getData(string $key)
     {
         $data = [];
 
@@ -59,7 +59,7 @@ class QuizSession
             $data = $this->session->get($key);
         }
 
-        return !is_array($data) ? [$data] : $data;
+        return $data;
     }
 
     /**
@@ -95,8 +95,8 @@ class QuizSession
         if (empty($score)) {
             $score = 1;
         } else {
-            $score = $score[0] + 1;
+            $score = $score + 1;
         }
-        $this->setData(static::SCORE_NAME, [$score]);
+        $this->setData(static::SCORE_NAME, $score);
     }
 }

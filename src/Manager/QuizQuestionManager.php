@@ -143,4 +143,75 @@ class QuizQuestionManager
 
         return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
     }
+
+    /**
+     * Find one published questions items by their parent ID
+     *
+     * @param integer $intId      The quiz ID
+     * @param integer $intLimit   An optional limit
+     * @param array   $arrOptions An optional options array
+     *
+     * @return \Model\Collection|QuizQuestionModel[]|QuizQuestionModel|null A collection of models or null if there are no news
+     */
+    public function findOnePublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
+    {
+        /** @var QuizQuestionModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
+
+        $t          = $adapter->getTable();
+        $arrColumns = ["$t.pid=?"];
+
+        if (!$this->isPreviewMode($arrOptions)) {
+            $time         = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+        }
+
+        if (!isset($arrOptions['order'])) {
+            $arrOptions['order'] = "$t.dateAdded DESC";
+        }
+
+        if ($intLimit > 0) {
+            $arrOptions['limit'] = $intLimit;
+        }
+
+        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
+    }
+
+
+    /**
+     * @param       $intId
+     * @param int   $intLimit
+     * @param array $arrOptions
+     *
+     * @return int
+     */
+    public function countPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
+    {
+        /** @var QuizQuestionModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
+
+        $t          = $adapter->getTable();
+        $arrColumns = ["$t.pid=?"];
+
+        if (!$this->isPreviewMode($arrOptions)) {
+            $time         = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+        }
+
+        if (!isset($arrOptions['order'])) {
+            $arrOptions['order'] = "$t.dateAdded DESC";
+        }
+
+        if ($intLimit > 0) {
+            $arrOptions['limit'] = $intLimit;
+        }
+
+        $collection = $adapter->findBy($arrColumns, $intId, $arrOptions);
+
+        if (null == $collection) {
+            return 0;
+        }
+
+        return $collection->count();
+    }
 }

@@ -9,9 +9,9 @@ namespace HeimrichHannot\QuizBundle\Manager;
 
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
-use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
+use HeimrichHannot\QuizBundle\Model\QuizScoreModel;
 
-class QuizAnswerManager
+class QuizScoreManager
 {
     /**
      * @var ContaoFrameworkInterface
@@ -36,12 +36,12 @@ class QuizAnswerManager
      * @param mixed $value
      * @param array $options
      *
-     * @return QuizAnswerModel|null
+     * @return QuizScoreModel|null
      */
     public function findOneBy($column, $value, array $options = [])
     {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
+        /** @var QuizScoreModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
 
         return $adapter->findOneBy($column, $value, $options);
     }
@@ -53,12 +53,12 @@ class QuizAnswerManager
      * @param mixed $value
      * @param array $options
      *
-     * @return \Contao\Model\Collection|QuizAnswerModel|null
+     * @return \Contao\Model\Collection|QuizScoreModel|null
      */
     public function findBy($column, $value, array $options = [])
     {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
+        /** @var QuizScoreModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
 
         return $adapter->findBy($column, $value, $options);
     }
@@ -70,12 +70,40 @@ class QuizAnswerManager
      * @param integer $intLimit   An optional limit
      * @param array   $arrOptions An optional options array
      *
-     * @return \Model\Collection|QuizAnswerModel[]|QuizAnswerModel|null A collection of models or null if there are no news
+     * @return \Model\Collection|QuizScoreModel[]|QuizScoreModel|null A collection of models or null if there are no news
+     */
+    public function findByPid($intId, $intLimit = 0, array $arrOptions = [])
+    {
+        /** @var QuizScoreModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
+
+        $t          = $adapter->getTable();
+        $arrColumns = ["$t.pid=?"];
+
+        if (!isset($arrOptions['order'])) {
+            $arrOptions['order'] = "$t.dateAdded DESC";
+        }
+
+        if ($intLimit > 0) {
+            $arrOptions['limit'] = $intLimit;
+        }
+
+        return $adapter->findBy($arrColumns, $intId, $arrOptions);
+    }
+
+    /**
+     * Find published questions items by their parent ID
+     *
+     * @param integer $intId      The quiz ID
+     * @param integer $intLimit   An optional limit
+     * @param array   $arrOptions An optional options array
+     *
+     * @return \Model\Collection|QuizScoreModel[]|QuizScoreModel|null A collection of models or null if there are no news
      */
     public function findPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
     {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
+        /** @var QuizScoreModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizScoreModel::class);
 
         $t          = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
@@ -103,38 +131,5 @@ class QuizAnswerManager
         }
 
         return \defined('BE_USER_LOGGED_IN') && true === BE_USER_LOGGED_IN;
-    }
-
-    /**
-     * Find one published answers items by their parent ID
-     *
-     * @param integer $intId      The question ID
-     * @param integer $intLimit   An optional limit
-     * @param array   $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizAnswerModel[]|QuizAnswerModel|null A collection of models or null if there are no news
-     */
-    public function findOnePublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
-
-        $t          = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
     }
 }

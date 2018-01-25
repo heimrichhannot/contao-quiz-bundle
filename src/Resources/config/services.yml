@@ -26,3 +26,7 @@ services:
       class: HeimrichHannot\QuizBundle\Manager\QuizAnswerSolvingManager
       arguments:
           - "@contao.framework"
+  huh.quiz.score.manager:
+      class: HeimrichHannot\QuizBundle\Manager\QuizScoreManager
+      arguments:
+          - "@contao.framework"

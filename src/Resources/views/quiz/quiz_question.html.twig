@@ -1,14 +1,7 @@
 {% block body %}
     <div class="count">{{ itemsFoundText }}</div>
-    {% if images.singleSRC|default() %}
-        {{ include('@HeimrichHannotContaoUtils/image.html.twig', images.singleSRC) }}
-    {% endif %}
-    {% if(hasContentElement) %}
-        {{ contentElement|raw }}
-    {% endif %}
-    <div class="question">
-        {{ question|raw }}
-    </div>
+
+    {{ question|raw }}
 
     {% for answer in answers %}
         <div class="answer">

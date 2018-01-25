@@ -29,8 +29,9 @@ $lang['publish_legend'] = 'Veröffentlichung';
  * Buttons
  */
 $lang['new']        = ['Neues Quiz', 'Quiz erstellen'];
-$lang['edit']       = ['Quiz bearbeiten', 'Quiz ID %s bearbeiten'];
+$lang['edit']       = ['Fragen hinzufügen', 'Fragen zum Quiz ID %s hinzufügen'];
 $lang['editheader'] = ['Quiz-Einstellungen bearbeiten', 'Quiz-Einstellungen ID %s bearbeiten'];
+$lang['quizScore']  = ['Auswertung hinzufügen', 'Auswertung zum Quiz ID %s hinzufügen'];
 $lang['copy']       = ['Quiz duplizieren', 'Quiz ID %s duplizieren'];
 $lang['delete']     = ['Quiz löschen', 'Quiz ID %s löschen'];
 $lang['toggle']     = ['Quiz veröffentlichen', 'Quiz ID %s veröffentlichen/verstecken'];
