@@ -14,6 +14,8 @@ namespace HeimrichHannot\QuizBundle\Model;
  * @property boolean $published
  * @property string  $start
  * @property string  $stop
+ * @property int     $addSubmission
+ * @property int     $submissionArchive
  *
  */
 class QuizModel extends \Contao\Model

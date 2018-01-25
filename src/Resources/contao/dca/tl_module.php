@@ -10,8 +10,8 @@ $dca = &$GLOBALS['TL_DCA']['tl_module'];
 /**
  * Palettes
  */
-$dca['palettes']['quiz'] = '{title_legend},name,headline,type;' . '{template_legend:hide},customTpl;' . '{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
-
+$dca['palettes']['quiz']           = '{title_legend},name,headline,type;' . '{template_legend:hide},customTpl;' . '{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
+$dca['palettes']['quizSubmission'] = '{title_legend},name,headline,type;' . '{template_legend:hide},customTpl;' . '{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
 
 /**
  * Fields

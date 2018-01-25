@@ -49,6 +49,22 @@ class QuizManager
     /**
      * Adapter function for the model's findBy method.
      *
+     * @param mixed $varId      The ID or alias
+     * @param array $arrOptions An optional options array
+     *
+     * @return \Contao\Model\Collection|QuizModel|null
+     */
+    public function findByIdOrAlias($value, array $options = [])
+    {
+        /** @var QuizModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizModel::class);
+
+        return $adapter->findByIdOrAlias($value, $options);
+    }
+
+    /**
+     * Adapter function for the model's findBy method.
+     *
      * @param mixed $column
      * @param mixed $value
      * @param array $options

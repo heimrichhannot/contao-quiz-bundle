@@ -14,16 +14,20 @@ $lang = &$GLOBALS['TL_LANG']['tl_quiz'];
 $lang['tstamp'][0] = 'Änderungsdatum';
 
 // general
-$lang['title'][0]  = 'Titel';
-$lang['title'][1]  = 'Geben Sie hier bitte den Titel ein.';
-$lang['published'] = ['Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.'];
-$lang['start']     = ['Anzeigen ab', 'Quiz erst ab diesem Tag auf der Webseite anzeigen.'];
-$lang['stop']      = ['Anzeigen bis', 'Quiz nur bis zu diesem Tag auf der Webseite anzeigen.'];
+$lang['title'][0]          = 'Titel';
+$lang['title'][1]          = 'Geben Sie hier bitte den Titel ein.';
+$lang['published']         = ['Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.'];
+$lang['start']             = ['Anzeigen ab', 'Quiz erst ab diesem Tag auf der Webseite anzeigen.'];
+$lang['stop']              = ['Anzeigen bis', 'Quiz nur bis zu diesem Tag auf der Webseite anzeigen.'];
+$lang['addSubmission']     = ['Einsendung hinzufügen', ''];
+$lang['submissionArchive'] = ['Archiv auswählen', 'Wählen Sie ein Submission-Archiv aus.'];
+
 /**
  * Legends
  */
-$lang['general_legend'] = 'Allgemeine Einstellungen';
-$lang['publish_legend'] = 'Veröffentlichung';
+$lang['general_legend']    = 'Allgemeine Einstellungen';
+$lang['publish_legend']    = 'Veröffentlichung';
+$lang['submission_legend'] = 'Einsendung Einstellungen';
 
 /**
  * Buttons

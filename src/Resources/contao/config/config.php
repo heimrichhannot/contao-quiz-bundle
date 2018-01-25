@@ -15,7 +15,8 @@ array_insert($GLOBALS['BE_MOD']['content'], 4, [
  * Frontend modules
  */
 array_insert($GLOBALS['FE_MOD']['quiz'], 3, [
-    'quiz' => 'HeimrichHannot\QuizBundle\Module\ModuleQuiz',
+    'quiz'           => 'HeimrichHannot\QuizBundle\Module\ModuleQuizReader',
+    'quizSubmission' => 'HeimrichHannot\QuizBundle\Module\ModuleQuizSubmission',
 ]);
 
 

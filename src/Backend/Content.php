@@ -12,7 +12,7 @@ use Contao\Backend;
 use Contao\Input;
 use Contao\System;
 
-class TlContent extends Backend
+class Content extends Backend
 {
 
     /**
@@ -113,5 +113,21 @@ class TlContent extends Backend
         if (!\in_array($objArchive->id, $root)) {
             throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to modify article ID ' . $objArchive->nid . ' in quiz ID ' . $objArchive->id . '.');
         }
+    }
+
+    /**
+     * @param $id
+     *
+     * @return int
+     */
+    public function getPidFromId($id)
+    {
+        $evaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findOneBy('id', $id);
+
+        if (null == $evaluationModel) {
+            return 0;
+        }
+
+        return $evaluationModel->id;
     }
 }

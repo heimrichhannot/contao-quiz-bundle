@@ -13,13 +13,12 @@ use Contao\Module;
 use Contao\System;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
-use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 use Contao\Model\Collection;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
 use HeimrichHannot\Request\Request;
 use Patchwork\Utf8;
 
-class ModuleQuiz extends Module
+class ModuleQuizReader extends Module
 {
 
     protected $strTemplate = 'mod_quiz';
@@ -118,7 +117,7 @@ class ModuleQuiz extends Module
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
         }
 
-        $quizModel = \System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
+        $quizModel = \System::getContainer()->get('huh.quiz.manager')->findByIdOrAlias($this->quiz);
 
         if (null == $quizModel) {
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
@@ -134,6 +133,7 @@ class ModuleQuiz extends Module
         }
 
         if ($this->evaluation) {
+
             return $this->Template->quiz = $this->parseQuizEvaluation();
         }
 

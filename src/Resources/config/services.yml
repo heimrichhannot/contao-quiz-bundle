@@ -1,11 +1,11 @@
 parameters:
-  hh.quizbundle.backend.content-table: tl_quiz_question
-  hh.quizbundle.backend.content-ptable: tl_quiz
+  huh.quiz.backend.content-table: tl_quiz_question
+  huh.quiz.backend.content-ptable: tl_quiz
 services:
-  hh.quiz-bundle.backend.tl_content:
-    class: HeimrichHannot\QuizBundle\Backend\TlContent
+  huh.quiz.backend.content:
+    class: HeimrichHannot\QuizBundle\Backend\Content
     arguments:
-        - ['%hh.quizbundle.backend.content-table%', '%hh.quizbundle.backend.content-ptable%']
+        - ['%huh.quiz.backend.content-table%', '%huh.quiz.backend.content-ptable%']
   huh.quiz.choice.template:
       class: HeimrichHannot\QuizBundle\Choice\TemplateChoice
       arguments:

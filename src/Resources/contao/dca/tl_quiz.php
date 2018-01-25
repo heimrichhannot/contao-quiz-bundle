@@ -80,28 +80,29 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
         ],
     ],
     'palettes'    => [
-        '__selector__' => ['published'],
-        'default'      => '{general_legend},title;{publish_legend},published',
+        '__selector__' => ['published', 'addSubmission'],
+        'default'      => '{general_legend},title;{submission_legend},addSubmission;{publish_legend},published',
     ],
     'subpalettes' => [
-        'published' => 'start,stop',
+        'published'     => 'start,stop',
+        'addSubmission' => 'submissionArchive',
     ],
     'fields'      => [
-        'id'        => [
+        'id'                => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
-        'tstamp'    => [
+        'tstamp'            => [
             'label' => &$GLOBALS['TL_LANG']['tl_quiz']['tstamp'],
             'sql'   => "int(10) unsigned NOT NULL default '0'",
         ],
-        'dateAdded' => [
+        'dateAdded'         => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
-        'title'     => [
+        'title'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['title'],
             'exclude'   => true,
             'search'    => true,
@@ -109,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'mandatory' => true],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'published' => [
+        'published'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['published'],
             'exclude'   => true,
             'filter'    => true,
@@ -117,19 +118,39 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'eval'      => ['doNotCopy' => true, 'submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'start'     => [
+        'start'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['start'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'stop'      => [
+        'stop'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['stop'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
+        ],
+        'addSubmission'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['addSubmission'],
+            'exclude'   => true,
+            'filter'    => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['doNotCopy' => true, 'submitOnChange' => true],
+            'sql'       => "char(1) NOT NULL default ''",
+        ],
+        'submissionArchive' => [
+            'label'      => &$GLOBALS['TL_LANG']['tl_quiz']['submissionArchive'],
+            'exclude'    => true,
+            'search'     => true,
+            'filter'     => true,
+            'sorting'    => true,
+            'inputType'  => 'select',
+            'foreignKey' => 'tl_submission_archive.title',
+            'eval'       => ['doNotCopy' => true, 'chosen' => true, 'mandatory' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'tl_class' => 'w50'],
+            'sql'        => "int(10) unsigned NOT NULL default '0'",
+            'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
     ],
 ];

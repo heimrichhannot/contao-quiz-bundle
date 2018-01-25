@@ -92,6 +92,34 @@ class QuizEvaluationManager
     }
 
     /**
+     * Find one published answers items by their parent ID
+     *
+     * @param integer $intId      The question ID
+     * @param integer $intLimit   An optional limit
+     * @param array   $arrOptions An optional options array
+     *
+     * @return \Model\Collection|QuizEvaluationModel[]|QuizEvaluationModel|null A collection of models or null if there are no news
+     */
+    public function findOneByPid($intId, $intLimit = 0, array $arrOptions = [])
+    {
+        /** @var QuizEvaluationModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
+
+        $t          = $adapter->getTable();
+        $arrColumns = ["$t.pid=?"];
+
+        if (!isset($arrOptions['order'])) {
+            $arrOptions['order'] = "$t.dateAdded DESC";
+        }
+
+        if ($intLimit > 0) {
+            $arrOptions['limit'] = $intLimit;
+        }
+
+        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
+    }
+
+    /**
      * Find published questions items by their parent ID
      *
      * @param integer $intId      The quiz ID
