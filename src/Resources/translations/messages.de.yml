@@ -11,3 +11,5 @@ huh.quiz.answer.score: '{0} Sie haben leider keine Frage richtig beantwortet.|{1
 
 # error message
 huh.quiz.error: 'Bitte entschuldigen Sie. Es ist ein Fehler aufgetreten.'
+huh.quiz.question.error: 'Die Frage konnte nicht gefunden werden.'
+huh.quiz.answer.error: 'Die Antwort konnte nicht gefunden werden.'

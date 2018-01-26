@@ -30,3 +30,7 @@ services:
       class: HeimrichHannot\QuizBundle\Manager\QuizEvaluationManager
       arguments:
           - "@contao.framework"
+  huh.quiz.token.manager:
+      class: HeimrichHannot\QuizBundle\Manager\TokenManager
+  huh.quiz.model.manager:
+      class: HeimrichHannot\QuizBundle\Manager\ModelManager

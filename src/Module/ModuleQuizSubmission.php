@@ -55,7 +55,7 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
             return '';
         }
 
-        if (Request::hasGet('s')) {
+        if (Request::hasGet('finished')) {
             $this->quizModel                      = \System::getContainer()->get('huh.quiz.manager')->findByIdOrAlias(Request::getGet('items'));
             $this->formHybridDataContainer        = 'tl_submission';
             $submissionArchive                    = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);

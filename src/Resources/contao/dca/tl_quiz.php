@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
     ],
     'palettes'    => [
         '__selector__' => ['published', 'addSubmission'],
-        'default'      => '{general_legend},title;{submission_legend},addSubmission;{publish_legend},published',
+        'default'      => '{general_legend},title, text;{submission_legend},addSubmission;{publish_legend},published',
     ],
     'subpalettes' => [
         'published'     => 'start,stop',
@@ -166,6 +166,14 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'inputType' => 'checkbox',
             'eval'      => ['tl_class' => 'w50'],
             'sql'       => "char(1) NOT NULL default ''",
+        ],
+        'text'                           => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['text'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'textarea',
+            'eval'      => ['rte' => 'tinyMCE', 'tl_class' => 'clr'],
+            'sql'       => "text NULL",
         ],
     ],
 ];
