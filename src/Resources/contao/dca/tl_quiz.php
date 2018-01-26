@@ -85,24 +85,24 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
     ],
     'subpalettes' => [
         'published'     => 'start,stop',
-        'addSubmission' => 'submissionArchive',
+        'addSubmission' => 'submissionArchive,formHybridSingleSubmission,formHybridResetAfterSubmission',
     ],
     'fields'      => [
-        'id'                => [
+        'id'                             => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
-        'tstamp'            => [
+        'tstamp'                         => [
             'label' => &$GLOBALS['TL_LANG']['tl_quiz']['tstamp'],
             'sql'   => "int(10) unsigned NOT NULL default '0'",
         ],
-        'dateAdded'         => [
+        'dateAdded'                      => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
-        'title'             => [
+        'title'                          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['title'],
             'exclude'   => true,
             'search'    => true,
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'mandatory' => true],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'published'         => [
+        'published'                      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['published'],
             'exclude'   => true,
             'filter'    => true,
@@ -118,21 +118,21 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'eval'      => ['doNotCopy' => true, 'submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'start'             => [
+        'start'                          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['start'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'stop'              => [
+        'stop'                           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['stop'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'addSubmission'     => [
+        'addSubmission'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['addSubmission'],
             'exclude'   => true,
             'filter'    => true,
@@ -140,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'eval'      => ['doNotCopy' => true, 'submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'submissionArchive' => [
+        'submissionArchive'              => [
             'label'      => &$GLOBALS['TL_LANG']['tl_quiz']['submissionArchive'],
             'exclude'    => true,
             'search'     => true,
@@ -151,6 +151,21 @@ $GLOBALS['TL_DCA']['tl_quiz'] = [
             'eval'       => ['doNotCopy' => true, 'chosen' => true, 'mandatory' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'tl_class' => 'w50'],
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
+        ],
+        'formHybridSingleSubmission'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['formHybridSingleSubmission'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50'],
+            'sql'       => "char(1) NOT NULL default ''",
+        ],
+        'formHybridResetAfterSubmission' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz']['formHybridResetAfterSubmission'],
+            'exclude'   => true,
+            'default'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50'],
+            'sql'       => "char(1) NOT NULL default ''",
         ],
     ],
 ];

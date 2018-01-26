@@ -17,7 +17,8 @@ use Patchwork\Utf8;
 class ModuleQuizSubmission extends ModuleSubmissionReader
 {
 
-    protected $strTemplate = 'mod_quiz_submission';
+    protected $strTemplate  = 'mod_quiz_submission';
+    protected $strFormClass = 'HeimrichHannot\QuizBundle\Form\QuizSubmissionForm';
 
     /**
      * @var QuizModel
@@ -55,10 +56,12 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
         }
 
         if (Request::hasGet('s')) {
-            $this->quizModel               = \System::getContainer()->get('huh.quiz.manager')->findByIdOrAlias(Request::getGet('items'));
-            $this->formHybridDataContainer = 'tl_submission';
-            $submissionArchive             = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
-            $this->formHybridEditable      = $submissionArchive->submissionFields;
+            $this->quizModel                      = \System::getContainer()->get('huh.quiz.manager')->findByIdOrAlias(Request::getGet('items'));
+            $this->formHybridDataContainer        = 'tl_submission';
+            $submissionArchive                    = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
+            $this->formHybridEditable             = $submissionArchive->submissionFields;
+            $this->formHybridSingleSubmission     = $this->quizModel->formHybridSingleSubmission;
+            $this->formHybridResetAfterSubmission = $this->quizModel->formHybridResetAfterSubmission;
         }
 
         return parent::generate();
@@ -70,5 +73,4 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
             return parent::compile();
         }
     }
-
 }

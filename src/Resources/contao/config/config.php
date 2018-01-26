@@ -19,6 +19,8 @@ array_insert($GLOBALS['FE_MOD']['quiz'], 3, [
     'quizSubmission' => 'HeimrichHannot\QuizBundle\Module\ModuleQuizSubmission',
 ]);
 
+// Registrieren im Hooks replaceInsertTags
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['HeimrichHannot\QuizBundle\Frontend\InsertTags', 'quizInsertTags'];
 
 /**
  * Permissions

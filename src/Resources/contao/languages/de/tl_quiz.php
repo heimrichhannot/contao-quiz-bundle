@@ -14,13 +14,15 @@ $lang = &$GLOBALS['TL_LANG']['tl_quiz'];
 $lang['tstamp'][0] = 'Änderungsdatum';
 
 // general
-$lang['title'][0]          = 'Titel';
-$lang['title'][1]          = 'Geben Sie hier bitte den Titel ein.';
-$lang['published']         = ['Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.'];
-$lang['start']             = ['Anzeigen ab', 'Quiz erst ab diesem Tag auf der Webseite anzeigen.'];
-$lang['stop']              = ['Anzeigen bis', 'Quiz nur bis zu diesem Tag auf der Webseite anzeigen.'];
-$lang['addSubmission']     = ['Einsendung hinzufügen', ''];
-$lang['submissionArchive'] = ['Archiv auswählen', 'Wählen Sie ein Submission-Archiv aus.'];
+$lang['title'][0]                       = 'Titel';
+$lang['title'][1]                       = 'Geben Sie hier bitte den Titel ein.';
+$lang['published']                      = ['Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.'];
+$lang['start']                          = ['Anzeigen ab', 'Quiz erst ab diesem Tag auf der Webseite anzeigen.'];
+$lang['stop']                           = ['Anzeigen bis', 'Quiz nur bis zu diesem Tag auf der Webseite anzeigen.'];
+$lang['addSubmission']                  = ['Einsendung hinzufügen', ''];
+$lang['submissionArchive']              = ['Archiv auswählen', 'Wählen Sie ein Submission-Archiv aus.'];
+$lang['formHybridResetAfterSubmission'] = ['Formular nach dem Abschicken zurücksetzen', 'Deaktivieren um nach Absenden, das Formular mit den Daten erneut zu laden. (Achtung: Nur einmaliges Absenden möglich!)'];
+$lang['formHybridSingleSubmission']     = ['Formular nur einmal erzeugen', 'Nachdem das Formular erfolgreich abgeschickt wurde, wird keine neue Entität erzeugt und nur Meldungen werden ausgegeben.'];
 
 /**
  * Legends

@@ -214,4 +214,20 @@ class QuizQuestionManager
 
         return $collection->count();
     }
+
+    /**
+     * Adapter function for the model's findBy method.
+     *
+     * @param mixed $varId      The ID or alias
+     * @param array $arrOptions An optional options array
+     *
+     * @return \Contao\Model\Collection|QuizQuestionModel|null
+     */
+    public function findByIdOrAlias($value, array $options = [])
+    {
+        /** @var QuizQuestionModel $adapter */
+        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
+
+        return $adapter->findByIdOrAlias($value, $options);
+    }
 }

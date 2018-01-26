@@ -14,7 +14,9 @@ use Contao\System;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
 use Contao\Model\Collection;
+use HeimrichHannot\QuizBundle\Model\QuizAnswerSolvingModel;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
+use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 use HeimrichHannot\Request\Request;
 use Patchwork\Utf8;
 
@@ -138,7 +140,7 @@ class ModuleQuizReader extends Module
         }
 
         if ($this->question) {
-            $question = \System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPid($this->question);
+            $question = \System::getContainer()->get('huh.quiz.question.manager')->findByIdOrAlias($this->question);
 
             if (null == $question) {
                 return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
@@ -179,7 +181,7 @@ class ModuleQuizReader extends Module
         $templateData['itemsFoundText'] = System::getContainer()->get('translator')->transChoice('huh.quiz.count.text.default', $this->count, ['%current%' => count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)), '%count%' => $this->count]);
 
 
-        $templateData['question'] = $this->parseModel($question, $question->question);
+        $templateData['question'] = $this->parseModel($question, $question->question, QuizQuestionModel::getTable());
 
         return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_question.html.twig', $templateData);
     }
@@ -276,7 +278,7 @@ class ModuleQuizReader extends Module
      */
     protected function parseAnswer(QuizAnswerModel $answerModel)
     {
-        $templateData['answer'] = $this->parseModel($answerModel, $answerModel->answer);
+        $templateData['answer'] = $this->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable());
 
         $templateData['href'] = $this->generateUrl('a', $answerModel->id);
 
@@ -307,7 +309,7 @@ class ModuleQuizReader extends Module
         if (null !== $answerSolving) {
             $solving = '';
             foreach ($answerSolving as $item) {
-                $solving .= $this->parseModel($item, $item->solving);
+                $solving .= $this->parseModel($item, $item->solving, QuizAnswerSolvingModel::getTable());
             }
         }
         $templateData['answerSolving'] = $solving;
@@ -370,21 +372,23 @@ class ModuleQuizReader extends Module
             return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
         }
         foreach ($quizEvaluationModel as $item) {
-            $templateData['strTemplate'] .= $this->parseModel($item, $item->evaluationText);
+            $templateData['strTemplate'] .= $this->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable());
         }
 
         return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
     }
 
     /**
-     * @param $item
+     * @param Model  $item
+     * @param string $text
+     * @param string $table
      *
      * @return string
      */
-    protected function parseModel($item, $text)
+    protected function parseModel(Model $item, string $text, string $table)
     {
         $templateData['text']              = $text;
-        $item                              = $this->getContentElementByModel($item, QuizEvaluationModel::getTable());
+        $item                              = $this->getContentElementByModel($item, $table);
         $templateData['item']              = $item;
         $templateData['hasContentElement'] = $item->hasContentElement;
         $templateData['contentElement']    = $item->contentElement;

@@ -6,8 +6,7 @@
   "require": {
     "php": ">=7.1.0",
     "contao/core-bundle": "^4.4",
-    "heimrichhannot/contao-submissions_creator": "^2.0",
-    "heimrichhannot/contao-utils-bundle": "dev-master",
+    "heimrichhannot/contao-submissions_creator": "^1.1",
     "heimrichhannot/contao-list-bundle": "dev-master"
   },
   "require-dev": {

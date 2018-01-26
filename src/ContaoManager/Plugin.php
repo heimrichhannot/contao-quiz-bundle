@@ -27,7 +27,7 @@ class Plugin implements BundlePluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(HeimrichHannotContaoQuizBundle::class)->setLoadAfter([ContaoCoreBundle::class]),
+            BundleConfig::create(HeimrichHannotContaoQuizBundle::class)->setLoadAfter([ContaoCoreBundle::class, 'submissions_creator', 'submissions']),
         ];
     }
 
