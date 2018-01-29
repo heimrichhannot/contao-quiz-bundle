@@ -53,7 +53,7 @@ class ModuleQuizReader extends Module
     /**
      * @var string $evaluation
      */
-    protected $evaluation;
+    protected $finished;
 
     /**
      * @var string $quiz
@@ -109,7 +109,7 @@ class ModuleQuizReader extends Module
         }
 
         if (Request::hasGet('finished')) {
-            $this->evaluation = Request::getGet('finished');
+            $this->finished = Request::getGet('finished');
         }
 
         /**
@@ -137,13 +137,13 @@ class ModuleQuizReader extends Module
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
         }
 
-        $this->count = \System::getContainer()->get('huh.quiz.question.manager')->countPublishedByPid($quizModel->id);
+        $this->count = System::getContainer()->get('huh.quiz.question.manager')->countPublishedByPid($quizModel->id);
 
         if ($this->answer) {
             return $this->Template->quiz = $this->parseAnswerSolving($this->answer);
         }
 
-        if ($this->evaluation) {
+        if ($this->finished) {
             return $this->Template->quiz = $this->parseQuizEvaluation();
         }
 
@@ -157,7 +157,7 @@ class ModuleQuizReader extends Module
             return $this->Template->quiz = $this->prepareQuestion($question, $quizModel);
         }
 
-        $questionModel = \System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPid($quizModel->id);
+        $questionModel = System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPid($quizModel->id);
 
         if (null == $questionModel) {
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.question.error');
@@ -206,7 +206,7 @@ class ModuleQuizReader extends Module
         $answers = [];
 
         foreach ($answersCollection as $answer) {
-            $answers[$answer->id] = $this->parseAnswer($answer);;
+            $answers[] = $this->parseAnswer($answer);
         }
 
         return $answers;
@@ -232,8 +232,7 @@ class ModuleQuizReader extends Module
     protected function parseAnswer(QuizAnswerModel $answerModel)
     {
         $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $this->imgSize);
-
-        $templateData['href'] = Url::addQueryString('answer=' . $answerModel->id, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+        $templateData['href']   = Url::addQueryString('answer=' . $answerModel->id, $this->getUri());
 
         return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_item.html.twig', $templateData);
     }
@@ -245,19 +244,20 @@ class ModuleQuizReader extends Module
      */
     protected function parseAnswerSolving($pid)
     {
-        $answer = \System::getContainer()->get('huh.quiz.answer.manager')->findBy('id', $this->answer);
+        $answer = System::getContainer()->get('huh.quiz.answer.manager')->findBy('id', $this->answer);
         if (null == $answer) {
             return System::getContainer()->get('translator')->trans('huh.quiz.answer.error');
         }
         $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.wrong');
+        $token   = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $answer->id, $answer->pid);
 
         if ($answer->isSolution) {
             $this->session->increaseScore();
             $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.correct');
         }
 
-        $templateData  = $this->getNextQuestionUrl();
-        $answerSolving = \System::getContainer()->get('huh.quiz.answer.solving.manager')->findPublishedByPid($pid);
+        $templateData  = $this->getNextQuestionUrl($token);
+        $answerSolving = System::getContainer()->get('huh.quiz.answer.solving.manager')->findPublishedByPid($pid);
 
         if (null !== $answerSolving) {
             $solving = '';
@@ -273,20 +273,28 @@ class ModuleQuizReader extends Module
     /**
      * @return array $templateData
      */
-    protected function getNextQuestionUrl()
+    protected function getNextQuestionUrl($token)
     {
         $usedQuestions            = $this->session->getData(QuizSession::USED_QUESTIONS_NAME);
         $questionModel            = System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPidNotInQuestions($this->quiz, $usedQuestions);
         $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.next');
         if (null == $questionModel) {
             $this->session->reset(QuizSession::USED_QUESTIONS_NAME);
-            $templateData['href']     = Url::addQueryString('finished=1', System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $templateData['href']     = Url::addQueryString('finished=1' . '&token=' . $token, $this->getUri());
             $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.score');
         } else {
-            $templateData['href'] = Url::addQueryString('question=' . $questionModel->id, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $templateData['href'] = Url::addQueryString('question=' . $questionModel->id . '&token=' . $token, $this->getUri());
         }
 
         return $templateData;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUri()
+    {
+        return Url::removeQueryString(['question', 'answer'], System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
     }
 
     /**
@@ -298,7 +306,7 @@ class ModuleQuizReader extends Module
     {
         $score                 = $this->session->getData(QuizSession::SCORE_NAME);
         $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $this->count]);
-        $quizEvaluationModel   = System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($this->evaluation);
+        $quizEvaluationModel   = System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($this->quiz);
         if (null == $quizEvaluationModel) {
             return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
         }

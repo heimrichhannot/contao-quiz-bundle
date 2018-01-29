@@ -10,6 +10,7 @@ namespace HeimrichHannot\QuizBundle\Form;
 
 use HeimrichHannot\FrontendEdit\ReaderForm;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
+use HeimrichHannot\Request\Request;
 
 class QuizSubmissionForm extends ReaderForm
 {
@@ -22,7 +23,12 @@ class QuizSubmissionForm extends ReaderForm
 
     protected function onSubmitCallback(\DataContainer $dc)
     {
-        $submission            = $dc->getSubmission();
+        $submission = $dc->getSubmission();
+
+        if (Request::hasGet('token')) {
+            $submission->quizToken = Request::getGet('token');
+        }
+
         $quizSession           = new QuizSession();
         $submission->quizScore = $quizSession->getData(QuizSession::SCORE_NAME);
         $submission->save();

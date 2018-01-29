@@ -62,6 +62,7 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
             $this->formHybridEditable             = $submissionArchive->submissionFields;
             $this->formHybridSingleSubmission     = $this->quizModel->formHybridSingleSubmission;
             $this->formHybridResetAfterSubmission = $this->quizModel->formHybridResetAfterSubmission;
+            $this->defaultArchive                 = $submissionArchive->id;
         }
 
         return parent::generate();
