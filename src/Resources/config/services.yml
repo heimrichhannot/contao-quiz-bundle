@@ -3,9 +3,9 @@ parameters:
   huh.quiz.backend.content-ptable: tl_quiz
 services:
   huh.quiz.backend.content:
-    class: HeimrichHannot\QuizBundle\Backend\Content
-    arguments:
-        - ['%huh.quiz.backend.content-table%', '%huh.quiz.backend.content-ptable%']
+      class: HeimrichHannot\QuizBundle\Backend\Content
+      arguments:
+          - ['%huh.quiz.backend.content-table%', '%huh.quiz.backend.content-ptable%']
   huh.quiz.choice.template:
       class: HeimrichHannot\QuizBundle\Choice\TemplateChoice
       arguments:
@@ -13,24 +13,28 @@ services:
   huh.quiz.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizManager
       arguments:
-          - "@contao.framework"
+        - "@contao.framework"
   huh.quiz.question.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizQuestionManager
       arguments:
-          - "@contao.framework"
+        - "@contao.framework"
   huh.quiz.answer.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizAnswerManager
       arguments:
-          - "@contao.framework"
+        - "@contao.framework"
   huh.quiz.answer.solving.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizAnswerSolvingManager
       arguments:
-          - "@contao.framework"
+        - "@contao.framework"
   huh.quiz.evaluation.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizEvaluationManager
       arguments:
-          - "@contao.framework"
+        - "@contao.framework"
   huh.quiz.token.manager:
       class: HeimrichHannot\QuizBundle\Manager\TokenManager
+      arguments:
+        - "@contao.framework"
   huh.quiz.model.manager:
       class: HeimrichHannot\QuizBundle\Manager\ModelManager
+      arguments:
+        - "@contao.framework"

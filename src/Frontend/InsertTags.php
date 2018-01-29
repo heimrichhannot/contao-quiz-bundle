@@ -8,14 +8,21 @@
 namespace HeimrichHannot\QuizBundle\Frontend;
 
 
+use Contao\Controller;
+use Contao\Frontend;
+use Contao\Module;
+use Contao\ModuleModel;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
+use HeimrichHannot\QuizBundle\Module\ModuleQuizReader;
 
-class InsertTags extends \Frontend
+class InsertTags extends Frontend
 {
 
     const TOTAL_SCORE = 'huh_quiz_total_score';
 
     const CURRENT_SCORE = 'huh_quiz_current_score';
+
+    const QUIZ = 'huh_quiz';
 
     /**
      * @param $strTag
@@ -34,6 +41,11 @@ class InsertTags extends \Frontend
         if ($arrSplit[0] == static::CURRENT_SCORE) {
 
             return $this->getCurrentScore();
+        }
+
+        if ($arrSplit[0] == static::QUIZ && isset($arrSplit[1]) && isset($arrSplit[2])) {
+
+            return $this->getQuiz($arrSplit[1], $arrSplit[2]);
         }
 
         return false;
@@ -55,5 +67,19 @@ class InsertTags extends \Frontend
         }
 
         return $score;
+    }
+
+    /**
+     * @param $moduleId
+     * @param $quizId
+     *
+     * @return string
+     */
+    public function getQuiz($moduleId, $quizId)
+    {
+        $moduleModel              = ModuleModel::findByIdOrAlias($moduleId);
+        $moduleModel->quizArchive = $quizId;
+
+        return Controller::getFrontendModule($moduleModel);
     }
 }

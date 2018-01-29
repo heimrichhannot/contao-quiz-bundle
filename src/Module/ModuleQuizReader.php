@@ -36,24 +36,9 @@ class ModuleQuizReader extends Module
     protected $session;
 
     /**
-     * @var string $question
-     */
-    protected $question;
-
-    /**
-     * @var string $answer
-     */
-    protected $answer;
-
-    /**
      * @var string $token
      */
     protected $token;
-
-    /**
-     * @var string $evaluation
-     */
-    protected $finished;
 
     /**
      * @var string $quiz
@@ -84,32 +69,16 @@ class ModuleQuizReader extends Module
             Request::setGet('items', Request::getGet('auto_item'));
         }
 
-        // Do not index or cache the page if no news item has been specified
-        if (!Request::hasGet('items')) {
-
-            /** @var \PageModel $objPage */
-            global $objPage;
-
-            $objPage->noSearch = 1;
-            $objPage->cache    = 0;
-
-            return '';
+        if (Request::hasGet('items')) {
+            $this->quiz = Request::getGet('items');
         }
 
-        if (Request::hasGet('question')) {
-            $this->question = Request::getGet('question');
+        if ($this->quizArchive) {
+            $this->quiz = $this->quizArchive;
         }
 
         if (Request::hasGet('token')) {
             $this->token = Request::getGet('token');
-        }
-
-        if (Request::hasGet('answer')) {
-            $this->answer = Request::getGet('answer');
-        }
-
-        if (Request::hasGet('finished')) {
-            $this->finished = Request::getGet('finished');
         }
 
         /**
@@ -122,8 +91,6 @@ class ModuleQuizReader extends Module
 
     protected function compile()
     {
-        $this->quiz = Request::getGet('items');
-
         if ($this->quiz <= 0) {
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
         }
@@ -139,16 +106,16 @@ class ModuleQuizReader extends Module
 
         $this->count = System::getContainer()->get('huh.quiz.question.manager')->countPublishedByPid($quizModel->id);
 
-        if ($this->answer) {
-            return $this->Template->quiz = $this->parseAnswerSolving($this->answer);
+        if (Request::hasGet('answer')) {
+            return $this->Template->quiz = $this->parseAnswerSolving(Request::getGet('answer'));
         }
 
-        if ($this->finished) {
+        if (Request::hasGet('finished')) {
             return $this->Template->quiz = $this->parseQuizEvaluation();
         }
 
-        if ($this->question) {
-            $question = \System::getContainer()->get('huh.quiz.question.manager')->findByIdOrAlias($this->question);
+        if (Request::hasGet('question')) {
+            $question = \System::getContainer()->get('huh.quiz.question.manager')->findByIdOrAlias(Request::getGet('question'));
 
             if (null == $question) {
                 return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.question.error');
@@ -190,8 +157,7 @@ class ModuleQuizReader extends Module
         $templateData['itemsFoundText'] = System::getContainer()->get('translator')->transChoice('huh.quiz.count.text.default', $this->count, ['%current%' => count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)), '%count%' => $this->count]);
         $templateData['text']           = $quiz->text;
         $templateData['title']          = $quiz->title;
-
-        $templateData['question'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($question, $question->question, QuizQuestionModel::getTable(), $question->cssClass, $this->imgSize);
+        $templateData['question']       = System::getContainer()->get('huh.quiz.model.manager')->parseModel($question, $question->question, QuizQuestionModel::getTable(), $question->cssClass, $this->imgSize);
 
         return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_question.html.twig', $templateData);
     }
@@ -244,7 +210,7 @@ class ModuleQuizReader extends Module
      */
     protected function parseAnswerSolving($pid)
     {
-        $answer = System::getContainer()->get('huh.quiz.answer.manager')->findBy('id', $this->answer);
+        $answer = System::getContainer()->get('huh.quiz.answer.manager')->findBy('id', $pid);
         if (null == $answer) {
             return System::getContainer()->get('translator')->trans('huh.quiz.answer.error');
         }
