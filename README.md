@@ -18,6 +18,9 @@ composer require heimrichhannot/contao-quiz-bundle ~1.0
 ### Adding submission to quiz
 ![alt submission](/docs/screenshot-add-submission.png)
 
+To adding a submission to your quiz, create a quizSubmission Module, select 'add submission', select your submission archive and add the quizSubmission Module to your evaluation.
+See [here](https://github.com/heimrichhannot/contao-submissions) to add a submission archive (https://github.com/heimrichhannot/contao-submissions). 
+
 ### Adding evaluation to quiz
 ![alt evaluation](/docs/screenshot-add-evaluation.png)
 
