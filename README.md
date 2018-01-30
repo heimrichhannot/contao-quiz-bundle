@@ -8,6 +8,8 @@ With composer and Contao 4 Managed Edition:
 composer require heimrichhannot/contao-quiz-bundle ~1.0
 ```
 ### Features
+* Module QuizReader
+* Module QuizSubmission
 * creating simple quiz with custom evaluation, answers and answer descriptions
 * submission
 * adding content element to evaluation, answer and answer description
@@ -18,8 +20,8 @@ composer require heimrichhannot/contao-quiz-bundle ~1.0
 ### Adding submission to quiz
 ![alt submission](/docs/screenshot-add-submission.png)
 
-To adding a submission to your quiz, create a quizSubmission Module, select 'add submission', select your submission archive and add the quizSubmission Module to your evaluation.
-See [here](https://github.com/heimrichhannot/contao-submissions) to add a submission archive (https://github.com/heimrichhannot/contao-submissions). 
+To adding a submission to your quiz, create a quiz submission module, select 'add submission', select your submission archive and add the quiz submission module to your evaluation.
+See [here](https://github.com/heimrichhannot/contao-submissions) how to add a submission archive (https://github.com/heimrichhannot/contao-submissions). 
 
 ### Adding evaluation to quiz
 ![alt evaluation](/docs/screenshot-add-evaluation.png)
@@ -31,11 +33,9 @@ See [here](https://github.com/heimrichhannot/contao-submissions) to add a submis
 ![alt_answer](/docs/screenshot-add-answer.png)
 
 ### Adding answer description to answer
-If you want to explain why the answer is whether correct or false, just simply add a description to the answer.
+If you want to explain why the answer is either correct or false simply add a description to the answer.
 Otherwise there will just stand correct or false as solving.
 ![alt answerDescription](/docs/screenshot-add-answer-description.png)
-
-
 
 ### InsertTags
 
