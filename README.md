@@ -2,32 +2,32 @@
 
 This bundle offers a simple quiz with submission (if needed).
 
-###Installing
+### Installing
 With composer and Contao 4 Managed Edition:
 ```
 composer require heimrichhannot/contao-quiz-bundle ~1.0
 ```
-###Features
+### Features
 * creating simple quiz with custom evaluation, answers and answer descriptions
 * submission
 * adding content element to evaluation, answer and answer description
 
-##Creating a quiz
+## Creating a quiz
 ![alt quiz](/docs/screenshot-new-quiz.png)
 
-###Adding submission to quiz
+### Adding submission to quiz
 ![alt submission](/docs/screenshot-add-submission.png)
 
-###Adding evaluation to quiz
+### Adding evaluation to quiz
 ![alt evaluation](/docs/screenshot-add-evaluation.png)
 
-###Adding questions to quiz
+### Adding questions to quiz
 ![alt question](/docs/screenshot-add-question.png)
 
-###Adding answers to question
+### Adding answers to question
 ![alt_answer](/docs/screenshot-add-answer.png)
 
-###Adding answer description to answer
+### Adding answer description to answer
 If you want to explain why the answer is whether correct or false, just simply add a description to the answer.
 Otherwise there will just stand correct or false as solving.
 ![alt answerDescription](/docs/screenshot-add-answer-description.png)
