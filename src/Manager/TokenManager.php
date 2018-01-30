@@ -41,4 +41,20 @@ class TokenManager
 
         return JWT::encode($decoded, System::getContainer()->getParameter('secret'));
     }
+
+    /**
+     * @param string $token
+     *
+     * @return object The JWT's payload as a PHP object
+     */
+    public function getDataFromJwtToken($token)
+    {
+        try {
+            $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
+        } catch (\Exception $e) {
+
+        }
+
+        return $decoded;
+    }
 }

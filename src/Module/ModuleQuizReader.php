@@ -73,7 +73,7 @@ class ModuleQuizReader extends Module
             $this->quiz = Request::getGet('items');
         }
 
-        if ($this->quizArchive) {
+        if ($this->quiz <= 0 && $this->quizArchive) {
             $this->quiz = $this->quizArchive;
         }
 
@@ -95,7 +95,7 @@ class ModuleQuizReader extends Module
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
         }
 
-        $quizModel = \System::getContainer()->get('huh.quiz.manager')->findByIdOrAlias($this->quiz);
+        $quizModel = \System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
         // apply module fields to template
         $this->Template->headline = $this->headline;
         $this->Template->hl       = $this->hl;
@@ -245,7 +245,7 @@ class ModuleQuizReader extends Module
         $questionModel            = System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPidNotInQuestions($this->quiz, $usedQuestions);
         $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.next');
         if (null == $questionModel) {
-            $this->session->reset(QuizSession::USED_QUESTIONS_NAME);
+            $token                    = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($token, $this->quiz, 'quizId');
             $templateData['href']     = Url::addQueryString('finished=1' . '&token=' . $token, $this->getUri());
             $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.score');
         } else {

@@ -8,6 +8,7 @@
 namespace HeimrichHannot\QuizBundle\Module;
 
 
+use Contao\System;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
 use HeimrichHannot\Request\Request;
 use HeimrichHannot\Submissions\Creator\ModuleSubmissionReader;
@@ -21,9 +22,14 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
     protected $strFormClass = 'HeimrichHannot\QuizBundle\Form\QuizSubmissionForm';
 
     /**
-     * @var QuizModel
+     * @var QuizModel $quizModel
      */
     protected $quizModel;
+
+    /**
+     * @var string $quiz
+     */
+    protected $quiz;
 
     public function generate()
     {
@@ -43,22 +49,28 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
             Request::setGet('items', Request::getGet('auto_item'));
         }
 
-        // Do not index or cache the page if no news item has been specified
-        if (!Request::hasGet('items')) {
+        if (Request::hasGet('items')) {
+            $this->quiz = Request::getGet('items');
+        }
 
-            /** @var \PageModel $objPage */
-            global $objPage;
-
-            $objPage->noSearch = 1;
-            $objPage->cache    = 0;
-
-            return '';
+        if ($this->quiz <= 0 && Request::hasGet('token')) {
+            $token     = Request::getGet('token');
+            $tokenData = System::getContainer()->get('huh.quiz.token.manager')->getDataFromJwtToken($token);
+            if ($tokenData->quizId) {
+                $this->quiz = $tokenData->quizId;
+            }
         }
 
         if (Request::hasGet('finished')) {
-            $this->quizModel                      = \System::getContainer()->get('huh.quiz.manager')->findByIdOrAlias(Request::getGet('items'));
-            $this->formHybridDataContainer        = 'tl_submission';
-            $submissionArchive                    = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
+            $this->quizModel = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
+            if (null == $this->quizModel) {
+                return '';
+            }
+            $this->formHybridDataContainer = 'tl_submission';
+            $submissionArchive             = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
+            if (null == $submissionArchive) {
+                return '';
+            }
             $this->formHybridEditable             = $submissionArchive->submissionFields;
             $this->formHybridSingleSubmission     = $this->quizModel->formHybridSingleSubmission;
             $this->formHybridResetAfterSubmission = $this->quizModel->formHybridResetAfterSubmission;
