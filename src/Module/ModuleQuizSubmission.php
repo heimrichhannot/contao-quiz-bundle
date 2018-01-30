@@ -1,12 +1,12 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Module;
-
 
 use Contao\System;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
@@ -17,29 +17,28 @@ use Patchwork\Utf8;
 
 class ModuleQuizSubmission extends ModuleSubmissionReader
 {
-
-    protected $strTemplate  = 'mod_quiz_submission';
+    protected $strTemplate = 'mod_quiz_submission';
     protected $strFormClass = 'HeimrichHannot\QuizBundle\Form\QuizSubmissionForm';
 
     /**
-     * @var QuizModel $quizModel
+     * @var QuizModel
      */
     protected $quizModel;
 
     /**
-     * @var string $quiz
+     * @var string
      */
     protected $quiz;
 
     public function generate()
     {
-        if (TL_MODE == 'BE') {
-            $objTemplate           = new \BackendTemplate('be_wildcard');
-            $objTemplate->wildcard = '### ' . Utf8::strtoupper($GLOBALS['TL_LANG']['FMD'][$this->type][0]) . ' ###';
-            $objTemplate->title    = $this->headline;
-            $objTemplate->id       = $this->id;
-            $objTemplate->link     = $this->name;
-            $objTemplate->href     = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+        if (TL_MODE === 'BE') {
+            $objTemplate = new \BackendTemplate('be_wildcard');
+            $objTemplate->wildcard = '### '.Utf8::strtoupper($GLOBALS['TL_LANG']['FMD'][$this->type][0]).' ###';
+            $objTemplate->title = $this->headline;
+            $objTemplate->id = $this->id;
+            $objTemplate->link = $this->name;
+            $objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id='.$this->id;
 
             return $objTemplate->parse();
         }
@@ -54,7 +53,7 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
         }
 
         if ($this->quiz <= 0 && Request::hasGet('token')) {
-            $token     = Request::getGet('token');
+            $token = Request::getGet('token');
             $tokenData = System::getContainer()->get('huh.quiz.token.manager')->getDataFromJwtToken($token);
             if ($tokenData->quizId) {
                 $this->quiz = $tokenData->quizId;
@@ -63,18 +62,18 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
 
         if (Request::hasGet('finished')) {
             $this->quizModel = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
-            if (null == $this->quizModel) {
+            if (null === $this->quizModel) {
                 return '';
             }
             $this->formHybridDataContainer = 'tl_submission';
-            $submissionArchive             = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
-            if (null == $submissionArchive) {
+            $submissionArchive = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
+            if (null === $submissionArchive) {
                 return '';
             }
-            $this->formHybridEditable             = $submissionArchive->submissionFields;
-            $this->formHybridSingleSubmission     = $this->quizModel->formHybridSingleSubmission;
+            $this->formHybridEditable = $submissionArchive->submissionFields;
+            $this->formHybridSingleSubmission = $this->quizModel->formHybridSingleSubmission;
             $this->formHybridResetAfterSubmission = $this->quizModel->formHybridResetAfterSubmission;
-            $this->defaultArchive                 = $submissionArchive->id;
+            $this->defaultArchive = $submissionArchive->id;
         }
 
         return parent::generate();

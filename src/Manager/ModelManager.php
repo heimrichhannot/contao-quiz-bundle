@@ -1,12 +1,12 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Manager;
-
 
 use Contao\Model;
 use Contao\Module;
@@ -15,7 +15,7 @@ use Contao\System;
 class ModelManager
 {
     /**
-     * gets the content element by the given model and table
+     * gets the content element by the given model and table.
      *
      * @param Model  $objModel
      * @param string $table
@@ -26,22 +26,22 @@ class ModelManager
     {
         $id = $objModel->id;
 
-        $strText    = '';
+        $strText = '';
         $objElement = \ContentModel::findPublishedByPidAndTable($id, $table);
-        if ($objElement !== null) {
+        if (null !== $objElement) {
             while ($objElement->next()) {
                 $strText .= Module::getContentElement($objElement->current());
             }
         }
 
-        $objModel->contentElement    = $strText;
+        $objModel->contentElement = $strText;
         $objModel->hasContentElement = \ContentModel::countPublishedByPidAndTable($objModel->id, $table) > 0;
 
         return $objModel;
     }
 
     /**
-     * add image to given model
+     * add image to given model.
      *
      * @param       $objArticle
      * @param array $templateData
@@ -50,22 +50,22 @@ class ModelManager
     public function addImage($objArticle, array &$templateData, $imgSize)
     {
         // Add an image
-        if ($objArticle->addImage && $objArticle->singleSRC != '') {
+        if ($objArticle->addImage && '' !== $objArticle->singleSRC) {
             $imageModel = \FilesModel::findByUuid($objArticle->singleSRC);
 
-            if ($imageModel !== null && is_file(TL_ROOT . '/' . $imageModel->path)) {
+            if (null !== $imageModel && is_file(TL_ROOT.'/'.$imageModel->path)) {
                 // Do not override the field now that we have a model registry (see #6303)
                 $imageArray = $objArticle->row();
 
                 // Override the default image size
-                if ($imgSize != '') {
+                if ('' !== $imgSize) {
                     $size = \StringUtil::deserialize($imgSize);
 
                     if ($size[0] > 0 || $size[1] > 0 || is_numeric($size[2])) {
                         $imageArray['size'] = $imgSize;
                     }
                 }
-                $imageArray['singleSRC']             = $imageModel->path;
+                $imageArray['singleSRC'] = $imageModel->path;
                 $templateData['images']['singleSRC'] = [];
                 System::getContainer()->get('huh.utils.image')->addToTemplateData('singleSRC', 'addImage', $templateData['images']['singleSRC'], $imageArray, null, null, null, $imageModel);
             }
@@ -80,19 +80,19 @@ class ModelManager
      *
      * @return string
      */
-    public function parseModel(Model $item, string $text, string $table, string $cssClass = '', $imgSize)
+    public function parseModel(Model $item, string $text, string $table, string $cssClass, $imgSize)
     {
         /**
          * @var \Twig_Environment
          */
         $twig = System::getContainer()->get('twig');
 
-        $templateData['text']              = $text;
-        $item                              = $this->getContentElementByModel($item, $table);
-        $templateData['item']              = $item;
+        $templateData['text'] = $text;
+        $item = $this->getContentElementByModel($item, $table);
+        $templateData['item'] = $item;
         $templateData['hasContentElement'] = $item->hasContentElement;
-        $templateData['contentElement']    = $item->contentElement;
-        $templateData['class']             = $cssClass;
+        $templateData['contentElement'] = $item->contentElement;
+        $templateData['class'] = $cssClass;
         $this->addImage($item, $templateData, $imgSize);
 
         return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_item.html.twig', $templateData);

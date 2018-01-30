@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
@@ -7,16 +8,14 @@
 
 namespace HeimrichHannot\QuizBundle\Backend;
 
-
 use Contao\Backend;
 use Contao\Input;
 use Contao\System;
 
 class Content extends Backend
 {
-
     /**
-     * Import the back end user object
+     * Import the back end user object.
      */
     public function __construct()
     {
@@ -25,7 +24,7 @@ class Content extends Backend
     }
 
     /**
-     * Check permissions to edit table tl_content
+     * Check permissions to edit table tl_content.
      */
     public function checkPermission(string $table, string $ptable)
     {
@@ -59,16 +58,16 @@ class Content extends Backend
             case 'cutAll':
             case 'copyAll':
                 // Check access to the parent element if a content element is moved
-                if (Input::get('act') == 'cutAll' || Input::get('act') == 'copyAll') {
-                    $this->checkAccessToElement(Input::get('pid'), $root, $table, $ptable, (Input::get('mode') == 2));
+                if ('cutAll' === Input::get('act') || 'copyAll' === Input::get('act')) {
+                    $this->checkAccessToElement(Input::get('pid'), $root, $table, $ptable, (2 === Input::get('mode')));
                 }
 
-                $objCes = $this->Database->prepare("SELECT id FROM tl_content WHERE ptable=" . $ptable . " AND pid=?")->execute(CURRENT_ID);
+                $objCes = $this->Database->prepare('SELECT id FROM tl_content WHERE ptable='.$ptable.' AND pid=?')->execute(CURRENT_ID);
 
                 /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $objSession */
                 $objSession = System::getContainer()->get('session');
 
-                $session                   = $objSession->all();
+                $session = $objSession->all();
                 $session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objCes->fetchEach('id'));
                 $objSession->replace($session);
                 break;
@@ -76,42 +75,13 @@ class Content extends Backend
             case 'cut':
             case 'copy':
                 // Check access to the parent element if a content element is moved
-                $this->checkAccessToElement(Input::get('pid'), $root, $table, $ptable, (Input::get('mode') == 2));
-            // NO BREAK STATEMENT HERE
+                $this->checkAccessToElement(Input::get('pid'), $root, $table, $ptable, (2 === Input::get('mode')));
+            // no break STATEMENT HERE
 
             default:
                 // Check access to the content element
                 $this->checkAccessToElement(Input::get('id'), $root, $table, $ptable);
                 break;
-        }
-    }
-
-
-    /**
-     * Check access to a particular content element
-     *
-     * @param integer $id
-     * @param array   $root
-     * @param boolean $blnIsPid
-     *
-     * @throws \Contao\CoreBundle\Exception\AccessDeniedException
-     */
-    protected function checkAccessToElement($id, $root, string $table, string $ptable, $blnIsPid = false)
-    {
-        if ($blnIsPid) {
-            $objArchive = $this->Database->prepare("SELECT a.id, n.id AS nid FROM " . $table . " n, " . $ptable . " a WHERE n.id=? AND n.pid=a.id")->limit(1)->execute($id);
-        } else {
-            $objArchive = $this->Database->prepare("SELECT a.id, n.id AS nid FROM tl_content c, " . $table . " n, " . $ptable . " a WHERE c.id=? AND c.pid=n.id AND n.pid=a.id")->limit(1)->execute($id);
-        }
-
-        // Invalid ID
-        if ($objArchive->numRows < 1) {
-            throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid quiz content element ID ' . $id . '.');
-        }
-
-        // The news archive is not mounted
-        if (!\in_array($objArchive->id, $root)) {
-            throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to modify article ID ' . $objArchive->nid . ' in quiz ID ' . $objArchive->id . '.');
         }
     }
 
@@ -124,10 +94,38 @@ class Content extends Backend
     {
         $evaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findOneBy('id', $id);
 
-        if (null == $evaluationModel) {
+        if (null === $evaluationModel) {
             return 0;
         }
 
         return $evaluationModel->id;
+    }
+
+    /**
+     * Check access to a particular content element.
+     *
+     * @param int   $id
+     * @param array $root
+     * @param bool  $blnIsPid
+     *
+     * @throws \Contao\CoreBundle\Exception\AccessDeniedException
+     */
+    protected function checkAccessToElement($id, $root, string $table, string $ptable, $blnIsPid = false)
+    {
+        if ($blnIsPid) {
+            $objArchive = $this->Database->prepare('SELECT a.id, n.id AS nid FROM '.$table.' n, '.$ptable.' a WHERE n.id=? AND n.pid=a.id')->limit(1)->execute($id);
+        } else {
+            $objArchive = $this->Database->prepare('SELECT a.id, n.id AS nid FROM tl_content c, '.$table.' n, '.$ptable.' a WHERE c.id=? AND c.pid=n.id AND n.pid=a.id')->limit(1)->execute($id);
+        }
+
+        // Invalid ID
+        if ($objArchive->numRows < 1) {
+            throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid quiz content element ID '.$id.'.');
+        }
+
+        // The news archive is not mounted
+        if (!\in_array($objArchive->id, $root, true)) {
+            throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to modify article ID '.$objArchive->nid.' in quiz ID '.$objArchive->id.'.');
+        }
     }
 }

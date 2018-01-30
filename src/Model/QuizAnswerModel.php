@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
@@ -8,26 +9,25 @@
 namespace HeimrichHannot\QuizBundle\Model;
 
 /**
- * @property int     $id
- * @property string  $title
- * @property string  $answer
- * @property boolean $isSolution
- * @property integer $pid
- * @property integer $author
- * @property boolean $addImage
- * @property string  $singleSRC
- * @property string  $alt
- * @property string  $size
- * @property string  $imagemargin
- * @property string  $imageUrl
- * @property boolean $fullsize
- * @property string  $caption
- * @property string  $floating
- * @property string  $cssClass
- * @property boolean $published
- * @property string  $start
- * @property string  $stop
- *
+ * @property int    $id
+ * @property string $title
+ * @property string $answer
+ * @property bool   $isSolution
+ * @property int    $pid
+ * @property int    $author
+ * @property bool   $addImage
+ * @property string $singleSRC
+ * @property string $alt
+ * @property string $size
+ * @property string $imagemargin
+ * @property string $imageUrl
+ * @property bool   $fullsize
+ * @property string $caption
+ * @property string $floating
+ * @property string $cssClass
+ * @property bool   $published
+ * @property string $start
+ * @property string $stop
  */
 class QuizAnswerModel extends \Contao\Model
 {

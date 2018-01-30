@@ -1,22 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kwagner
- * Date: 19.01.18
- * Time: 08:59
+
+/*
+ * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle;
 
-
 use HeimrichHannot\QuizBundle\DependencyInjection\HeimrichHannotContaoQuizExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeimrichHannotContaoQuizBundle extends Bundle
 {
-
     /**
      * @return HeimrichHannotContaoQuizExtension
      */

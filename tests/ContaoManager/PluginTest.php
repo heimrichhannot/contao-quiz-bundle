@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
@@ -16,9 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test the plugin class
- * Class PluginTest
- *
- * @package HeimrichHannot\QuizBundle\Test\ContaoManager
+ * Class PluginTest.
  */
 class PluginTest extends TestCase
 {

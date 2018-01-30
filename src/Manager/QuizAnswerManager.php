@@ -1,12 +1,12 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Manager;
-
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
@@ -27,7 +27,6 @@ class QuizAnswerManager
     {
         $this->framework = $framework;
     }
-
 
     /**
      * Adapter function for the model's findBy method.
@@ -64,11 +63,11 @@ class QuizAnswerManager
     }
 
     /**
-     * Find published answers items by their parent ID
+     * Find published answers items by their parent ID.
      *
-     * @param integer $intId      The question ID
-     * @param integer $intLimit   An optional limit
-     * @param array   $arrOptions An optional options array
+     * @param int   $intId      The question ID
+     * @param int   $intLimit   An optional limit
+     * @param array $arrOptions An optional options array
      *
      * @return \Model\Collection|QuizAnswerModel[]|QuizAnswerModel|null A collection of models or null if there are no news
      */
@@ -77,12 +76,12 @@ class QuizAnswerManager
         /** @var QuizAnswerModel $adapter */
         $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
 
-        $t          = $adapter->getTable();
+        $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
 
         if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+            $time = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
 
         if (!isset($arrOptions['order'])) {
@@ -106,11 +105,11 @@ class QuizAnswerManager
     }
 
     /**
-     * Find one published answers items by their parent ID
+     * Find one published answers items by their parent ID.
      *
-     * @param integer $intId      The question ID
-     * @param integer $intLimit   An optional limit
-     * @param array   $arrOptions An optional options array
+     * @param int   $intId      The question ID
+     * @param int   $intLimit   An optional limit
+     * @param array $arrOptions An optional options array
      *
      * @return \Model\Collection|QuizAnswerModel[]|QuizAnswerModel|null A collection of models or null if there are no news
      */
@@ -119,12 +118,12 @@ class QuizAnswerManager
         /** @var QuizAnswerModel $adapter */
         $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
 
-        $t          = $adapter->getTable();
+        $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
 
         if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+            $time = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
 
         if (!isset($arrOptions['order'])) {

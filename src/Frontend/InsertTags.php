@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
@@ -7,17 +8,13 @@
 
 namespace HeimrichHannot\QuizBundle\Frontend;
 
-
 use Contao\Controller;
 use Contao\Frontend;
-use Contao\Module;
 use Contao\ModuleModel;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
-use HeimrichHannot\QuizBundle\Module\ModuleQuizReader;
 
 class InsertTags extends Frontend
 {
-
     const TOTAL_SCORE = 'huh_quiz_total_score';
 
     const CURRENT_SCORE = 'huh_quiz_current_score';
@@ -34,17 +31,15 @@ class InsertTags extends Frontend
         // Parameter abtrennen
         $arrSplit = explode('::', $strTag);
 
-        if ($arrSplit[0] == static::TOTAL_SCORE && isset($arrSplit[1])) {
+        if ($arrSplit[0] === static::TOTAL_SCORE && isset($arrSplit[1])) {
             return \System::getContainer()->get('huh.quiz.question.manager')->countPublishedByPid($arrSplit[1]);
         }
 
-        if ($arrSplit[0] == static::CURRENT_SCORE) {
-
+        if ($arrSplit[0] === static::CURRENT_SCORE) {
             return $this->getCurrentScore();
         }
 
-        if ($arrSplit[0] == static::QUIZ && isset($arrSplit[1]) && isset($arrSplit[2])) {
-
+        if ($arrSplit[0] === static::QUIZ && isset($arrSplit[1]) && isset($arrSplit[2])) {
             return $this->getQuiz($arrSplit[1], $arrSplit[2]);
         }
 
@@ -52,13 +47,13 @@ class InsertTags extends Frontend
     }
 
     /**
-     * returns the current quiz score from session
+     * returns the current quiz score from session.
      *
      * @return int
      */
     public function getCurrentScore()
     {
-        $session = New QuizSession();
+        $session = new QuizSession();
 
         $score = $session->getData(QuizSession::SCORE_NAME);
 
@@ -77,7 +72,7 @@ class InsertTags extends Frontend
      */
     public function getQuiz($moduleId, $quizId)
     {
-        $moduleModel              = ModuleModel::findByIdOrAlias($moduleId);
+        $moduleModel = ModuleModel::findByIdOrAlias($moduleId);
         $moduleModel->quizArchive = $quizId;
 
         return Controller::getFrontendModule($moduleModel);

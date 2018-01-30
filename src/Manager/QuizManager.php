@@ -1,12 +1,12 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Manager;
-
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
@@ -27,7 +27,6 @@ class QuizManager
     {
         $this->framework = $framework;
     }
-
 
     /**
      * Adapter function for the model's findBy method.

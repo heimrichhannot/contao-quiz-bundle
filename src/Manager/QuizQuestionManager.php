@@ -1,12 +1,12 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Manager;
-
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
@@ -27,7 +27,6 @@ class QuizQuestionManager
     {
         $this->framework = $framework;
     }
-
 
     /**
      * Adapter function for the model's findBy method.
@@ -64,11 +63,11 @@ class QuizQuestionManager
     }
 
     /**
-     * Find published questions items by their parent ID
+     * Find published questions items by their parent ID.
      *
-     * @param integer $intId      The quiz ID
-     * @param integer $intLimit   An optional limit
-     * @param array   $arrOptions An optional options array
+     * @param int   $intId      The quiz ID
+     * @param int   $intLimit   An optional limit
+     * @param array $arrOptions An optional options array
      *
      * @return \Model\Collection|QuizQuestionModel[]|QuizQuestionModel|null A collection of models or null if there are no news
      */
@@ -77,12 +76,12 @@ class QuizQuestionManager
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
 
-        $t          = $adapter->getTable();
+        $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
 
         if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+            $time = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
 
         if (!isset($arrOptions['order'])) {
@@ -106,12 +105,12 @@ class QuizQuestionManager
     }
 
     /**
-     * Find published questions items by their parent ID which are not in array
+     * Find published questions items by their parent ID which are not in array.
      *
-     * @param integer $intId      The quiz ID
-     * @param integer $intLimit   An optional limit
-     * @param array   $arrOptions An optional options array
-     * @param array   $notIn
+     * @param int   $intId      The quiz ID
+     * @param int   $intLimit   An optional limit
+     * @param array $arrOptions An optional options array
+     * @param array $notIn
      *
      * @return \Model\Collection|QuizQuestionModel[]|QuizQuestionModel|null A collection of models or null if there are no news
      */
@@ -120,12 +119,12 @@ class QuizQuestionManager
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
 
-        $t          = $adapter->getTable();
+        $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
 
         if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+            $time = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
 
         if (!isset($arrOptions['order'])) {
@@ -133,7 +132,7 @@ class QuizQuestionManager
         }
 
         if (!empty($notIn)) {
-            $ids          = implode(', ', $notIn);
+            $ids = implode(', ', $notIn);
             $arrColumns[] = "$t.id NOT IN ($ids)";
         }
 
@@ -145,11 +144,11 @@ class QuizQuestionManager
     }
 
     /**
-     * Find one published questions items by their parent ID
+     * Find one published questions items by their parent ID.
      *
-     * @param integer $intId      The quiz ID
-     * @param integer $intLimit   An optional limit
-     * @param array   $arrOptions An optional options array
+     * @param int   $intId      The quiz ID
+     * @param int   $intLimit   An optional limit
+     * @param array $arrOptions An optional options array
      *
      * @return \Model\Collection|QuizQuestionModel[]|QuizQuestionModel|null A collection of models or null if there are no news
      */
@@ -158,12 +157,12 @@ class QuizQuestionManager
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
 
-        $t          = $adapter->getTable();
+        $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
 
         if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+            $time = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
 
         if (!isset($arrOptions['order'])) {
@@ -176,7 +175,6 @@ class QuizQuestionManager
 
         return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
     }
-
 
     /**
      * @param       $intId
@@ -190,12 +188,12 @@ class QuizQuestionManager
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
 
-        $t          = $adapter->getTable();
+        $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
 
         if (!$this->isPreviewMode($arrOptions)) {
-            $time         = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'" . ($time + 60) . "') AND $t.published='1'";
+            $time = \Date::floorToMinute();
+            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
 
         if (!isset($arrOptions['order'])) {
@@ -208,7 +206,7 @@ class QuizQuestionManager
 
         $collection = $adapter->findBy($arrColumns, $intId, $arrOptions);
 
-        if (null == $collection) {
+        if (null === $collection) {
             return 0;
         }
 

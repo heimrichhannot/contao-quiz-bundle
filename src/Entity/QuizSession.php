@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * Copyright (c) 2018 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
@@ -7,13 +8,12 @@
 
 namespace HeimrichHannot\QuizBundle\Entity;
 
-
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class QuizSession
 {
-    const SCORE_NAME          = 'score';
+    const SCORE_NAME = 'score';
     const USED_QUESTIONS_NAME = 'usedQuestions';
 
     /**
@@ -87,7 +87,7 @@ class QuizSession
     }
 
     /**
-     * increase the score +1
+     * increase the score +1.
      */
     public function increaseScore()
     {
