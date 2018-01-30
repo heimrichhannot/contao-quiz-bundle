@@ -8,6 +8,7 @@
 
 namespace HeimrichHannot\QuizBundle\Choice;
 
+use Contao\System;
 use HeimrichHannot\UtilsBundle\Choice\AbstractChoice;
 
 class TemplateChoice extends AbstractChoice
@@ -15,11 +16,11 @@ class TemplateChoice extends AbstractChoice
     /**
      * @return array
      */
-    protected function collect()
+    public function collect()
     {
         $choices = [];
 
-        $config = \System::getContainer()->getParameter('huh.quiz');
+        $config = System::getContainer()->getParameter('huh.quiz');
 
         if (!isset($config['quiz']['templates'])) {
             return $choices;
