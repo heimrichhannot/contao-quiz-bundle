@@ -18,6 +18,7 @@ use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 
 class TokenManagerTest extends ContaoTestCase
@@ -35,7 +36,7 @@ class TokenManagerTest extends ContaoTestCase
 
         $router = $this->createRouterMock();
         $requestStack = $this->createRequestStackMock();
-        $framework = $this->mockContaoFramework($this->createMockAdapater());
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
 
         $database = $this->createMock(Connection::class);
         $container = $this->mockContainer();
@@ -43,21 +44,28 @@ class TokenManagerTest extends ContaoTestCase
         $container->setParameter('secret', Config::class);
         $container->set('request_stack', $requestStack);
         $container->set('router', $router);
+        $container->set('session', new Session());
         $container->set('contao.framework', $framework);
         $container->set('database_connection', $database);
         System::setContainer($container);
     }
 
-    /**
-     * @return array
-     */
-    public function testAddDataToJwtToken()
+    public function testGetDataFromJwtToken()
     {
         $tokenManager = new TokenManager();
         $encode = JWT::encode(['id' => 12], System::getContainer()->getParameter('secret'));
         $token = $tokenManager->getDataFromJwtToken($encode);
 
         $this->assertSame(12, $token->id);
+    }
+
+    public function testAddDataToJwtToken()
+    {
+        $tokenManager = new TokenManager();
+        $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
+        $token = $tokenManager->addDataToJwtToken($encode, 12, 'id');
+
+        $this->assertNotEmpty($token);
     }
 
     public function createRouterMock()
@@ -90,7 +98,7 @@ class TokenManagerTest extends ContaoTestCase
         return $requestStack;
     }
 
-    public function createMockAdapater()
+    public function createMockAdapter()
     {
         $modelAdapter = $this->mockAdapter(['__construct']);
 
