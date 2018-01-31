@@ -114,7 +114,7 @@ class ModuleQuizReader extends Module
         }
 
         if (Request::hasGet('question')) {
-            $question = \System::getContainer()->get('huh.quiz.question.manager')->findByIdOrAlias(Request::getGet('question'));
+            $question = System::getContainer()->get('huh.quiz.question.manager')->findBy('id', Request::getGet('question'));
 
             if (null === $question) {
                 return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.question.error');

@@ -177,55 +177,16 @@ class QuizQuestionManager
     }
 
     /**
-     * @param       $intId
-     * @param int   $intLimit
+     * @param       $pid
      * @param array $arrOptions
      *
      * @return int
      */
-    public function countPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
+    public function countPublishedByPid($pid, array $arrOptions = [])
     {
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
 
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        $collection = $adapter->findBy($arrColumns, $intId, $arrOptions);
-
-        if (null === $collection) {
-            return 0;
-        }
-
-        return $collection->count();
-    }
-
-    /**
-     * Adapter function for the model's findBy method.
-     *
-     * @param mixed $varId      The ID or alias
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Contao\Model\Collection|QuizQuestionModel|null
-     */
-    public function findByIdOrAlias($value, array $options = [])
-    {
-        /** @var QuizQuestionModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
-
-        return $adapter->findByIdOrAlias($value, $options);
+        return $adapter->countBy('pid', $pid, $arrOptions);
     }
 }

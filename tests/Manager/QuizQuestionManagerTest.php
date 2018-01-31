@@ -38,7 +38,7 @@ class QuizQuestionManagerTest extends ContaoTestCase
 
         $quizQuestionAdapter = $this->mockAdapter(['findOnePublishedByPid', 'getTable', 'findOneBy']);
         $quizQuestionAdapter->method('findOnePublishedByPid')->willReturn($quizQuestionModel);
-        $quizQuestionAdapter->method('getTable')->willReturn('tl_quiz_answer');
+        $quizQuestionAdapter->method('getTable')->willReturn('tl_quiz_question');
         $quizQuestionAdapter->method('findOneBy')->willReturn($quizQuestionModel);
 
         $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
@@ -56,7 +56,7 @@ class QuizQuestionManagerTest extends ContaoTestCase
 
         $quizQuestionAdapter = $this->mockAdapter(['findPublishedByPid', 'getTable', 'findBy']);
         $quizQuestionAdapter->method('findPublishedByPid')->willReturn($quizQuestionModel);
-        $quizQuestionAdapter->method('getTable')->willReturn('tl_quiz_answer');
+        $quizQuestionAdapter->method('getTable')->willReturn('tl_quiz_question');
         $quizQuestionAdapter->method('findBy')->willReturn($quizQuestionModel);
 
         $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
@@ -66,6 +66,38 @@ class QuizQuestionManagerTest extends ContaoTestCase
         $result = $manager->findPublishedByPid(1);
 
         $this->assertInstanceOf(QuizQuestionModel::class, $result);
+    }
+
+    public function testFindOnePublishedByPidNotInQuestions()
+    {
+        $quizQuestionModel = $this->mockClassWithProperties(QuizQuestionModel::class, ['id' => 1]);
+        $quizQuestionAdapter = $this->mockAdapter(['findOnePublishedByPidNotInQuestions', 'getTable', 'findOneBy']);
+
+        $quizQuestionAdapter->method('findOnePublishedByPidNotInQuestions')->willReturn($quizQuestionModel);
+        $quizQuestionAdapter->method('getTable')->willReturn('tl_quiz_question');
+        $quizQuestionAdapter->method('findOneBy')->willReturn($quizQuestionModel);
+
+        $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
+        $manager = new QuizQuestionManager($framework);
+        $result = $manager->findOnePublishedByPidNotInQuestions(1, [2, 3]);
+
+        $this->assertInstanceOf(QuizQuestionModel::class, $result);
+        $this->assertSame(1, $result->id);
+    }
+
+    public function testCountPublishedByPid()
+    {
+        $quizQuestionModel = $this->createMock(QuizQuestionModel::class);
+        $quizQuestionAdapter = $this->mockAdapter(['countPublishedByPid', 'countBy']);
+
+        $quizQuestionAdapter->method('countPublishedByPid')->willReturn(1);
+        $quizQuestionAdapter->method('countBy')->willReturn(1);
+
+        $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
+        $manager = new QuizQuestionManager($framework);
+        $result = $manager->countPublishedByPid(1);
+
+        $this->assertSame(1, $result);
     }
 
     public function testFindBy()
