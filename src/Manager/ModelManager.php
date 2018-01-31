@@ -8,12 +8,31 @@
 
 namespace HeimrichHannot\QuizBundle\Manager;
 
+use Contao\ContentModel;
+use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\FilesModel;
 use Contao\Model;
 use Contao\Module;
+use Contao\StringUtil;
 use Contao\System;
 
 class ModelManager
 {
+    /**
+     * @var ContaoFrameworkInterface
+     */
+    protected $framework;
+
+    /**
+     * Constructor.
+     *
+     * @param ContaoFrameworkInterface $framework
+     */
+    public function __construct(ContaoFrameworkInterface $framework)
+    {
+        $this->framework = $framework;
+    }
+
     /**
      * gets the content element by the given model and table.
      *
@@ -25,17 +44,17 @@ class ModelManager
     public function getContentElementByModel(Model $objModel, string $table)
     {
         $id = $objModel->id;
-
+        /** @var ContentModel $adapter */
+        $adapter = $this->framework->getAdapter(ContentModel::class);
         $strText = '';
-        $objElement = \ContentModel::findPublishedByPidAndTable($id, $table);
-        if (null !== $objElement) {
-            while ($objElement->next()) {
-                $strText .= Module::getContentElement($objElement->current());
+        $objElements = $adapter->findPublishedByPidAndTable($id, $table);
+        if (null !== $objElements) {
+            foreach ($objElements as $objElement) {
+                $strText .= $this->framework->getAdapter(Module::class)->getContentElement($objElement);
             }
         }
-
+        $objModel->hasContentElement = $adapter->countPublishedByPidAndTable($objModel->id, $table) > 0;
         $objModel->contentElement = $strText;
-        $objModel->hasContentElement = \ContentModel::countPublishedByPidAndTable($objModel->id, $table) > 0;
 
         return $objModel;
     }
@@ -51,7 +70,7 @@ class ModelManager
     {
         // Add an image
         if ($objArticle->addImage && '' !== $objArticle->singleSRC) {
-            $imageModel = \FilesModel::findByUuid($objArticle->singleSRC);
+            $imageModel = $this->framework->getAdapter(FilesModel::class)->findByUuid($objArticle->singleSRC);
 
             if (null !== $imageModel && is_file(TL_ROOT.'/'.$imageModel->path)) {
                 // Do not override the field now that we have a model registry (see #6303)
@@ -59,7 +78,7 @@ class ModelManager
 
                 // Override the default image size
                 if ('' !== $imgSize) {
-                    $size = \StringUtil::deserialize($imgSize);
+                    $size = $this->framework->getAdapter(StringUtil::class)->deserialize($imgSize);
 
                     if ($size[0] > 0 || $size[1] > 0 || is_numeric($size[2])) {
                         $imageArray['size'] = $imgSize;

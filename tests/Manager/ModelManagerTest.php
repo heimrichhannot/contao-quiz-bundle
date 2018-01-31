@@ -9,19 +9,19 @@
 namespace HeimrichHannot\QuizBundle\Test\Choice;
 
 use Contao\Config;
+use Contao\ContentModel;
 use Contao\ManagerBundle\HttpKernel\ContaoKernel;
-use Contao\ManagerPlugin\PluginLoader;
 use Contao\Model;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use Doctrine\DBAL\Connection;
-use Firebase\JWT\JWT;
-use HeimrichHannot\QuizBundle\Manager\TokenManager;
+use HeimrichHannot\QuizBundle\Manager\ModelManager;
+use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 
-class TokenManagerTest extends ContaoTestCase
+class ModelManagerTest extends ContaoTestCase
 {
     /**
      * {@inheritdoc}
@@ -50,22 +50,25 @@ class TokenManagerTest extends ContaoTestCase
         System::setContainer($container);
     }
 
-    public function testGetDataFromJwtToken()
+    public function testContentElementByModel()
     {
-        $tokenManager = new TokenManager();
-        $encode = JWT::encode(['id' => 12], System::getContainer()->getParameter('secret'));
-        $token = $tokenManager->getDataFromJwtToken($encode);
+        $contentModel = $this->mockClassWithProperties(ContentModel::class, ['id' => 1]);
 
-        $this->assertSame(12, $token->id);
-    }
+        $contentAdapter = $this->mockAdapter(['findPublishedByPidAndTable', 'countPublishedByPidAndTable']);
+        $contentAdapter->method('findPublishedByPidAndTable')->willReturn($contentModel);
+        $contentAdapter->method('countPublishedByPidAndTable')->willReturn(1);
 
-    public function testAddDataToJwtToken()
-    {
-        $tokenManager = new TokenManager();
-        $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
-        $token = $tokenManager->addDataToJwtToken($encode, 12, 'id');
+        $framework = $this->mockContaoFramework([ContentModel::class => $contentAdapter]);
 
-        $this->assertNotEmpty($token);
+        $manager = new ModelManager($framework);
+
+        $mockModel = $this->mockClassWithProperties(QuizAnswerModel::class, ['id' => 1, 'hasContentElement' => null, 'contentElement' => '']);
+
+        $mockModel = $manager->getContentElementByModel($mockModel, 'tl_test');
+
+        $this->assertInstanceOf(QuizAnswerModel::class, $mockModel);
+        $this->assertSame('', $mockModel->contentElement);
+        $this->assertNull($mockModel->hasContentElement);
     }
 
     public function createRouterMock()
@@ -111,22 +114,5 @@ class TokenManagerTest extends ContaoTestCase
     protected function getFixturesDir(): string
     {
         return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
-    }
-
-    /**
-     * Mocks the plugin loader.
-     *
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $expects
-     * @param array                                                 $plugins
-     *
-     * @return PluginLoader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function mockPluginLoader(\PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $expects, array $plugins = [])
-    {
-        $pluginLoader = $this->createMock(PluginLoader::class);
-
-        $pluginLoader->expects($expects)->method('getInstancesOf')->with(PluginLoader::EXTENSION_PLUGINS)->willReturn($plugins);
-
-        return $pluginLoader;
     }
 }

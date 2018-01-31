@@ -9,6 +9,7 @@
 namespace HeimrichHannot\QuizBundle\Entity;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\System;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class QuizSession
@@ -30,7 +31,7 @@ class QuizSession
      */
     public function __construct()
     {
-        $this->session = \System::getContainer()->get('session');
+        $this->session = System::getContainer()->get('session');
     }
 
     /**
