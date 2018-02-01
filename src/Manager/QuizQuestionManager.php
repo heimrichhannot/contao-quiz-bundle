@@ -182,7 +182,7 @@ class QuizQuestionManager
      *
      * @return int
      */
-    public function countPublishedByPid($pid, array $arrOptions = [])
+    public function countByPid($pid, array $arrOptions = [])
     {
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);

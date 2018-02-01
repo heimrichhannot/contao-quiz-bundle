@@ -103,7 +103,7 @@ class ModuleQuizReader extends Module
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
         }
 
-        $this->count = System::getContainer()->get('huh.quiz.question.manager')->countPublishedByPid($quizModel->id);
+        $this->count = System::getContainer()->get('huh.quiz.question.manager')->countByPid($quizModel->id);
 
         if (Request::hasGet('answer')) {
             return $this->Template->quiz = $this->parseAnswerSolving(Request::getGet('answer'));

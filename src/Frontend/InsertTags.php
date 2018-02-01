@@ -11,6 +11,7 @@ namespace HeimrichHannot\QuizBundle\Frontend;
 use Contao\Controller;
 use Contao\Frontend;
 use Contao\ModuleModel;
+use Contao\System;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
 
 class InsertTags extends Frontend
@@ -32,11 +33,13 @@ class InsertTags extends Frontend
         $arrSplit = explode('::', $strTag);
 
         if ($arrSplit[0] === static::TOTAL_SCORE && isset($arrSplit[1])) {
-            return \System::getContainer()->get('huh.quiz.question.manager')->countPublishedByPid($arrSplit[1]);
+            return System::getContainer()->get('huh.quiz.question.manager')->countByPid($arrSplit[1]);
         }
 
         if ($arrSplit[0] === static::CURRENT_SCORE) {
-            return $this->getCurrentScore();
+            $session = new QuizSession();
+
+            return $session->getCurrentScore();
         }
 
         if ($arrSplit[0] === static::QUIZ && isset($arrSplit[1]) && isset($arrSplit[2])) {
@@ -47,24 +50,6 @@ class InsertTags extends Frontend
     }
 
     /**
-     * returns the current quiz score from session.
-     *
-     * @return int
-     */
-    public function getCurrentScore()
-    {
-        $session = new QuizSession();
-
-        $score = $session->getData(QuizSession::SCORE_NAME);
-
-        if (empty($score)) {
-            return 0;
-        }
-
-        return $score;
-    }
-
-    /**
      * @param $moduleId
      * @param $quizId
      *
@@ -72,9 +57,9 @@ class InsertTags extends Frontend
      */
     public function getQuiz($moduleId, $quizId)
     {
-        $moduleModel = ModuleModel::findByIdOrAlias($moduleId);
+        $moduleModel = System::getContainer()->get('contao.framework')->getAdapter(ModuleModel::class)->findByIdOrAlias($moduleId);
         $moduleModel->quizArchive = $quizId;
 
-        return Controller::getFrontendModule($moduleModel);
+        return System::getContainer()->get('contao.framework')->getAdapter(Controller::class)->getFrontendModule($moduleModel);
     }
 }

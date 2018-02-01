@@ -100,4 +100,18 @@ class QuizSession
         }
         $this->setData(static::SCORE_NAME, $score);
     }
+
+    /**
+     * @return int
+     */
+    public function getCurrentScore()
+    {
+        $score = $this->getData(self::SCORE_NAME);
+
+        if (empty($score)) {
+            return 0;
+        }
+
+        return $score;
+    }
 }

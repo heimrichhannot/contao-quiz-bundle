@@ -85,16 +85,16 @@ class QuizQuestionManagerTest extends ContaoTestCase
         $this->assertSame(1, $result->id);
     }
 
-    public function testCountPublishedByPid()
+    public function testCountByPid()
     {
-        $quizQuestionAdapter = $this->mockAdapter(['countPublishedByPid', 'countBy']);
+        $quizQuestionAdapter = $this->mockAdapter(['countByPid', 'countBy']);
 
-        $quizQuestionAdapter->method('countPublishedByPid')->willReturn(1);
+        $quizQuestionAdapter->method('countByPid')->willReturn(1);
         $quizQuestionAdapter->method('countBy')->willReturn(1);
 
         $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
         $manager = new QuizQuestionManager($framework);
-        $result = $manager->countPublishedByPid(1);
+        $result = $manager->countByPid(1);
 
         $this->assertSame(1, $result);
     }

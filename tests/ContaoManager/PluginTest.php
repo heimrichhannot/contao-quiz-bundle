@@ -11,16 +11,16 @@ namespace HeimrichHannot\QuizBundle\Test\ContaoManager;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\DelegatingParser;
+use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\ListBundle\HeimrichHannotContaoListBundle;
 use HeimrichHannot\QuizBundle\ContaoManager\Plugin;
 use HeimrichHannot\QuizBundle\HeimrichHannotContaoQuizBundle;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test the plugin class
  * Class PluginTest.
  */
-class PluginTest extends TestCase
+class PluginTest extends ContaoTestCase
 {
     public function testInstantiation()
     {
