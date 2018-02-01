@@ -87,7 +87,6 @@ class QuizQuestionManagerTest extends ContaoTestCase
 
     public function testCountPublishedByPid()
     {
-        $quizQuestionModel = $this->createMock(QuizQuestionModel::class);
         $quizQuestionAdapter = $this->mockAdapter(['countPublishedByPid', 'countBy']);
 
         $quizQuestionAdapter->method('countPublishedByPid')->willReturn(1);

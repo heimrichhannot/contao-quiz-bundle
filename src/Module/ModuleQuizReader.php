@@ -272,6 +272,9 @@ class ModuleQuizReader extends Module
         $score = $this->session->getData(QuizSession::SCORE_NAME);
         $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $this->count]);
         $quizEvaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($this->quiz);
+        $quiz = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
+        $templateData['text'] = $quiz->text;
+        $templateData['title'] = $quiz->title;
         if (null === $quizEvaluationModel) {
             return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
         }

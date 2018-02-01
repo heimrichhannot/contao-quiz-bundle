@@ -1,0 +1,5 @@
+huh:
+  list:
+    templates:
+      item:
+        - { name: quiz-list-item, template: "@HeimrichHannotContaoQuiz/item/list_item_quiz_default.html.twig" }

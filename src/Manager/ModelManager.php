@@ -114,6 +114,6 @@ class ModelManager
         $templateData['class'] = $cssClass;
         $this->addImage($item, $templateData, $imgSize);
 
-        return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_item.html.twig', $templateData);
+        return $twig->render('@HeimrichHannotContaoQuiz/item/quiz_item.html.twig', $templateData);
     }
 }

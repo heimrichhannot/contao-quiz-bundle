@@ -12,7 +12,7 @@ use HeimrichHannot\QuizBundle\DependencyInjection\HeimrichHannotContaoQuizExtens
 use HeimrichHannot\QuizBundle\HeimrichHannotContaoQuizBundle;
 use PHPUnit\Framework\TestCase;
 
-class HeimrichHannotContaoQuizExtensionTest extends TestCase
+class HeimrichHannotContaoQuizBundleTest extends TestCase
 {
     public function testGetContainerExtension()
     {

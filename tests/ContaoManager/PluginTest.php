@@ -11,6 +11,7 @@ namespace HeimrichHannot\QuizBundle\Test\ContaoManager;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\DelegatingParser;
+use HeimrichHannot\ListBundle\HeimrichHannotContaoListBundle;
 use HeimrichHannot\QuizBundle\ContaoManager\Plugin;
 use HeimrichHannot\QuizBundle\HeimrichHannotContaoQuizBundle;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +37,6 @@ class PluginTest extends TestCase
         static::assertCount(1, $bundles);
         static::assertInstanceOf(BundleConfig::class, $bundles[0]);
         static::assertEquals(HeimrichHannotContaoQuizBundle::class, $bundles[0]->getName());
-        static::assertEquals([ContaoCoreBundle::class, 'submissions_creator', 'submissions'], $bundles[0]->getLoadAfter());
+        static::assertEquals([ContaoCoreBundle::class, 'submissions_creator', 'submissions', HeimrichHannotContaoListBundle::class], $bundles[0]->getLoadAfter());
     }
 }
