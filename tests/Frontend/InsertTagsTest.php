@@ -60,14 +60,12 @@ class InsertTagsTest extends ContaoTestCase
 
     public function testQuizInsertTags()
     {
-        $strTotalScore = InsertTags::TOTAL_SCORE.'::1';
-
         $insertTag = new InsertTags();
 
         $resultCurrentScore = $insertTag->quizInsertTags(InsertTags::CURRENT_SCORE);
-        $resultTotalScore = $insertTag->quizInsertTags($strTotalScore);
+        $resultTotalScore = $insertTag->quizInsertTags(InsertTags::TOTAL_SCORE.'::1');
         $resultFalse = $insertTag->quizInsertTags('bla');
-        $resultQuiz = $insertTag->quizInsertTags(InsertTags::QUIZ);
+        $resultQuiz = $insertTag->quizInsertTags(InsertTags::QUIZ.'::2::3');
 
         $this->assertSame(0, $resultCurrentScore);
         $this->assertSame(2, $resultTotalScore);
