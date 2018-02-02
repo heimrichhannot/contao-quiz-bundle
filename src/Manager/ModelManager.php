@@ -105,9 +105,9 @@ class ModelManager
          * @var \Twig_Environment
          */
         $twig = System::getContainer()->get('twig');
+        $item = $this->getContentElementByModel($item, $table);
 
         $templateData['text'] = $text;
-        $item = $this->getContentElementByModel($item, $table);
         $templateData['item'] = $item;
         $templateData['hasContentElement'] = $item->hasContentElement;
         $templateData['contentElement'] = $item->contentElement;

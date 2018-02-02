@@ -10,7 +10,6 @@ array_insert($GLOBALS['BE_MOD']['content'], 4, [
     ],
 ]);
 
-
 /**
  * Frontend modules
  */

@@ -9,15 +9,19 @@
 namespace HeimrichHannot\QuizBundle\Test\Choice;
 
 use Contao\Config;
+use Contao\Controller;
+use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
+use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\RouterInterface;
 
 class TokenManagerTest extends ContaoTestCase
@@ -40,18 +44,19 @@ class TokenManagerTest extends ContaoTestCase
         $database = $this->createMock(Connection::class);
         $container = $this->mockContainer();
         $container->set('kernel', $this->createMock(ContaoKernel::class));
-        $container->setParameter('secret', Config::class);
         $container->set('request_stack', $requestStack);
         $container->set('router', $router);
-        $container->set('session', new Session());
+        $container->set('session', new Session(new MockArraySessionStorage()));
         $container->set('contao.framework', $framework);
         $container->set('database_connection', $database);
+        $container->setParameter('secret', Config::class);
         System::setContainer($container);
     }
 
     public function testGetDataFromJwtToken()
     {
-        $tokenManager = new TokenManager();
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
         $encode = JWT::encode(['id' => 12], System::getContainer()->getParameter('secret'));
         $token = $tokenManager->getDataFromJwtToken($encode);
 
@@ -60,13 +65,31 @@ class TokenManagerTest extends ContaoTestCase
 
     public function testAddDataToJwtToken()
     {
-        $tokenManager = new TokenManager();
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
         $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
         $token = $tokenManager->addDataToJwtToken($encode, 12, 'id');
         $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
 
         $this->assertSame('', $decoded->session);
         $this->assertSame(12, $decoded->id);
+
+        $tokenManager = new TokenManager($framework);
+        try {
+            $token = $tokenManager->addDataToJwtToken('', 12, 'id');
+        } catch (\Exception $exception) {
+            $this->assertInstanceOf(RedirectResponseException::class, $exception);
+            $this->assertSame('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21', $exception->getResponse()->getTargetUrl());
+        }
+
+        $encode = JWT::encode(['session' => '123456789'], System::getContainer()->getParameter('secret'));
+        $tokenManager = new TokenManager($framework);
+        try {
+            $token = $tokenManager->addDataToJwtToken($encode, 12, 'id');
+        } catch (\Exception $exception) {
+            $this->assertInstanceOf(RedirectResponseException::class, $exception);
+            $this->assertSame('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21', $exception->getResponse()->getTargetUrl());
+        }
     }
 
     public function createRouterMock()
@@ -102,8 +125,12 @@ class TokenManagerTest extends ContaoTestCase
     public function createMockAdapter()
     {
         $modelAdapter = $this->mockAdapter(['__construct']);
+        $urlAdapter = $this->mockAdapter(['addQueryString']);
+        $urlAdapter->method('addQueryString')->willReturn('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21');
+        $controllerAdapter = $this->mockAdapter(['redirect']);
+        $controllerAdapter->method('redirect')->willThrowException(new RedirectResponseException('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21'));
 
-        return [Model::class => $modelAdapter];
+        return [Model::class => $modelAdapter, Url::class => $urlAdapter, Controller::class => $controllerAdapter];
     }
 
     /**
