@@ -10,7 +10,8 @@
     "heimrichhannot/contao-list-bundle": "dev-master",
     "heimrichhannot/contao-filter-bundle": "dev-master",
     "heimrichhannot/contao-utils-bundle": "dev-master",
-    "heimrichhannot/contao-haste_plus": "^1.8"
+    "heimrichhannot/contao-haste_plus": "^1.8",
+    "heimrichhannot/contao-request": "^1.2"
   },
   "require-dev": {
     "contao/test-case": "^1.1",

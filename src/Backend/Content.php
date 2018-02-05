@@ -86,22 +86,6 @@ class Content extends Backend
     }
 
     /**
-     * @param $id
-     *
-     * @return int
-     */
-    public function getPidFromId($id)
-    {
-        $evaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findOneBy('id', $id);
-
-        if (null === $evaluationModel) {
-            return 0;
-        }
-
-        return $evaluationModel->id;
-    }
-
-    /**
      * Check access to a particular content element.
      *
      * @param int   $id

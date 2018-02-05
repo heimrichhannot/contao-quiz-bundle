@@ -41,7 +41,7 @@ class Plugin implements BundlePluginInterface, ExtensionPluginInterface
      */
     public function getExtensionConfig($extensionName, array $extensionConfigs, ContainerBuilder $container)
     {
-        $extensionConfigs = ContainerUtil::mergeConfigFile('huh_list', $extensionName, $extensionConfigs, $container->getParameter('kernel.project_dir').'/vendor/heimrichhannot/contao-quiz-bundle/src/Resources/config/config.yml');
+        $extensionConfigs = ContainerUtil::mergeConfigFile('huh_list', $extensionName, $extensionConfigs, __DIR__.'/../Resources/config/config.yml');
 
         return $extensionConfigs;
     }

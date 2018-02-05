@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
                 'label'           => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['toggle'],
                 'icon'            => 'visible.gif',
                 'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => ['tl_quiz_answer', 'toggleIcon'],
+                'button_callback' => ['tl_quiz_evaluation', 'toggleIcon'],
             ],
             'show'       => [
                 'label' => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['show'],

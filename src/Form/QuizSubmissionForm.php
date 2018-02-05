@@ -33,8 +33,4 @@ class QuizSubmissionForm extends ReaderForm
         $submission->quizScore = $quizSession->getData(QuizSession::SCORE_NAME);
         $submission->save();
     }
-
-    protected function compile()
-    {
-    }
 }
