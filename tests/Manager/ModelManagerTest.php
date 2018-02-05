@@ -76,30 +76,33 @@ class ModelManagerTest extends ContaoTestCase
         System::setContainer($container);
     }
 
-//    public function testContentElementByModel()
-//    {
-//        $contentModel = $this->mockClassWithProperties(ContentModel::class, []);
-//
-//        $contentAdapter = $this->mockAdapter(['findPublishedByPidAndTable', 'countPublishedByPidAndTable']);
-//        $contentAdapter->method('findPublishedByPidAndTable')->willReturn([$contentModel]);
-//        $contentAdapter->method('countPublishedByPidAndTable')->willReturn(1);
-//
-//        $framework = $this->mockContaoFramework([ContentModel::class => $contentAdapter]);
-//        $mockModel = $this->mockClassWithProperties(QuizAnswerModel::class, ['id' => 1]);
-//
-//        $manager   = new ModelManager($framework);
-//        $mockModel = $manager->getContentElementByModel($mockModel, 'tl_test');
-//
-//        $this->assertInstanceOf(QuizAnswerModel::class, $mockModel);
-//        $this->assertSame('', $mockModel->contentElement);
-//        $this->assertFalse($mockModel->hasContentElement);
-//    }
+    public function testGetContentElementByModel()
+    {
+        $contentModel = $this->mockClassWithProperties(ContentModel::class, []);
+        $contentAdapter = $this->mockAdapter(['findPublishedByPidAndTable', 'countPublishedByPidAndTable']);
+        $moduleAdapter = $this->mockAdapter(['getContentElement']);
+
+        $contentAdapter->method('findPublishedByPidAndTable')->willReturn([$contentModel]);
+        $contentAdapter->method('countPublishedByPidAndTable')->willReturn(1);
+        $moduleAdapter->method('getContentElement')->willReturn('Template');
+
+        $framework = $this->mockContaoFramework([ContentModel::class => $contentAdapter, Module::class => $moduleAdapter]);
+        $mockModel = $this->mockClassWithProperties(QuizAnswerModel::class, ['id' => 1, 'contentElement' => '', 'hasContentElement' => false]);
+
+        $manager = new ModelManager($framework);
+        $mockModel = $manager->getContentElementByModel($mockModel, 'tl_test');
+
+        $this->assertInstanceOf(QuizAnswerModel::class, $mockModel);
+        $this->assertFalse($mockModel->hasContentElement);
+        $this->assertSame('Template', $mockModel->contentElement);
+    }
 
     public function testAddImage()
     {
         $templateData = [];
         $mockedModel = $this->mockClassWithProperties(QuizAnswerModel::class, ['addImage' => true, 'singleSRC' => 'image']);
-        $mockedImageModel = $this->mockClassWithProperties(FilesModel::class, ['path' => '/data/files/image.jpg']);
+        $mockedModel->method('row')->willReturn([]);
+        $mockedImageModel = $this->mockClassWithProperties(FilesModel::class, ['path' => '../../../docs/screenshot-add-answer.png']);
 
         $filesAdapter = $this->mockAdapter(['findByUuid']);
         $filesAdapter->method('findByUuid')->willReturn($mockedImageModel);
@@ -165,10 +168,8 @@ class ModelManagerTest extends ContaoTestCase
     public function createMockAdapter()
     {
         $modelAdapter = $this->mockAdapter(['__construct']);
-        $moduleAdapter = $this->mockAdapter(['getContentElement']);
-        $moduleAdapter->method('getContentElement')->willReturn('Template');
 
-        return [Model::class => $modelAdapter, Module::class => $moduleAdapter];
+        return [Model::class => $modelAdapter];
     }
 
     /**

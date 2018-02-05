@@ -45,9 +45,10 @@ class QuizEvaluationManagerTest extends ContaoTestCase
 
         $manager = new QuizEvaluationManager($framework);
 
-        $result = $manager->findPublishedByPid(1);
+        $result = $manager->findPublishedByPid(1, ['limit' => 1]);
 
         $this->assertInstanceOf(QuizEvaluationModel::class, $result);
+        $this->assertSame(1, $result->id);
     }
 
     public function testFindBy()
@@ -64,6 +65,7 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         $result = $manager->findBy('id', 1);
 
         $this->assertInstanceOf(QuizEvaluationModel::class, $result);
+        $this->assertSame(1, $result->id);
     }
 
     public function testFindByPid()
@@ -79,9 +81,10 @@ class QuizEvaluationManagerTest extends ContaoTestCase
 
         $manager = new QuizEvaluationManager($framework);
 
-        $result = $manager->findByPid(1);
+        $result = $manager->findByPid(1, ['limit' => 1]);
 
         $this->assertInstanceOf(QuizEvaluationModel::class, $result);
+        $this->assertSame(1, $result->id);
     }
 
     public function testFindOneByPid()
@@ -97,9 +100,10 @@ class QuizEvaluationManagerTest extends ContaoTestCase
 
         $manager = new QuizEvaluationManager($framework);
 
-        $result = $manager->findOneByPid(1);
+        $result = $manager->findOneByPid(1, ['limit' => 1]);
 
         $this->assertInstanceOf(QuizEvaluationModel::class, $result);
+        $this->assertSame(1, $result->id);
     }
 
     public function testFindOneBy()
@@ -116,6 +120,7 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         $result = $manager->findOneBy('id', 1);
 
         $this->assertInstanceOf(QuizEvaluationModel::class, $result);
+        $this->assertSame(1, $result->id);
     }
 
     /**

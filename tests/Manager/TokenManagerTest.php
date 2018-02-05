@@ -61,6 +61,15 @@ class TokenManagerTest extends ContaoTestCase
         $token = $tokenManager->getDataFromJwtToken($encode);
 
         $this->assertSame(12, $token->id);
+
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
+        try {
+            $token = $tokenManager->getDataFromJwtToken('');
+        } catch (\Exception $exception) {
+            $this->assertInstanceOf(RedirectResponseException::class, $exception);
+            $this->assertSame('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21', $exception->getResponse()->getTargetUrl());
+        }
     }
 
     public function testAddDataToJwtToken()
