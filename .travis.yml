@@ -8,28 +8,19 @@ env:
   - CONTAO_VERSION="4.4.*"
   - CONTAO_VERSION="4.5.*"
 
-
-install:
-  - composer require contao/core-bundle:${CONTAO_VERSION}
-
-sudo: false
-
 notifications:
   email:
     recipients:
-        - digitales@heimrich-hannot.de
-    on_success: never # default: change
-    on_failure: always # default: always
+    - digitales@heimrich-hannot.de
+    on_success: never
+    on_failure: always
   hipchat:
-      rooms:
-        secure: TlNfiDoWjG1zf/JeVKUUbPzByN0lZAgkge+pnVaFsoPhPMsTJ4XiXfGR0tbEaMsRoWf0vxAEvbx4imYD/od6b5xazxI4loAy5ToeDSYVPwu/upypg/bJKd55Xm3duzGIaK1t8byE+XEpntPp0qjx/+OgbTNi4XEEegc0/S8r6NQYGagD7RyOBMqL9lFys4tL354TgSAMsiMf8YsgtVJrdgkpXakACjV3qPsLWvJEZG0Dvym24UCJRvAoo5XNl3DsK0l6p9O287QMDxTpvdA0EK1HVlKNjSzEFlT2Lm7mwv5MFz6P52T/LN+5xv8fMwpFZ+TRbCCXPZxg71CgHD4yiGvNyvRN4Gn7j329KPEZ7+pFltfehvE/YXusR3mMfwW8YWp7uoRhUGu8zmvB9FblygopNyb2VgI0goKwPFvpDQTaPXz/sys8OvGsh4oYPPxj18pLPEX7lrkv4qI2sF3Zb1ZJxg61j2VPvLSt+xBHBdg7IgWK6HTj+vLOo4VALhb9bq7GGmRi/nRkYljrdf+BFkY1vjdcqdz7AWlSuJPmAi7apV/ENaQmRB55ndGisXa2HSaCYyq8/VN0PQI8VgwViZdF/sQ2fcvF5J8X7L3heLuSoDRogFi4WVEyqm7/1uJLO13+F7RWRX2LqZl8jBH2aSO2aWjsaiDQMFYLoC20irM=
-
+    rooms:
+      secure: mmb9pcAJByTZV/YrbL0pS4lHUboBpEIdTmFw+OZnfOyqa+P2hr/L6hnJ87UpIrXe17PLlxTy1viimVPTxUXTWHS8N6dNJW5C6erqbJUZLvLL5l2rxUHcig2rJ2hiHXv5RzxfM49uqH2zd9FWdgjGoKe1vaTS7RieJIt51mhsPJ29ZMJW3Aj0Inu+cQHrGPb1Mraart7FsU6a7jnJ9i5GdDX8tOOq1Y0Vid94Oi2V+HERgBgFmcUv0443FfrRBWI4asqKpKAS0qqBPkuECb45ewejd2OTwOd+KcWksMFZErUIwtp6LBshYrk8bqhK07SVwgZ5yEBO6+NtcGPE48WV7CzgNJqnyJVt3udU4ck/Y++Sj+Y2F30XU8tPzpu4i5cJYVy9AJCmRnmduMX44Xjr2ovKcAKFCvDls6eC+F2PtFik1jYvaWqG5EnY+ZJH82lB6wo4hzlocmTKvEyfKOQoXhqrxnT5LlrE4ld3uhpnAN4fRrIHHn897gbgoic7wk8uRbPJmNnU2TdowlZDzVvU17IxydUwRgc2OsDxZB4h9s8SOyGEXYe5jtBVunuwo4yjrhEmm/u5q7S18vJuqMmBNdrzf1MBwSYHfKXBKebg7bjQAjVUE7sjCFq8Os3Dnrs446M4owAvdJQ07CDTl29157TuztG7c04cX7vT/3bTlIg=
 before_script:
-  - travis_wait composer install --no-interaction
-
+- travis_wait composer install --no-interaction
 script:
-  - mkdir -p build/logs
-  - php vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-
+- mkdir -p build/logs
+- php vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 after_script:
-  - php vendor/bin/coveralls
+- php vendor/bin/coveralls
