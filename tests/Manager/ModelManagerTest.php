@@ -94,7 +94,7 @@ class ModelManagerTest extends ContaoTestCase
 
         $this->assertInstanceOf(QuizAnswerModel::class, $mockModel);
         $this->assertFalse($mockModel->hasContentElement);
-        $this->assertSame('Template', $mockModel->contentElement);
+        $this->assertSame('', $mockModel->contentElement);
     }
 
     public function testAddImage()
