@@ -13,6 +13,8 @@ use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\QuizBundle\Manager\QuizEvaluationManager;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class QuizEvaluationManagerTest extends ContaoTestCase
 {
@@ -29,6 +31,7 @@ class QuizEvaluationManagerTest extends ContaoTestCase
 
         $container = $this->mockContainer();
         $container->set('kernel', $this->createMock(ContaoKernel::class));
+        $container->set('session', new Session(new MockArraySessionStorage()));
         System::setContainer($container);
     }
 

@@ -9,6 +9,7 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
 
 class QuizManager
@@ -19,6 +20,11 @@ class QuizManager
     protected $framework;
 
     /**
+     * @var QuizSession
+     */
+    protected $session;
+
+    /**
      * Constructor.
      *
      * @param ContaoFrameworkInterface $framework
@@ -26,6 +32,7 @@ class QuizManager
     public function __construct(ContaoFrameworkInterface $framework)
     {
         $this->framework = $framework;
+        $this->session = new QuizSession();
     }
 
     /**

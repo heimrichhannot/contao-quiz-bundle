@@ -114,4 +114,14 @@ class QuizSession
 
         return $score;
     }
+
+    /**
+     * @param $questionId
+     */
+    public function addCurrentQuestionToSession($questionId)
+    {
+        $usedQuestions = $this->getData(static::USED_QUESTIONS_NAME);
+        $usedQuestions[$questionId] = $questionId;
+        $this->setData(static::USED_QUESTIONS_NAME, $usedQuestions);
+    }
 }

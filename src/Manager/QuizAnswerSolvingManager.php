@@ -9,15 +9,13 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\System;
+use Haste\Util\Url;
+use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerSolvingModel;
 
-class QuizAnswerSolvingManager
+class QuizAnswerSolvingManager extends Manager
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    protected $framework;
-
     /**
      * Constructor.
      *
@@ -25,115 +23,68 @@ class QuizAnswerSolvingManager
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
-        $this->framework = $framework;
+        parent::__construct($framework);
+        $this->class = QuizAnswerSolvingModel::class;
     }
 
     /**
-     * Adapter function for the model's findBy method.
+     * @param $pid
+     * @param $quizId
+     * @param $token
      *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return QuizAnswerSolvingModel|null
+     * @return string
      */
-    public function findOneBy($column, $value, array $options = [])
+    public function parseAnswerSolving($pid, $quizId, $token)
     {
-        /** @var QuizAnswerSolvingModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerSolvingModel::class);
+        $answer = System::getContainer()->get('huh.quiz.answer.manager')->findBy('id', $pid);
+        if (null === $answer) {
+            return System::getContainer()->get('translator')->trans('huh.quiz.answer.error');
+        }
+        $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.wrong');
+        $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($token, $answer->id, $answer->pid);
 
-        return $adapter->findOneBy($column, $value, $options);
+        if ($answer->isSolution) {
+            $this->session->increaseScore();
+            $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.correct');
+        }
+
+        $templateData = $this->getNextQuestionUrl($token, $quizId);
+        $answerSolving = $this->findPublishedByPid($pid);
+
+        if (null !== $answerSolving) {
+            $solving = '';
+            foreach ($answerSolving as $item) {
+                $solving .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->solving, QuizAnswerSolvingModel::getTable(), $item->cssClass, $item->imgSize);
+            }
+        }
+        $templateData['answerSolving'] = $solving;
+        /*
+         * @var \Twig_Environment
+         */
+        $twig = System::getContainer()->get('twig');
+
+        return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_solving.html.twig', $templateData);
     }
 
     /**
-     * Adapter function for the model's findBy method.
+     * @param $token
+     * @param $quizId
      *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return \Contao\Model\Collection|QuizAnswerSolvingModel|null
+     * @return mixed
      */
-    public function findBy($column, $value, array $options = [])
+    public function getNextQuestionUrl($token, $quizId)
     {
-        /** @var QuizAnswerSolvingModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerSolvingModel::class);
-
-        return $adapter->findBy($column, $value, $options);
-    }
-
-    /**
-     * Find published answer solving by their parent ID.
-     *
-     * @param int   $intId      The answer ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizAnswerSolvingModel[]|QuizAnswerSolvingModel|null A collection of models or null if there are no news
-     */
-    public function findPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizAnswerSolvingModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerSolvingModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
+        $usedQuestions = $this->session->getData(QuizSession::USED_QUESTIONS_NAME);
+        $questionModel = System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPidNotInQuestions($quizId, $usedQuestions);
+        $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.next');
+        if (null === $questionModel) {
+            $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($token, $quizId, 'quizId');
+            $templateData['href'] = $this->framework->getAdapter(Url::class)->addQueryString('finished=1'.'&token='.$token, $this->getUri());
+            $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.score');
+        } else {
+            $templateData['href'] = $this->framework->getAdapter(Url::class)->addQueryString('question='.$questionModel->id.'&token='.$token, $this->getUri());
         }
 
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findBy($arrColumns, $intId, $arrOptions);
-    }
-
-    public function isPreviewMode($arrOptions)
-    {
-        if (isset($arrOptions['ignoreFePreview'])) {
-            return false;
-        }
-
-        return \defined('BE_USER_LOGGED_IN') && true === BE_USER_LOGGED_IN;
-    }
-
-    /**
-     * Find one published answer solving by their parent ID.
-     *
-     * @param int   $intId      The answer ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizAnswerSolvingModel[]|QuizAnswerSolvingModel|null A collection of models or null if there are no news
-     */
-    public function findOnePublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizAnswerSolvingModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerSolvingModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
+        return $templateData;
     }
 }

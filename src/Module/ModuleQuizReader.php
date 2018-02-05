@@ -8,15 +8,9 @@
 
 namespace HeimrichHannot\QuizBundle\Module;
 
-use Contao\Model\Collection;
 use Contao\Module;
 use Contao\System;
-use Haste\Util\Url;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
-use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
-use HeimrichHannot\QuizBundle\Model\QuizAnswerSolvingModel;
-use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
-use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 use HeimrichHannot\Request\Request;
 use Patchwork\Utf8;
 
@@ -43,11 +37,6 @@ class ModuleQuizReader extends Module
      * @var string
      */
     protected $quiz;
-
-    /**
-     * @var \Twig_Environment
-     */
-    protected $twig;
 
     public function generate()
     {
@@ -80,11 +69,6 @@ class ModuleQuizReader extends Module
             $this->token = Request::getGet('token');
         }
 
-        /*
-         * @var \Twig_Environment
-         */
-        $this->twig = System::getContainer()->get('twig');
-
         return parent::generate();
     }
 
@@ -106,11 +90,11 @@ class ModuleQuizReader extends Module
         $this->count = System::getContainer()->get('huh.quiz.question.manager')->countByPid($quizModel->id);
 
         if (Request::hasGet('answer')) {
-            return $this->Template->quiz = $this->parseAnswerSolving(Request::getGet('answer'));
+            return $this->Template->quiz = System::getContainer()->get('huh.quiz.answer.solving.manager')->parseAnswerSolving(Request::getGet('answer'), $this->quiz, $this->token);
         }
 
         if (Request::hasGet('finished')) {
-            return $this->Template->quiz = $this->parseQuizEvaluation();
+            return $this->Template->quiz = System::getContainer()->get('huh.quiz.evaluation.manager')->parseQuizEvaluation($this->quiz, $this->count);
         }
 
         if (Request::hasGet('question')) {
@@ -120,7 +104,7 @@ class ModuleQuizReader extends Module
                 return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.question.error');
             }
 
-            return $this->Template->quiz = $this->prepareQuestion($question, $quizModel);
+            return $this->Template->quiz = System::getContainer()->get('huh.quiz.question.manager')->prepareQuestion($question, $quizModel, $this->count, $this->imgSize);
         }
 
         $questionModel = System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPid($quizModel->id);
@@ -131,157 +115,6 @@ class ModuleQuizReader extends Module
         $this->session->reset(QuizSession::USED_QUESTIONS_NAME);
         $this->session->reset(QuizSession::SCORE_NAME);
 
-        $this->Template->quiz = $this->prepareQuestion($questionModel, $quizModel);
-    }
-
-    /**
-     * @param $question
-     * @param $quiz
-     *
-     * @return string
-     */
-    protected function prepareQuestion($question, $quiz)
-    {
-        $answersCollection = \System::getContainer()->get('huh.quiz.answer.manager')->findPublishedByPid($question->id);
-
-        if (null === $answersCollection) {
-            $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.answer.error');
-        }
-
-        $templateData['answers'] = $this->prepareAnswers($answersCollection);
-
-        $this->addCurrentQuestionToSession($question->id);
-
-        // item count text
-        $templateData['itemsFoundText'] = System::getContainer()->get('translator')->transChoice('huh.quiz.count.text.default', $this->count, ['%current%' => count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)), '%count%' => $this->count]);
-        $templateData['text'] = $quiz->text;
-        $templateData['title'] = $quiz->title;
-        $templateData['question'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($question, $question->question, QuizQuestionModel::getTable(), $question->cssClass, $this->imgSize);
-
-        return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_question.html.twig', $templateData);
-    }
-
-    /**
-     * @param $answersCollection
-     *
-     * @return array
-     */
-    protected function prepareAnswers(Collection $answersCollection)
-    {
-        $answers = [];
-
-        foreach ($answersCollection as $answer) {
-            $answers[] = $this->parseAnswer($answer);
-        }
-
-        return $answers;
-    }
-
-    /**
-     * @param $questionId
-     */
-    protected function addCurrentQuestionToSession($questionId)
-    {
-        $usedQuestions = $this->session->getData(QuizSession::USED_QUESTIONS_NAME);
-        $usedQuestions[$questionId] = $questionId;
-        $this->session->setData(QuizSession::USED_QUESTIONS_NAME, $usedQuestions);
-    }
-
-    /**
-     * parse the answer and return twig template as string.
-     *
-     * @param QuizAnswerModel $answerModel
-     *
-     * @return string
-     */
-    protected function parseAnswer(QuizAnswerModel $answerModel)
-    {
-        $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $this->imgSize);
-        $templateData['href'] = Url::addQueryString('answer='.$answerModel->id, $this->getUri());
-
-        return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_item.html.twig', $templateData);
-    }
-
-    /**
-     * @param $pid
-     *
-     * @return string
-     */
-    protected function parseAnswerSolving($pid)
-    {
-        $answer = System::getContainer()->get('huh.quiz.answer.manager')->findBy('id', $pid);
-        if (null === $answer) {
-            return System::getContainer()->get('translator')->trans('huh.quiz.answer.error');
-        }
-        $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.wrong');
-        $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $answer->id, $answer->pid);
-
-        if ($answer->isSolution) {
-            $this->session->increaseScore();
-            $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.correct');
-        }
-
-        $templateData = $this->getNextQuestionUrl($token);
-        $answerSolving = System::getContainer()->get('huh.quiz.answer.solving.manager')->findPublishedByPid($pid);
-
-        if (null !== $answerSolving) {
-            $solving = '';
-            foreach ($answerSolving as $item) {
-                $solving .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->solving, QuizAnswerSolvingModel::getTable(), $item->cssClass, $this->imgSize);
-            }
-        }
-        $templateData['answerSolving'] = $solving;
-
-        return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_solving.html.twig', $templateData);
-    }
-
-    /**
-     * @return array $templateData
-     */
-    protected function getNextQuestionUrl($token)
-    {
-        $usedQuestions = $this->session->getData(QuizSession::USED_QUESTIONS_NAME);
-        $questionModel = System::getContainer()->get('huh.quiz.question.manager')->findOnePublishedByPidNotInQuestions($this->quiz, $usedQuestions);
-        $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.next');
-        if (null === $questionModel) {
-            $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($token, $this->quiz, 'quizId');
-            $templateData['href'] = Url::addQueryString('finished=1'.'&token='.$token, $this->getUri());
-            $templateData['linkText'] = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.score');
-        } else {
-            $templateData['href'] = Url::addQueryString('question='.$questionModel->id.'&token='.$token, $this->getUri());
-        }
-
-        return $templateData;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getUri()
-    {
-        return Url::removeQueryString(['question', 'answer'], System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
-    }
-
-    /**
-     * get the quiz evaluation.
-     *
-     * @return string
-     */
-    protected function parseQuizEvaluation()
-    {
-        $score = $this->session->getData(QuizSession::SCORE_NAME);
-        $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $this->count]);
-        $quizEvaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($this->quiz);
-        $quiz = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
-        $templateData['text'] = $quiz->text;
-        $templateData['title'] = $quiz->title;
-        if (null === $quizEvaluationModel) {
-            return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
-        }
-        foreach ($quizEvaluationModel as $item) {
-            $templateData['evaluation'] .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable(), $item->cssClass, $this->imgSize);
-        }
-
-        return $this->twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
+        $this->Template->quiz = System::getContainer()->get('huh.quiz.question.manager')->prepareQuestion($questionModel, $quizModel, $this->count, $this->imgSize);
     }
 }

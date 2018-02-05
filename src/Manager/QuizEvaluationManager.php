@@ -9,15 +9,12 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\System;
+use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
 
-class QuizEvaluationManager
+class QuizEvaluationManager extends Manager
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    protected $framework;
-
     /**
      * Constructor.
      *
@@ -25,138 +22,35 @@ class QuizEvaluationManager
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
-        $this->framework = $framework;
+        parent::__construct($framework);
+        $this->class = QuizEvaluationModel::class;
     }
 
     /**
-     * Adapter function for the model's findBy method.
+     * @param $quizId
+     * @param $count
      *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return QuizEvaluationModel|null
+     * @return mixed
      */
-    public function findOneBy($column, $value, array $options = [])
+    public function parseQuizEvaluation($quizId, $count)
     {
-        /** @var QuizEvaluationModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
-
-        return $adapter->findOneBy($column, $value, $options);
-    }
-
-    /**
-     * Adapter function for the model's findBy method.
-     *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return \Contao\Model\Collection|QuizEvaluationModel|null
-     */
-    public function findBy($column, $value, array $options = [])
-    {
-        /** @var QuizEvaluationModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
-
-        return $adapter->findBy($column, $value, $options);
-    }
-
-    /**
-     * Find published answers items by their parent ID.
-     *
-     * @param int   $intId      The question ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizEvaluationModel[]|QuizEvaluationModel|null A collection of models or null if there are no news
-     */
-    public function findByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizEvaluationModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
+        /*
+         * @var \Twig_Environment
+         */
+        $twig = System::getContainer()->get('twig');
+        $score = $this->session->getData(QuizSession::SCORE_NAME);
+        $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $count]);
+        $quizEvaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($quizId);
+        $quiz = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $quizId);
+        $templateData['text'] = $quiz->text;
+        $templateData['title'] = $quiz->title;
+        if (null === $quizEvaluationModel) {
+            return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
+        }
+        foreach ($quizEvaluationModel as $item) {
+            $templateData['evaluation'] .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable(), $item->cssClass, $item->imgSize);
         }
 
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findBy($arrColumns, $intId, $arrOptions);
-    }
-
-    /**
-     * Find one published answers items by their parent ID.
-     *
-     * @param int   $intId      The question ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizEvaluationModel[]|QuizEvaluationModel|null A collection of models or null if there are no news
-     */
-    public function findOneByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizEvaluationModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
-    }
-
-    /**
-     * Find published questions items by their parent ID.
-     *
-     * @param int   $intId      The quiz ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizEvaluationModel[]|QuizEvaluationModel|null A collection of models or null if there are no news
-     */
-    public function findPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizEvaluationModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizEvaluationModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findBy($arrColumns, $intId, $arrOptions);
-    }
-
-    public function isPreviewMode($arrOptions)
-    {
-        if (isset($arrOptions['ignoreFePreview'])) {
-            return false;
-        }
-
-        return \defined('BE_USER_LOGGED_IN') && true === BE_USER_LOGGED_IN;
+        return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
     }
 }

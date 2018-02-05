@@ -9,15 +9,12 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\System;
+use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 
-class QuizQuestionManager
+class QuizQuestionManager extends Manager
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    protected $framework;
-
     /**
      * Constructor.
      *
@@ -25,83 +22,8 @@ class QuizQuestionManager
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
-        $this->framework = $framework;
-    }
-
-    /**
-     * Adapter function for the model's findBy method.
-     *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return QuizQuestionModel|null
-     */
-    public function findOneBy($column, $value, array $options = [])
-    {
-        /** @var QuizQuestionModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
-
-        return $adapter->findOneBy($column, $value, $options);
-    }
-
-    /**
-     * Adapter function for the model's findBy method.
-     *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return \Contao\Model\Collection|QuizQuestionModel|null
-     */
-    public function findBy($column, $value, array $options = [])
-    {
-        /** @var QuizQuestionModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
-
-        return $adapter->findBy($column, $value, $options);
-    }
-
-    /**
-     * Find published questions items by their parent ID.
-     *
-     * @param int   $intId      The quiz ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizQuestionModel[]|QuizQuestionModel|null A collection of models or null if there are no news
-     */
-    public function findPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizQuestionModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findBy($arrColumns, $intId, $arrOptions);
-    }
-
-    public function isPreviewMode($arrOptions)
-    {
-        if (isset($arrOptions['ignoreFePreview'])) {
-            return false;
-        }
-
-        return \defined('BE_USER_LOGGED_IN') && true === BE_USER_LOGGED_IN;
+        parent::__construct($framework);
+        $this->class = QuizQuestionModel::class;
     }
 
     /**
@@ -118,24 +40,19 @@ class QuizQuestionManager
     {
         /** @var QuizQuestionModel $adapter */
         $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
-
         $t = $adapter->getTable();
         $arrColumns = ["$t.pid=?"];
-
         if (!$this->isPreviewMode($arrOptions)) {
             $time = \Date::floorToMinute();
             $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
         }
-
         if (!isset($arrOptions['order'])) {
             $arrOptions['order'] = "$t.dateAdded DESC";
         }
-
         if (!empty($notIn)) {
             $ids = implode(', ', $notIn);
             $arrColumns[] = "$t.id NOT IN ($ids)";
         }
-
         if ($intLimit > 0) {
             $arrOptions['limit'] = $intLimit;
         }
@@ -144,49 +61,34 @@ class QuizQuestionManager
     }
 
     /**
-     * Find one published questions items by their parent ID.
+     * @param $question
+     * @param $quiz
      *
-     * @param int   $intId      The quiz ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizQuestionModel[]|QuizQuestionModel|null A collection of models or null if there are no news
+     * @return string
      */
-    public function findOnePublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
+    public function prepareQuestion($question, $quiz, $count, $imgSize)
     {
-        /** @var QuizQuestionModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
+        $answersCollection = System::getContainer()->get('huh.quiz.answer.manager')->findPublishedByPid($question->id);
 
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
+        if (null === $answersCollection) {
+            return System::getContainer()->get('translator')->trans('huh.quiz.answer.error');
         }
 
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
+        $templateData['answers'] = System::getContainer()->get('huh.quiz.answer.manager')->prepareAnswers($answersCollection);
 
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
+        $this->session->addCurrentQuestionToSession($question->id);
 
-        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
-    }
+        // item count text
+        $templateData['itemsFoundText'] = System::getContainer()->get('translator')->transChoice('huh.quiz.count.text.default', $count, ['%current%' => count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)), '%count%' => $count]);
+        $templateData['text'] = $quiz->text;
+        $templateData['title'] = $quiz->title;
+        $templateData['question'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($question, $question->question, QuizQuestionModel::getTable(), $question->cssClass, $imgSize);
 
-    /**
-     * @param       $pid
-     * @param array $arrOptions
-     *
-     * @return int
-     */
-    public function countByPid($pid, array $arrOptions = [])
-    {
-        /** @var QuizQuestionModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizQuestionModel::class);
+        /*
+         * @var \Twig_Environment
+         */
+        $twig = System::getContainer()->get('twig');
 
-        return $adapter->countBy('pid', $pid, $arrOptions);
+        return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_question.html.twig', $templateData);
     }
 }

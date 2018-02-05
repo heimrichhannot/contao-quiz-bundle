@@ -9,15 +9,13 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\System;
+use Haste\Util\Url;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
+use Model\Collection;
 
-class QuizAnswerManager
+class QuizAnswerManager extends Manager
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    protected $framework;
-
     /**
      * Constructor.
      *
@@ -25,115 +23,42 @@ class QuizAnswerManager
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
-        $this->framework = $framework;
+        parent::__construct($framework);
+        $this->class = QuizAnswerModel::class;
     }
 
     /**
-     * Adapter function for the model's findBy method.
+     * @param $answersCollection
      *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return QuizAnswerModel|null
+     * @return array
      */
-    public function findOneBy($column, $value, array $options = [])
+    public function prepareAnswers(Collection $answersCollection)
     {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
+        $answers = [];
 
-        return $adapter->findOneBy($column, $value, $options);
+        foreach ($answersCollection as $answer) {
+            $answers[] = $this->parseAnswer($answer, $answer->imgSize);
+        }
+
+        return $answers;
     }
 
     /**
-     * Adapter function for the model's findBy method.
+     * parse the answer and return twig template as string.
      *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
+     * @param QuizAnswerModel $answerModel
      *
-     * @return \Contao\Model\Collection|QuizAnswerModel|null
+     * @return string
      */
-    public function findBy($column, $value, array $options = [])
+    public function parseAnswer(QuizAnswerModel $answerModel, $imgSize)
     {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
+        /*
+         * @var \Twig_Environment
+         */
+        $twig = System::getContainer()->get('twig');
+        $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $imgSize);
+        $templateData['href'] = $this->framework->getAdapter(Url::class)->addQueryString('answer='.$answerModel->id, $this->getUri());
 
-        return $adapter->findBy($column, $value, $options);
-    }
-
-    /**
-     * Find published answers items by their parent ID.
-     *
-     * @param int   $intId      The question ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizAnswerModel[]|QuizAnswerModel|null A collection of models or null if there are no news
-     */
-    public function findPublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findBy($arrColumns, $intId, $arrOptions);
-    }
-
-    public function isPreviewMode($arrOptions)
-    {
-        if (isset($arrOptions['ignoreFePreview'])) {
-            return false;
-        }
-
-        return \defined('BE_USER_LOGGED_IN') && true === BE_USER_LOGGED_IN;
-    }
-
-    /**
-     * Find one published answers items by their parent ID.
-     *
-     * @param int   $intId      The question ID
-     * @param int   $intLimit   An optional limit
-     * @param array $arrOptions An optional options array
-     *
-     * @return \Model\Collection|QuizAnswerModel[]|QuizAnswerModel|null A collection of models or null if there are no news
-     */
-    public function findOnePublishedByPid($intId, $intLimit = 0, array $arrOptions = [])
-    {
-        /** @var QuizAnswerModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizAnswerModel::class);
-
-        $t = $adapter->getTable();
-        $arrColumns = ["$t.pid=?"];
-
-        if (!$this->isPreviewMode($arrOptions)) {
-            $time = \Date::floorToMinute();
-            $arrColumns[] = "($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'".($time + 60)."') AND $t.published='1'";
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.dateAdded DESC";
-        }
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        return $adapter->findOneBy($arrColumns, $intId, $arrOptions);
+        return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_item.html.twig', $templateData);
     }
 }
