@@ -42,11 +42,13 @@ class QuizAnswerManagerTest extends ContaoTestCase
         $framework = $this->mockContaoFramework($this->createMockAdapter());
         $container->set('contao.framework', $framework);
 
+        // twig
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../src/Resources/views/');
         $loader->addPath(__DIR__.'/../../src/Resources/views/', 'HeimrichHannotContaoQuiz');
         $twig = new \Twig_Environment($loader, ['cache' => $this->getTempDir().'/var/cache/']);
         $container->set('twig', $twig);
 
+        // model manager
         $contentModel = $this->mockClassWithProperties(ContentModel::class, ['id' => 1]);
         $contentAdapter = $this->mockAdapter(['findPublishedByPidAndTable', 'countPublishedByPidAndTable']);
         $contentAdapter->method('findPublishedByPidAndTable')->willReturn($contentModel);
@@ -54,6 +56,7 @@ class QuizAnswerManagerTest extends ContaoTestCase
         $manager = new ModelManager($this->mockContaoFramework(array_merge($this->createMockAdapter(), [ContentModel::class => $contentAdapter])));
         $container->set('huh.quiz.model.manager', $manager);
 
+        // request stack
         $request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($request);
