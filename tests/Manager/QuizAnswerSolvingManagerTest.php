@@ -71,6 +71,8 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
         // translator
         $translator = new Translator('de');
         $container->set('translator', $translator);
+
+        // secret
         $container->setParameter('secret', Config::class);
 
         // request stack

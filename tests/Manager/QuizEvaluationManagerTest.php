@@ -8,13 +8,19 @@
 
 namespace HeimrichHannot\QuizBundle\Test\Manager;
 
+use Contao\ContentModel;
 use Contao\ManagerBundle\HttpKernel\ContaoKernel;
+use Contao\Model;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
+use HeimrichHannot\QuizBundle\Manager\ModelManager;
 use HeimrichHannot\QuizBundle\Manager\QuizEvaluationManager;
+use HeimrichHannot\QuizBundle\Manager\QuizManager;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
+use HeimrichHannot\QuizBundle\Model\QuizModel;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Translation\Translator;
 
 class QuizEvaluationManagerTest extends ContaoTestCase
 {
@@ -32,6 +38,35 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         $container = $this->mockContainer();
         $container->set('kernel', $this->createMock(ContaoKernel::class));
         $container->set('session', new Session(new MockArraySessionStorage()));
+
+        // twig
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../src/Resources/views/');
+        $loader->addPath(__DIR__.'/../../src/Resources/views/', 'HeimrichHannotContaoQuiz');
+        $twig = new \Twig_Environment($loader, ['cache' => $this->getTempDir().'/var/cache/']);
+        $container->set('twig', $twig);
+
+        // translator
+        $translator = new Translator('de');
+        $container->set('translator', $translator);
+
+        //secret
+        $container->setParameter('secret', \Config::class);
+
+        // model manager
+        $contentModel = $this->mockClassWithProperties(ContentModel::class, ['id' => 1]);
+        $contentAdapter = $this->mockAdapter(['findPublishedByPidAndTable', 'countPublishedByPidAndTable']);
+        $contentAdapter->method('findPublishedByPidAndTable')->willReturn($contentModel);
+        $contentAdapter->method('countPublishedByPidAndTable')->willReturn(1);
+        $manager = new ModelManager($this->mockContaoFramework([ContentModel::class => $contentAdapter]));
+        $container->set('huh.quiz.model.manager', $manager);
+
+        // quiz manager
+        $quizModel = $this->mockClassWithProperties(QuizModel::class, ['text' => 'text', 'title' => 'title']);
+        $quizAdapter = $this->mockAdapter(['findOneBy']);
+        $quizAdapter->method('findOneBy')->willReturn($quizModel);
+        $manager = new QuizManager($this->mockContaoFramework([QuizModel::class => $quizAdapter]));
+        $container->set('huh.quiz.manager', $manager);
+
         System::setContainer($container);
     }
 
@@ -124,6 +159,24 @@ class QuizEvaluationManagerTest extends ContaoTestCase
 
         $this->assertInstanceOf(QuizEvaluationModel::class, $result);
         $this->assertSame(1, $result->id);
+    }
+
+    public function testParseQuizEvaluation()
+    {
+        $manager = new QuizEvaluationManager($this->mockContaoFramework($this->createMockAdapter()));
+        $template = $manager->parseQuizEvaluation('1', 2);
+    }
+
+    public function createMockAdapter()
+    {
+        $modelAdapter = $this->mockAdapter(['__construct']);
+
+        $evalModel = $this->mockClassWithProperties(QuizEvaluationModel::class, ['imgSize' => '', 'cssClass' => 'css', 'evaluationText' => 'evaluationText']);
+        $evalAdapter = $this->mockAdapter(['findBy', 'getTable']);
+        $evalAdapter->method('findBy')->method($evalModel)->willReturn([$evalModel]);
+        $evalAdapter->method('getTable')->willReturn('tl_quiz_evaluation');
+
+        return [Model::class => $modelAdapter, QuizEvaluationModel::class => $evalAdapter];
     }
 
     /**

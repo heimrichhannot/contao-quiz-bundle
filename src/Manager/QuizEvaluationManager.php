@@ -40,7 +40,7 @@ class QuizEvaluationManager extends Manager
         $twig = System::getContainer()->get('twig');
         $score = $this->session->getData(QuizSession::SCORE_NAME);
         $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $count]);
-        $quizEvaluationModel = System::getContainer()->get('huh.quiz.evaluation.manager')->findPublishedByPid($quizId);
+        $quizEvaluationModel = $this->findPublishedByPid($quizId);
         $quiz = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $quizId);
         $templateData['text'] = $quiz->text;
         $templateData['title'] = $quiz->title;
