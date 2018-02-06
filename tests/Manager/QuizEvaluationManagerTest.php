@@ -165,6 +165,32 @@ class QuizEvaluationManagerTest extends ContaoTestCase
     {
         $manager = new QuizEvaluationManager($this->mockContaoFramework($this->createMockAdapter()));
         $template = $manager->parseQuizEvaluation('1', 2);
+
+        $html = '<div class="quiz-evaluation">
+    <h1 class="quiz-title">title</h1>
+    <div class="quiz-text">text</div>
+    <div class="quiz-score">huh.quiz.answer.score</div>
+    <div class="css">
+    <div class="text">
+        evaluationText
+    </div>
+        </div>
+</div>';
+        $this->assertSame($html, $template);
+
+        $evalAdapter = $this->mockAdapter(['getTable', 'findBy']);
+        $evalAdapter->method('getTable')->willReturn('tl_quiz_evaluation');
+        $evalAdapter->method('findBy')->willReturn(null);
+
+        $manager = new QuizEvaluationManager($this->mockContaoFramework([QuizEvaluationModel::class => $evalAdapter]));
+        $template = $manager->parseQuizEvaluation('1', 2);
+        $html = '<div class="quiz-evaluation">
+    <h1 class="quiz-title">title</h1>
+    <div class="quiz-text">text</div>
+    <div class="quiz-score">huh.quiz.answer.score</div>
+    
+</div>';
+        $this->assertSame($html, $template);
     }
 
     public function createMockAdapter()
@@ -172,9 +198,9 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         $modelAdapter = $this->mockAdapter(['__construct']);
 
         $evalModel = $this->mockClassWithProperties(QuizEvaluationModel::class, ['imgSize' => '', 'cssClass' => 'css', 'evaluationText' => 'evaluationText']);
-        $evalAdapter = $this->mockAdapter(['findBy', 'getTable']);
-        $evalAdapter->method('findBy')->method($evalModel)->willReturn([$evalModel]);
+        $evalAdapter = $this->mockAdapter(['getTable', 'findBy']);
         $evalAdapter->method('getTable')->willReturn('tl_quiz_evaluation');
+        $evalAdapter->method('findBy')->willReturn([$evalModel]);
 
         return [Model::class => $modelAdapter, QuizEvaluationModel::class => $evalAdapter];
     }

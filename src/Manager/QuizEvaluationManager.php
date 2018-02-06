@@ -47,6 +47,7 @@ class QuizEvaluationManager extends Manager
         if (null === $quizEvaluationModel) {
             return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);
         }
+        $templateData['evaluation'] = '';
         foreach ($quizEvaluationModel as $item) {
             $templateData['evaluation'] .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable(), $item->cssClass, $item->imgSize);
         }
