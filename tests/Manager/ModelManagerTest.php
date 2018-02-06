@@ -21,7 +21,6 @@ use Doctrine\DBAL\Connection;
 use HeimrichHannot\QuizBundle\Manager\ModelManager;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
 use HeimrichHannot\UtilsBundle\Container\ContainerUtil;
-use HeimrichHannot\UtilsBundle\Image\Image;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
