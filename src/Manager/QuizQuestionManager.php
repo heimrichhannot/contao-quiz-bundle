@@ -11,6 +11,7 @@ namespace HeimrichHannot\QuizBundle\Manager;
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\System;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
+use HeimrichHannot\QuizBundle\Model\QuizModel;
 use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 
 class QuizQuestionManager extends Manager
@@ -61,10 +62,12 @@ class QuizQuestionManager extends Manager
     }
 
     /**
-     * @param $question
-     * @param $quiz
+     * @param QuizQuestionModel $question
+     * @param QuizModel         $quiz
+     * @param int               $count
+     * @param                   $imgSize
      *
-     * @return string
+     * @return mixed
      */
     public function prepareQuestion($question, $quiz, $count, $imgSize)
     {
