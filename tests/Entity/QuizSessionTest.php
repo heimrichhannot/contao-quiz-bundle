@@ -95,6 +95,6 @@ class QuizSessionTest extends ContaoTestCase
         $session->addCurrentQuestionToSession('1');
         $data = $session->getData(QuizSession::USED_QUESTIONS_NAME);
         $this->assertArrayHasKey(1, $data);
-        $this->assertSame(1, $data[1]);
+        $this->assertSame('1', $data[1]);
     }
 }
