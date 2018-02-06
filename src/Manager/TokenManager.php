@@ -45,15 +45,15 @@ class TokenManager
         } catch (\Exception $e) {
             $token = ['session' => System::getContainer()->get('session')->getId()];
             $encode = JWT::encode($token, System::getContainer()->getParameter('secret'));
-            $url = System::getContainer()->get('contao.framework')->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
-            System::getContainer()->get('contao.framework')->getAdapter(Controller::class)->redirect($url);
+            $url = $this->framework->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $this->framework->getAdapter(Controller::class)->redirect($url);
         }
 
         if (!isset($decoded->session) || $decoded->session !== System::getContainer()->get('session')->getId()) {
             $token = ['session' => System::getContainer()->get('session')->getId()];
             $encode = JWT::encode($token, System::getContainer()->getParameter('secret'));
-            $url = System::getContainer()->get('contao.framework')->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
-            System::getContainer()->get('contao.framework')->getAdapter(Controller::class)->redirect($url);
+            $url = $this->framework->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $this->framework->getAdapter(Controller::class)->redirect($url);
         }
 
         $decoded->$key = $data;
@@ -73,8 +73,8 @@ class TokenManager
         } catch (\Exception $e) {
             $token = ['session' => System::getContainer()->get('session')->getId()];
             $encode = JWT::encode($token, System::getContainer()->getParameter('secret'));
-            $url = System::getContainer()->get('contao.framework')->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
-            System::getContainer()->get('contao.framework')->getAdapter(Controller::class)->redirect($url);
+            $url = $this->framework->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $this->framework->getAdapter(Controller::class)->redirect($url);
         }
 
         return $decoded;

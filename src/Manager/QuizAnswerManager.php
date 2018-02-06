@@ -9,10 +9,10 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\Model\Collection;
 use Contao\System;
 use Haste\Util\Url;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
-use Model\Collection;
 
 class QuizAnswerManager extends Manager
 {
@@ -37,7 +37,7 @@ class QuizAnswerManager extends Manager
         $answers = [];
 
         foreach ($answersCollection as $answer) {
-            $answers[] = $this->parseAnswer($answer, $answer->imgSize);
+            $answers[] = $this->parseAnswer($answer);
         }
 
         return $answers;
@@ -50,13 +50,13 @@ class QuizAnswerManager extends Manager
      *
      * @return string
      */
-    public function parseAnswer(QuizAnswerModel $answerModel, $imgSize)
+    public function parseAnswer(QuizAnswerModel $answerModel)
     {
         /*
          * @var \Twig_Environment
          */
         $twig = System::getContainer()->get('twig');
-        $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $imgSize);
+        $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $answerModel->imgSize);
         $templateData['href'] = $this->framework->getAdapter(Url::class)->addQueryString('answer='.$answerModel->id, $this->getUri());
 
         return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_item.html.twig', $templateData);
