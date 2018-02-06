@@ -26,7 +26,7 @@ class QuizManagerTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $container = $this->mockContainer();
@@ -65,13 +65,5 @@ class QuizManagerTest extends ContaoTestCase
         $result = $manager->findOneBy('id', 1);
 
         $this->assertInstanceOf(QuizModel::class, $result);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }

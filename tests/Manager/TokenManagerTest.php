@@ -34,7 +34,7 @@ class TokenManagerTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $router = $this->createRouterMock();
@@ -140,13 +140,5 @@ class TokenManagerTest extends ContaoTestCase
         $controllerAdapter->method('redirect')->willThrowException(new RedirectResponseException('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21'));
 
         return [Model::class => $modelAdapter, Url::class => $urlAdapter, Controller::class => $controllerAdapter];
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }

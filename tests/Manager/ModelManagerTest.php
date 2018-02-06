@@ -14,12 +14,15 @@ use Contao\FilesModel;
 use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\Module;
+use Contao\StringUtil;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use Doctrine\DBAL\Connection;
 use HeimrichHannot\QuizBundle\Manager\ModelManager;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
+use HeimrichHannot\UtilsBundle\Container\ContainerUtil;
 use HeimrichHannot\UtilsBundle\Image\Image;
+use Monolog\Logger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -41,7 +44,7 @@ class ModelManagerTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $fs = new \Symfony\Component\Filesystem\Filesystem();
@@ -61,14 +64,21 @@ class ModelManagerTest extends ContaoTestCase
         $database = $this->createMock(Connection::class);
         $container->set('database_connection', $database);
 
+        $container->set('monolog.logger.contao', new Logger('test'));
+
+        // twig
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../src/Resources/views/');
         $loader->addPath(__DIR__.'/../../src/Resources/views/', 'HeimrichHannotContaoQuiz');
         $twig = new \Twig_Environment($loader, ['cache' => $this->getTempDir().'/var/cache/']);
         $container->set('twig', $twig);
 
+        // utils image
         $imageAdapter = $this->mockAdapter(['addToTemplateData']);
         $imageAdapter->method('addToTemplateData')->willReturn($templateData['images']['singleSRC'] = []);
-        $container->set('huh.utils.image', $this->mockContaoFramework([Image::class => $imageAdapter]));
+        $container->set('huh.utils.image', $imageAdapter);
+
+        $utilsContainer = new ContainerUtil($this->mockContaoFramework());
+        $container->set('huh.utils.container', $utilsContainer);
 
         $container->setParameter('secret', Config::class);
         $container->set('kernel', $this->createMock(ContaoKernel::class));
@@ -101,18 +111,22 @@ class ModelManagerTest extends ContaoTestCase
     {
         $templateData = [];
         $mockedModel = $this->mockClassWithProperties(QuizAnswerModel::class, ['addImage' => true, 'singleSRC' => 'image']);
-        $mockedModel->method('row')->willReturn([]);
-        $mockedImageModel = $this->mockClassWithProperties(FilesModel::class, ['path' => '../../../docs/screenshot-add-answer.png']);
+        $mockedModel->method('row')->willReturn(['imagemargin' => 'a:5:{s:6:"bottom";s:0:"";s:4:"left";s:0:"";s:5:"right";s:0:"";s:3:"top";s:0:"";s:4:"unit";s:0:"";}']);
+        $mockedImageModel = $this->mockClassWithProperties(FilesModel::class, ['path' => '../img/screenshot.png']);
 
         $filesAdapter = $this->mockAdapter(['findByUuid']);
         $filesAdapter->method('findByUuid')->willReturn($mockedImageModel);
 
-        $framework = $this->mockContaoFramework([FilesModel::class => $filesAdapter]);
+        $stringUtilAdapter = $this->mockAdapter(['deserialize']);
+        $stringUtilAdapter->method('deserialize')->willReturn([0 => 1, 1 => 2, 2 => 3]);
+
+        $framework = $this->mockContaoFramework([FilesModel::class => $filesAdapter, StringUtil::class => $stringUtilAdapter]);
         $manager = new ModelManager($framework);
 
-        $manager->addImage($mockedModel, $templateData, '');
+        $manager->addImage($mockedModel, $templateData, 'a:3:{i:0;s:0:"2";i:1;s:0:"2";i:2;s:0:"2";}');
 
-        $this->assertSame([], $templateData);
+        $this->assertArrayHasKey('images', $templateData);
+        $this->assertArrayHasKey('singleSRC', $templateData['images']);
     }
 
     public function testParseModel()
@@ -170,13 +184,5 @@ class ModelManagerTest extends ContaoTestCase
         $modelAdapter = $this->mockAdapter(['__construct']);
 
         return [Model::class => $modelAdapter];
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }

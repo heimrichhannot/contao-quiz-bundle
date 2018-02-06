@@ -40,7 +40,7 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $container = $this->mockContainer();
@@ -246,13 +246,5 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
         $quizAnswerSolvingAdapter->method('findBy')->willReturn([$quizAnswerSolvingModel]);
 
         return [Model::class => $modelAdapter, Url::class => $urlAdapter, QuizAnswerSolvingModel::class => $quizAnswerSolvingAdapter];
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }

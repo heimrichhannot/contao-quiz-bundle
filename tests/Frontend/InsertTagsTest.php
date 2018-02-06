@@ -29,7 +29,7 @@ class InsertTagsTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $GLOBALS['FE_MOD']['quiz'] = [
@@ -112,13 +112,5 @@ class InsertTagsTest extends ContaoTestCase
         $quizQuestionAdapter->method('countBy')->willReturn(2);
 
         return $quizQuestionAdapter;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }

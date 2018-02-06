@@ -22,7 +22,7 @@ class QuizSessionTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $container = $this->mockContainer();
@@ -89,11 +89,12 @@ class QuizSessionTest extends ContaoTestCase
         $this->assertSame(2, $session->getCurrentScore());
     }
 
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
+    public function testAddCurrentQuestionToSession()
     {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
+        $session = new QuizSession();
+        $session->addCurrentQuestionToSession('1');
+        $data = $session->getData(QuizSession::USED_QUESTIONS_NAME);
+        $this->assertArrayHasKey(1, $data);
+        $this->assertSame(1, $data[1]);
     }
 }

@@ -36,7 +36,7 @@ class QuizQuestionManagerTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $container = $this->mockContainer();
@@ -130,7 +130,7 @@ class QuizQuestionManagerTest extends ContaoTestCase
 
         $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
         $manager = new QuizQuestionManager($framework);
-        $result = $manager->findOnePublishedByPidNotInQuestions(1, [2, 3]);
+        $result = $manager->findOnePublishedByPidNotInQuestions(1, [2, 3], 1);
 
         $this->assertInstanceOf(QuizQuestionModel::class, $result);
         $this->assertSame(1, $result->id);
@@ -210,13 +210,5 @@ class QuizQuestionManagerTest extends ContaoTestCase
 </div>
     ';
         $this->assertSame($html, $template);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }

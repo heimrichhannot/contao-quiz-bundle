@@ -32,7 +32,7 @@ class QuizAnswerManagerTest extends ContaoTestCase
         parent::setUp();
 
         if (!defined('TL_ROOT')) {
-            \define('TL_ROOT', $this->getFixturesDir());
+            \define('TL_ROOT', __DIR__);
         }
 
         $container = $this->mockContainer();
@@ -179,13 +179,5 @@ class QuizAnswerManagerTest extends ContaoTestCase
         $urlAdapter->method('removeQueryString')->willReturn('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8');
 
         return [Model::class => $modelAdapter, Url::class => $urlAdapter];
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFixturesDir(): string
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures';
     }
 }
