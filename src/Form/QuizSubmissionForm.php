@@ -8,8 +8,8 @@
 
 namespace HeimrichHannot\QuizBundle\Form;
 
+use Contao\System;
 use HeimrichHannot\FrontendEdit\ReaderForm;
-use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\Request\Request;
 
 class QuizSubmissionForm extends ReaderForm
@@ -27,10 +27,8 @@ class QuizSubmissionForm extends ReaderForm
 
         if (Request::hasGet('token')) {
             $submission->quizToken = Request::getGet('token');
+            $submission->quizScore = System::getContainer()->get('huh.quiz.token.manager')->getCurrentScore(Request::getGet('token'));
         }
-
-        $quizSession = new QuizSession();
-        $submission->quizScore = $quizSession->getData(QuizSession::SCORE_NAME);
         $submission->save();
     }
 }
