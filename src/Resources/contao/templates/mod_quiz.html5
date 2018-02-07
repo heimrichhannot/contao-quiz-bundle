@@ -1,4 +1,6 @@
 <?php $this->extend('block_unsearchable'); ?>
 <?php $this->block('content'); ?>
+    <h1 class="quiz-title"><?= $this->title; ?></h1>
+    <div class="quiz-text"><?= $this->text; ?></div>
 <?= $this->quiz; ?>
 <?php $this->endblock(); ?>

@@ -10,7 +10,6 @@ namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\System;
-use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
 
 class QuizEvaluationManager extends Manager
@@ -32,13 +31,13 @@ class QuizEvaluationManager extends Manager
      *
      * @return mixed
      */
-    public function parseQuizEvaluation($quizId, $count)
+    public function parseQuizEvaluation($quizId, $count, $token)
     {
         /*
          * @var \Twig_Environment
          */
         $twig = System::getContainer()->get('twig');
-        $score = $this->session->getData(QuizSession::SCORE_NAME);
+        $score = System::getContainer()->get('huh.quiz.token.manager')->getCurrentScore($token);
         $templateData['score'] = System::getContainer()->get('translator')->transChoice('huh.quiz.answer.score', $score, ['%score%' => $score, '%possibleScore%' => $count]);
         $quizEvaluationModel = $this->findPublishedByPid($quizId);
         $quiz = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $quizId);

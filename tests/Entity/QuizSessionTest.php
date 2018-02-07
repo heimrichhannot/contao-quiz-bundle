@@ -70,25 +70,6 @@ class QuizSessionTest extends ContaoTestCase
         $this->assertFalse($session->hasData('test'));
     }
 
-    public function testGetCurrentScore()
-    {
-        $session = new QuizSession();
-        $this->assertSame(0, $session->getCurrentScore());
-        $session->increaseScore();
-        $this->assertSame(1, $session->getCurrentScore());
-        $session->increaseScore();
-        $this->assertSame(2, $session->getCurrentScore());
-    }
-
-    public function testIncreaseScore()
-    {
-        $session = new QuizSession();
-        $session->increaseScore();
-        $this->assertSame(1, $session->getCurrentScore());
-        $session->increaseScore();
-        $this->assertSame(2, $session->getCurrentScore());
-    }
-
     public function testAddCurrentQuestionToSession()
     {
         $session = new QuizSession();

@@ -16,6 +16,8 @@ use HeimrichHannot\Haste\Util\Url;
 
 class TokenManager
 {
+    const SCORE_NAME = 'score';
+
     /**
      * @var ContaoFrameworkInterface
      */
@@ -78,5 +80,50 @@ class TokenManager
         }
 
         return $decoded;
+    }
+
+    /**
+     * increase the score +1.
+     */
+    public function increaseScore($token)
+    {
+        try {
+            $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
+        } catch (\Exception $e) {
+            $token = ['session' => System::getContainer()->get('session')->getId()];
+            $encode = JWT::encode($token, System::getContainer()->getParameter('secret'));
+            $url = $this->framework->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $this->framework->getAdapter(Controller::class)->redirect($url);
+        }
+
+        if (!isset($decoded->session) || $decoded->session !== System::getContainer()->get('session')->getId()) {
+            $token = ['session' => System::getContainer()->get('session')->getId()];
+            $encode = JWT::encode($token, System::getContainer()->getParameter('secret'));
+            $url = $this->framework->getAdapter(Url::class)->addQueryString('token='.$encode, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+            $this->framework->getAdapter(Controller::class)->redirect($url);
+        }
+
+        if (!isset($decoded->score)) {
+            $decoded->score = 1;
+        } else {
+            $score = $decoded->score;
+            $decoded->score = $score + 1;
+        }
+
+        return JWT::encode($decoded, System::getContainer()->getParameter('secret'));
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentScore($token)
+    {
+        $data = $this->getDataFromJwtToken($token);
+
+        if (!isset($data->score)) {
+            return 0;
+        }
+
+        return $data->score;
     }
 }

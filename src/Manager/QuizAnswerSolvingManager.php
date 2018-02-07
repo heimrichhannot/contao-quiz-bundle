@@ -44,7 +44,7 @@ class QuizAnswerSolvingManager extends Manager
         $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($token, $answer->id, $answer->pid);
 
         if ($answer->isSolution) {
-            $this->session->increaseScore();
+            $token = System::getContainer()->get('huh.quiz.token.manager')->increaseScore($token);
             $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.correct');
         }
 

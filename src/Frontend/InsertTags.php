@@ -12,7 +12,7 @@ use Contao\Controller;
 use Contao\Frontend;
 use Contao\ModuleModel;
 use Contao\System;
-use HeimrichHannot\QuizBundle\Entity\QuizSession;
+use HeimrichHannot\Request\Request;
 
 class InsertTags extends Frontend
 {
@@ -37,9 +37,13 @@ class InsertTags extends Frontend
         }
 
         if ($arrSplit[0] === static::CURRENT_SCORE) {
-            $session = new QuizSession();
+            $token = '';
 
-            return $session->getCurrentScore();
+            if (Request::hasGet('token')) {
+                $token = Request::getGet('token');
+            }
+
+            return System::getContainer()->get('huh.quiz.token.manager')->getCurrentScore($token);
         }
 
         if ($arrSplit[0] === static::QUIZ && isset($arrSplit[1]) && isset($arrSplit[2])) {

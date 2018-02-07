@@ -184,7 +184,7 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
     </div>
         </div>
 
-    <a href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">huh.quiz.answer.solving.next</a>
+    <a class="btn btn-primary quiz-next-button" href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">huh.quiz.answer.solving.next</a>
 </div>';
         $this->assertSame($html, $template);
 

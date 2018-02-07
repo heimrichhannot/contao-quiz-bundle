@@ -139,7 +139,7 @@ class QuizAnswerManagerTest extends ContaoTestCase
         $manager = new QuizAnswerManager($this->mockContaoFramework($this->createMockAdapter()));
         $template = $manager->parseAnswer($answerModel);
 
-        $html = '<div class="quiz-answer">
+        $html = '<li class="quiz-answer">
     <a href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">
         <div class="css">
     <div class="text">
@@ -147,7 +147,7 @@ class QuizAnswerManagerTest extends ContaoTestCase
     </div>
         </div>
     </a>
-</div>';
+</li>';
         $this->assertSame($html, $template);
     }
 
@@ -157,7 +157,7 @@ class QuizAnswerManagerTest extends ContaoTestCase
         $collection = new Model\Collection([$answerModel], 'tl_quiz_answer');
         $manager = new QuizAnswerManager($this->mockContaoFramework($this->createMockAdapter()));
         $result = $manager->prepareAnswers($collection);
-        $html = '<div class="quiz-answer">
+        $html = '<li class="quiz-answer">
     <a href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">
         <div class="css">
     <div class="text">
@@ -165,7 +165,7 @@ class QuizAnswerManagerTest extends ContaoTestCase
     </div>
         </div>
     </a>
-</div>';
+</li>';
         $this->assertCount(1, $result);
         $this->assertArrayHasKey('0', $result);
         $this->assertSame($html, $result[0]);

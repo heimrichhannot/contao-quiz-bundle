@@ -101,6 +101,33 @@ class TokenManagerTest extends ContaoTestCase
         }
     }
 
+    public function testGetCurrentScore()
+    {
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
+        $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
+        $token = $tokenManager->increaseScore($encode);
+        $score = $tokenManager->getCurrentScore($token);
+        $this->assertSame(1, $score);
+        $token = $tokenManager->increaseScore($token);
+        $score = $tokenManager->getCurrentScore($token);
+        $this->assertSame(2, $score);
+    }
+
+    public function testIncreaseScore()
+    {
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
+        $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
+        $token = $tokenManager->increaseScore($encode);
+        $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
+
+        $this->assertSame(1, $decoded->score);
+        $token = $tokenManager->increaseScore($token);
+        $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
+        $this->assertSame(2, $decoded->score);
+    }
+
     public function createRouterMock()
     {
         $router = $this->createMock(RouterInterface::class);

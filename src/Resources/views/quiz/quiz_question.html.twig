@@ -1,11 +1,11 @@
 {% block body %}
-    <h1 class="quiz-title">{{ title|raw }}</h1>
-    <div class="quiz-text">{{ text|raw }}</div>
     <div class="count">{{ itemsFoundText }}</div>
     <div class="quiz-question">
         {{ question|raw }}
     </div>
-    {% for answer in answers %}
-        {{ answer|raw }}
-    {% endfor %}
+    <ul class="answer-list">
+        {% for answer in answers %}
+            {{ answer|raw }}
+        {% endfor %}
+    </ul>
 {% endblock %}

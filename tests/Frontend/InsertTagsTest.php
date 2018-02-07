@@ -8,6 +8,7 @@
 
 namespace HeimrichHannot\QuizBundle\Test\Frontend;
 
+use Contao\Config;
 use Contao\Controller;
 use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
@@ -15,9 +16,12 @@ use Contao\ModuleModel;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use Doctrine\DBAL\Connection;
+use Firebase\JWT\JWT;
 use HeimrichHannot\QuizBundle\Frontend\InsertTags;
 use HeimrichHannot\QuizBundle\Manager\QuizQuestionManager;
+use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
+use HeimrichHannot\Request\Request;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -55,19 +59,30 @@ class InsertTagsTest extends ContaoTestCase
         $container->set('huh.quiz.question.manager', $quizQuestionManager);
         $container->set('monolog.logger.contao', new Logger('test'));
         $container->set('contao.framework', $this->mockContaoFramework($this->createMockAdapter()));
+        $container->setParameter('secret', Config::class);
+
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
+        $container->set('huh.quiz.token.manager', $tokenManager);
+
         System::setContainer($container);
     }
 
     public function testQuizInsertTags()
     {
         $insertTag = new InsertTags();
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
+        $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
+        $token = $tokenManager->increaseScore($encode);
+        Request::setGet('token', $token);
 
         $resultCurrentScore = $insertTag->quizInsertTags(InsertTags::CURRENT_SCORE);
         $resultTotalScore = $insertTag->quizInsertTags(InsertTags::TOTAL_SCORE.'::1');
         $resultFalse = $insertTag->quizInsertTags('bla');
         $resultQuiz = $insertTag->quizInsertTags(InsertTags::QUIZ.'::2::3');
 
-        $this->assertSame(0, $resultCurrentScore);
+        $this->assertSame(1, $resultCurrentScore);
         $this->assertSame(2, $resultTotalScore);
         $this->assertFalse($resultFalse);
         $this->assertSame('', $resultQuiz);

@@ -13,9 +13,11 @@ use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
+use Firebase\JWT\JWT;
 use HeimrichHannot\QuizBundle\Manager\ModelManager;
 use HeimrichHannot\QuizBundle\Manager\QuizEvaluationManager;
 use HeimrichHannot\QuizBundle\Manager\QuizManager;
+use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use HeimrichHannot\QuizBundle\Model\QuizEvaluationModel;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -66,6 +68,10 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         $quizAdapter->method('findOneBy')->willReturn($quizModel);
         $manager = new QuizManager($this->mockContaoFramework([QuizModel::class => $quizAdapter]));
         $container->set('huh.quiz.manager', $manager);
+
+        $framework = $this->mockContaoFramework($this->createMockAdapter());
+        $tokenManager = new TokenManager($framework);
+        $container->set('huh.quiz.token.manager', $tokenManager);
 
         System::setContainer($container);
     }
@@ -163,12 +169,11 @@ class QuizEvaluationManagerTest extends ContaoTestCase
 
     public function testParseQuizEvaluation()
     {
+        $token = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
         $manager = new QuizEvaluationManager($this->mockContaoFramework($this->createMockAdapter()));
-        $template = $manager->parseQuizEvaluation('1', 2);
+        $template = $manager->parseQuizEvaluation('1', 2, $token);
 
         $html = '<div class="quiz-evaluation">
-    <h1 class="quiz-title">title</h1>
-    <div class="quiz-text">text</div>
     <div class="quiz-score">huh.quiz.answer.score</div>
     <div class="css">
     <div class="text">
@@ -183,10 +188,8 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         $evalAdapter->method('findBy')->willReturn(null);
 
         $manager = new QuizEvaluationManager($this->mockContaoFramework([QuizEvaluationModel::class => $evalAdapter]));
-        $template = $manager->parseQuizEvaluation('1', 2);
+        $template = $manager->parseQuizEvaluation('1', 2, $token);
         $html = '<div class="quiz-evaluation">
-    <h1 class="quiz-title">title</h1>
-    <div class="quiz-text">text</div>
     <div class="quiz-score">huh.quiz.answer.score</div>
     
 </div>';

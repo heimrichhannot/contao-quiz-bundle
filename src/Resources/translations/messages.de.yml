@@ -1,5 +1,5 @@
 # count questions text
-huh.quiz.count.text.default: '{0} Keine Fragen gefunden|{1} 1 von 1 Frage|]1,Inf[ Frage %current% von %count%.'
+huh.quiz.count.text.default: '{0} Keine Fragen gefunden|{1} 1 von 1 Frage|]1,Inf[ Frage %current% von %count%'
 
 # default solving answer
 huh.quiz.answer.solving.correct: 'Richtig'

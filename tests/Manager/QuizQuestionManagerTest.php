@@ -189,9 +189,7 @@ class QuizQuestionManagerTest extends ContaoTestCase
 
         $manager = new QuizQuestionManager($this->mockContaoFramework());
         $template = $manager->prepareQuestion($questionModel, $quizModel, 2, '');
-        $html = '    <h1 class="quiz-title">title</h1>
-    <div class="quiz-text">text</div>
-    <div class="count">huh.quiz.count.text.default</div>
+        $html = '    <div class="count">huh.quiz.count.text.default</div>
     <div class="quiz-question">
         <div class="css">
     <div class="text">
@@ -199,7 +197,8 @@ class QuizQuestionManagerTest extends ContaoTestCase
     </div>
         </div>
     </div>
-            <div class="quiz-answer">
+    <ul class="answer-list">
+                    <li class="quiz-answer">
     <a href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">
         <div class="css">
     <div class="text">
@@ -207,8 +206,9 @@ class QuizQuestionManagerTest extends ContaoTestCase
     </div>
         </div>
     </a>
-</div>
-    ';
+</li>
+            </ul>
+';
         $this->assertSame($html, $template);
     }
 }

@@ -82,6 +82,8 @@ class ModuleQuizReader extends Module
         // apply module fields to template
         $this->Template->headline = $this->headline;
         $this->Template->hl = $this->hl;
+        $this->Template->title = $quizModel->title;
+        $this->Template->text = $quizModel->text;
 
         if (null === $quizModel) {
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.error');
@@ -94,7 +96,7 @@ class ModuleQuizReader extends Module
         }
 
         if (Request::hasGet('finished')) {
-            return $this->Template->quiz = System::getContainer()->get('huh.quiz.evaluation.manager')->parseQuizEvaluation($this->quiz, $this->count);
+            return $this->Template->quiz = System::getContainer()->get('huh.quiz.evaluation.manager')->parseQuizEvaluation($this->quiz, $this->count, $this->token);
         }
 
         if (Request::hasGet('question')) {
@@ -113,7 +115,6 @@ class ModuleQuizReader extends Module
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.question.error');
         }
         $this->session->reset(QuizSession::USED_QUESTIONS_NAME);
-        $this->session->reset(QuizSession::SCORE_NAME);
 
         $this->Template->quiz = System::getContainer()->get('huh.quiz.question.manager')->prepareQuestion($questionModel, $quizModel, $this->count, $this->imgSize);
     }
