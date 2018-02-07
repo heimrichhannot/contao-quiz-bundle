@@ -178,7 +178,7 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
         $template = $manager->parseAnswerSolving('1', '1', $token);
 
         $html = '<div class="quiz-answer-solving">
-    huh.quiz.answer.solving.correct<div class="css">
+    <div class="css">
     <div class="text">
         correct
     </div>
