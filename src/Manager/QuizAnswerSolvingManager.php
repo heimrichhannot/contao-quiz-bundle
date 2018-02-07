@@ -52,6 +52,7 @@ class QuizAnswerSolvingManager extends Manager
         $answerSolving = $this->findPublishedByPid($pid);
 
         if (null !== $answerSolving) {
+            $solving = '';
             foreach ($answerSolving as $item) {
                 $solving .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->solving, QuizAnswerSolvingModel::getTable(), $item->cssClass, $item->imgSize);
             }
