@@ -6,10 +6,6 @@ services:
       class: HeimrichHannot\QuizBundle\Backend\Content
       arguments:
           - ['%huh.quiz.backend.content-table%', '%huh.quiz.backend.content-ptable%']
-  huh.quiz.choice.template:
-      class: HeimrichHannot\QuizBundle\Choice\TemplateChoice
-      arguments:
-        - "@contao.framework"
   huh.quiz.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizManager
       arguments:
@@ -36,5 +32,9 @@ services:
         - "@contao.framework"
   huh.quiz.model.manager:
       class: HeimrichHannot\QuizBundle\Manager\ModelManager
+      arguments:
+        - "@contao.framework"
+  huh.quiz.module.manager:
+      class: HeimrichHannot\QuizBundle\Backend\Module
       arguments:
         - "@contao.framework"

@@ -18,6 +18,8 @@ class TokenManager
 {
     const SCORE_NAME = 'score';
 
+    const QUIZ_NAME = 'quizId';
+
     /**
      * @var ContaoFrameworkInterface
      */

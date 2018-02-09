@@ -9,21 +9,10 @@
 namespace HeimrichHannot\QuizBundle\Manager;
 
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
-use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
 
-class QuizManager
+class QuizManager extends Manager
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    protected $framework;
-
-    /**
-     * @var QuizSession
-     */
-    protected $session;
-
     /**
      * Constructor.
      *
@@ -31,41 +20,7 @@ class QuizManager
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
-        $this->framework = $framework;
-        $this->session = new QuizSession();
-    }
-
-    /**
-     * Adapter function for the model's findBy method.
-     *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return QuizModel|null
-     */
-    public function findOneBy($column, $value, array $options = [])
-    {
-        /** @var QuizModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizModel::class);
-
-        return $adapter->findOneBy($column, $value, $options);
-    }
-
-    /**
-     * Adapter function for the model's findBy method.
-     *
-     * @param mixed $column
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return \Contao\Model\Collection|QuizModel|null
-     */
-    public function findBy($column, $value, array $options = [])
-    {
-        /** @var QuizModel $adapter */
-        $adapter = $this->framework->getAdapter(QuizModel::class);
-
-        return $adapter->findBy($column, $value, $options);
+        parent::__construct($framework);
+        $this->class = QuizModel::class;
     }
 }

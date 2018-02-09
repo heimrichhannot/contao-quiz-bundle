@@ -8,9 +8,12 @@
 
 namespace HeimrichHannot\QuizBundle\Module;
 
+use Contao\Controller;
 use Contao\Module;
 use Contao\System;
+use Haste\Util\Url;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
+use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use HeimrichHannot\Request\Request;
 use Patchwork\Utf8;
 
@@ -57,7 +60,9 @@ class ModuleQuizReader extends Module
             Request::setGet('items', Request::getGet('auto_item'));
         }
 
-        if (Request::hasGet('items')) {
+        if ($this->singleQuiz) {
+            $this->quiz = $this->quizArchive;
+        } elseif (Request::hasGet('items')) {
             $this->quiz = Request::getGet('items');
         }
 
@@ -67,6 +72,14 @@ class ModuleQuizReader extends Module
 
         if (Request::hasGet('token')) {
             $this->token = Request::getGet('token');
+            $data = System::getContainer()->get('huh.quiz.token.manager')->getDataFromJwtToken($this->token);
+            if (!$data->quizId) {
+                $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
+                $url = System::getContainer()->get('contao.framework')->getAdapter(Url::class)->addQueryString('token='.$token, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
+                System::getContainer()->get('contao.framework')->getAdapter(Controller::class)->redirect($url);
+            }
+        } else {
+            System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
         }
 
         return parent::generate();
@@ -115,7 +128,6 @@ class ModuleQuizReader extends Module
             return $this->Template->quiz = System::getContainer()->get('translator')->trans('huh.quiz.question.error');
         }
         $this->session->reset(QuizSession::USED_QUESTIONS_NAME);
-
         $this->Template->quiz = System::getContainer()->get('huh.quiz.question.manager')->prepareQuestion($questionModel, $quizModel, $this->count, $this->imgSize);
     }
 }

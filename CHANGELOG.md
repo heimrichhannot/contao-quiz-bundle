@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2018-02-09
+
+### Changed
+- Added singleQuiz and edited token handling and quiz submission
+
 ## [1.1.1] - 2018-02-07
 
 ### Fixed

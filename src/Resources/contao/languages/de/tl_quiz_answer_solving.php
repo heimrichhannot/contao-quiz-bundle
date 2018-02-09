@@ -11,8 +11,6 @@ $lang = &$GLOBALS['TL_LANG']['tl_quiz_answer_solving'];
 /**
  * Fields
  */
-$lang['tstamp'][0] = 'Änderungsdatum';
-
 $lang['author'][0] = 'Autor';
 $lang['author'][1] = 'Hier können Sie den Autor der Antwort ändern.';
 
@@ -38,7 +36,7 @@ $lang['title'][1] = 'Geben Sie hier bitte den Titel ein.';
 
 // question
 $lang['solving'][0] = 'Antwort-Beschreibung Eintragen';
-$lang['answer'][1]  = 'Geben Sie hier bitte eine Beschreibung ein.';
+$lang['solving'][1] = 'Geben Sie hier bitte eine Beschreibung ein.';
 
 /**
  * Legends

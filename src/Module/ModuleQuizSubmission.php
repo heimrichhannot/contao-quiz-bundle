@@ -60,21 +60,23 @@ class ModuleQuizSubmission extends ModuleSubmissionReader
             }
         }
 
-        if (Request::hasGet('finished')) {
-            $this->quizModel = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
-            if (null === $this->quizModel) {
-                return '';
-            }
-            $this->formHybridDataContainer = 'tl_submission';
-            $submissionArchive = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
-            if (null === $submissionArchive) {
-                return '';
-            }
-            $this->formHybridEditable = $submissionArchive->submissionFields;
-            $this->formHybridSingleSubmission = $this->quizModel->formHybridSingleSubmission;
-            $this->formHybridResetAfterSubmission = $this->quizModel->formHybridResetAfterSubmission;
-            $this->defaultArchive = $submissionArchive->id;
+        if (!$this->quiz) {
+            return '';
         }
+
+        $this->quizModel = System::getContainer()->get('huh.quiz.manager')->findOneBy('id', $this->quiz);
+        if (null === $this->quizModel) {
+            return '';
+        }
+        $this->formHybridDataContainer = 'tl_submission';
+        $submissionArchive = SubmissionArchiveModel::findBy('id', $this->quizModel->submissionArchive);
+        if (null === $submissionArchive) {
+            return '';
+        }
+        $this->formHybridEditable = $submissionArchive->submissionFields;
+        $this->formHybridSingleSubmission = $this->quizModel->formHybridSingleSubmission;
+        $this->formHybridResetAfterSubmission = $this->quizModel->formHybridResetAfterSubmission;
+        $this->defaultArchive = $submissionArchive->id;
 
         return parent::generate();
     }

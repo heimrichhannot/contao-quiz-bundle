@@ -61,6 +61,19 @@ abstract class Manager
     }
 
     /**
+     * @param array $options
+     *
+     * @return Model\Collection|null
+     */
+    public function findAll(array $options)
+    {
+        /** @var Model $adapter */
+        $adapter = $this->framework->getAdapter($this->class);
+
+        return $adapter->findAll($options);
+    }
+
+    /**
      * Adapter function for the model's findBy method.
      *
      * @param mixed $column
