@@ -58,6 +58,18 @@ class ModuleTest extends ContaoTestCase
         $this->assertArrayHasKey(2, $quizArchives);
         $this->assertSame('Quiz1', $quizArchives[1]);
         $this->assertSame('Quiz2', $quizArchives[2]);
+
+        $container = System::getContainer();
+        $quizAdapter = $this->mockAdapter(['findAll']);
+        $quizAdapter->method('findAll')->willReturn(null);
+        $container->set('huh.quiz.manager', $quizAdapter);
+        System::setContainer($container);
+
+        $framework = $this->mockContaoFramework();
+        $module = new Module($framework);
+        $quizArchives = $module->getQuizArchives();
+
+        $this->assertSame([], $quizArchives);
     }
 
     public function createRequestStackMock()

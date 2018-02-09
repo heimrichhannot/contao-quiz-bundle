@@ -66,4 +66,20 @@ class QuizManagerTest extends ContaoTestCase
 
         $this->assertInstanceOf(QuizModel::class, $result);
     }
+
+    public function testFindAll()
+    {
+        $quizModel = $this->mockClassWithProperties(QuizModel::class, ['id' => 1]);
+
+        $quizManager = $this->mockAdapter(['findAll']);
+        $quizManager->method('findAll')->willReturn($quizModel);
+
+        $framework = $this->mockContaoFramework([QuizModel::class => $quizManager]);
+
+        $manager = new QuizManager($framework);
+
+        $result = $manager->findAll([]);
+
+        $this->assertInstanceOf(QuizModel::class, $result);
+    }
 }
