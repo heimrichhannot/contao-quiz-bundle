@@ -199,13 +199,15 @@ class QuizQuestionManagerTest extends ContaoTestCase
     </div>
     <ul class="answer-list">
                     <li class="quiz-answer">
-    <a href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">
-        <div class="css">
+    <div>
+        <a href="https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?answer=1">
+            <div class="css">
     <div class="text">
         text
     </div>
         </div>
-    </a>
+        </a>
+    </div>
 </li>
             </ul>
 ';
