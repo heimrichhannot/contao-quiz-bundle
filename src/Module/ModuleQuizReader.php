@@ -109,7 +109,9 @@ class ModuleQuizReader extends Module
         }
 
         if (Request::hasGet('finished')) {
-            return $this->Template->quiz = System::getContainer()->get('huh.quiz.evaluation.manager')->parseQuizEvaluation($this->quiz, $this->count, $this->token);
+            $reachablePoints = System::getContainer()->get('huh.quiz.question.manager')->getMaxReachablePointsPerQuiz($this->quiz);
+
+            return $this->Template->quiz = System::getContainer()->get('huh.quiz.evaluation.manager')->parseQuizEvaluation($this->quiz, $reachablePoints, $this->token);
         }
 
         if (Request::hasGet('question')) {

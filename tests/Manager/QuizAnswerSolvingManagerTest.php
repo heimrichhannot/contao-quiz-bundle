@@ -49,11 +49,12 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
 
         // quiz question manager
         $quizQuestionModel = $this->mockClassWithProperties(QuizQuestionModel::class, ['id' => 1]);
-        $quizQuestionAdapter = $this->mockAdapter(['findOnePublishedByPidNotInQuestions', 'getTable', 'findOneBy']);
+        $quizQuestionAdapter = $this->mockAdapter(['findOnePublishedByPidNotInQuestions', 'getTable', 'findOneBy', 'findBy']);
 
         $quizQuestionAdapter->method('findOnePublishedByPidNotInQuestions')->willReturn($quizQuestionModel);
         $quizQuestionAdapter->method('getTable')->willReturn('tl_quiz_question');
         $quizQuestionAdapter->method('findOneBy')->willReturn($quizQuestionModel);
+        $quizQuestionAdapter->method('findBy')->willReturn($this->mockClassWithProperties(QuizQuestionModel::class, ['pointsPerQuestion' => 1]));
 
         $framework = $this->mockContaoFramework([QuizQuestionModel::class => $quizQuestionAdapter]);
         $manager = new QuizQuestionManager($framework);
@@ -178,7 +179,7 @@ class QuizAnswerSolvingManagerTest extends ContaoTestCase
         $template = $manager->parseAnswerSolving('1', '1', $token);
 
         $html = '<div class="quiz-answer-solving">
-    <div class="css">
+    huh.quiz.answer.solving.correct<div class="css">
     <div class="text">
         correct
     </div>

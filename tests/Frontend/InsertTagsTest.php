@@ -74,7 +74,7 @@ class InsertTagsTest extends ContaoTestCase
         $framework = $this->mockContaoFramework($this->createMockAdapter());
         $tokenManager = new TokenManager($framework);
         $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
-        $token = $tokenManager->increaseScore($encode);
+        $token = $tokenManager->increaseScore($encode, 1);
         Request::setGet('token', $token);
 
         $resultCurrentScore = $insertTag->quizInsertTags(InsertTags::CURRENT_SCORE);

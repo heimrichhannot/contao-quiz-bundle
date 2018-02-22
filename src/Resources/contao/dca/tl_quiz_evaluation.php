@@ -53,14 +53,14 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             ],
             'copy'       => [
                 'label' => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.gif',
+                'href'  => 'act=paste&amp;mode=copy',
+                'icon'  => 'copy.svg',
             ],
             'delete'     => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
+                'attributes' => 'onclick="if(!confirm(' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '))return false;Backend.getScrollOffset()"',
             ],
             'toggle'     => [
                 'label'           => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['toggle'],
@@ -77,7 +77,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
     ],
     'palettes'    => [
         '__selector__' => ['addImage', 'overwriteMeta', 'published'],
-        'default'      => '{general_legend},title,author;{evaluation_legend},evaluationText;{image_legend},addImage;{expert_legend:hide},cssClass;{publish_legend},published',
+        'default'      => '{general_legend},title,author;{evaluation_legend},evaluationPerPointsMin,evaluationPerPointsMax,evaluationText;{image_legend},addImage;{expert_legend:hide},cssClass;{publish_legend},published',
     ],
     'subpalettes' => [
         'addImage'      => 'singleSRC,size,floating,imagemargin,fullsize,overwriteMeta',
@@ -85,26 +85,26 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
         'published'     => 'start,stop',
     ],
     'fields'      => [
-        'id'             => [
+        'id'                     => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
-        'pid'            => [
+        'pid'                    => [
             'foreignKey' => 'tl_quiz_question.id',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
-        'tstamp'         => [
+        'tstamp'                 => [
             'label' => &$GLOBALS['TL_LANG']['tl_quiz_answer']['tstamp'],
             'sql'   => "int(10) unsigned NOT NULL default '0'",
         ],
-        'dateAdded'      => [
+        'dateAdded'              => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
-        'title'          => [
+        'title'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['title'],
             'exclude'   => true,
             'search'    => true,
@@ -112,7 +112,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'mandatory' => true],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'published'      => [
+        'published'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['published'],
             'exclude'   => true,
             'filter'    => true,
@@ -120,21 +120,21 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['doNotCopy' => true, 'submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'start'          => [
+        'start'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['start'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'stop'           => [
+        'stop'                   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['stop'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'author'         => [
+        'author'                 => [
             'label'      => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['author'],
             'default'    => BackendUser::getInstance()->id,
             'exclude'    => true,
@@ -148,35 +148,35 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'hasOne', 'load' => 'eager'],
         ],
-        'cssClass'       => [
+        'cssClass'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['cssClass'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'addImage'       => [
+        'addImage'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['addImage'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => ['submitOnChange' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'overwriteMeta'  => [
+        'overwriteMeta'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['overwriteMeta'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50 clr'],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'singleSRC'      => [
+        'singleSRC'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['singleSRC'],
             'exclude'   => true,
             'inputType' => 'fileTree',
             'eval'      => ['fieldType' => 'radio', 'filesOnly' => true, 'extensions' => Config::get('validImageTypes'), 'mandatory' => true],
             'sql'       => "binary(16) NULL",
         ],
-        'alt'            => [
+        'alt'                    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['alt'],
             'exclude'   => true,
             'search'    => true,
@@ -184,7 +184,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'imageTitle'     => [
+        'imageTitle'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['imageTitle'],
             'exclude'   => true,
             'search'    => true,
@@ -192,7 +192,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'size'           => [
+        'size'                   => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['size'],
             'exclude'          => true,
             'inputType'        => 'imageSize',
@@ -203,7 +203,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             },
             'sql'              => "varchar(64) NOT NULL default ''",
         ],
-        'imagemargin'    => [
+        'imagemargin'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['imagemargin'],
             'exclude'   => true,
             'inputType' => 'trbl',
@@ -211,7 +211,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'imageUrl'       => [
+        'imageUrl'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['imageUrl'],
             'exclude'   => true,
             'search'    => true,
@@ -219,7 +219,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'caption'        => [
+        'caption'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['caption'],
             'exclude'   => true,
             'search'    => true,
@@ -227,7 +227,7 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'eval'      => ['maxlength' => 255, 'allowHtml' => true, 'tl_class' => 'w50'],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
-        'floating'       => [
+        'floating'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['floating'],
             'default'   => 'above',
             'exclude'   => true,
@@ -237,20 +237,36 @@ $GLOBALS['TL_DCA']['tl_quiz_evaluation'] = [
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'sql'       => "varchar(12) NOT NULL default ''",
         ],
-        'fullsize'       => [
+        'fullsize'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['fullsize'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => ['tl_class' => 'w50 m12'],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'evaluationText' => [
+        'evaluationText'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['evaluationText'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'textarea',
             'eval'      => ['rte' => 'tinyMCE', 'tl_class' => 'clr'],
             'sql'       => "text NULL",
+        ],
+        'evaluationPerPointsMin' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['evaluationPerPointsMin'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 4, 'tl_class' => 'w50'],
+            'sql'       => "varchar(4) NOT NULL default ''",
+        ],
+        'evaluationPerPointsMax' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_quiz_evaluation']['evaluationPerPointsMax'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 4, 'tl_class' => 'w50'],
+            'sql'       => "varchar(4) NOT NULL default ''",
         ],
     ],
 ];

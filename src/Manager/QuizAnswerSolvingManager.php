@@ -44,7 +44,8 @@ class QuizAnswerSolvingManager extends Manager
         $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($token, $answer->id, $answer->pid);
 
         if ($answer->isSolution) {
-            $token = System::getContainer()->get('huh.quiz.token.manager')->increaseScore($token);
+            $pointsPerQuestion = System::getContainer()->get('huh.quiz.question.manager')->getPointsPerQuestion($answer->pid);
+            $token = System::getContainer()->get('huh.quiz.token.manager')->increaseScore($token, $pointsPerQuestion);
             $solving = System::getContainer()->get('translator')->trans('huh.quiz.answer.solving.correct');
         }
 
@@ -52,7 +53,6 @@ class QuizAnswerSolvingManager extends Manager
         $answerSolving = $this->findPublishedByPid($pid);
 
         if (null !== $answerSolving) {
-            $solving = '';
             foreach ($answerSolving as $item) {
                 $solving .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->solving, QuizAnswerSolvingModel::getTable(), $item->cssClass, $item->imgSize);
             }

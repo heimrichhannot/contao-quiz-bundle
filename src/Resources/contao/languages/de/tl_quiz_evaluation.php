@@ -29,9 +29,10 @@ $lang['published'][1] = 'Die Auswertung auf der Website veröffentlichen.';
 $lang['start'][0] = 'Anzeigen ab';
 $lang['start'][1] = 'Die Auswertung erst ab diesem Tag auf der Webseite anzeigen.';
 
-$lang['stop'][0] = 'Anzeigen bis';
-$lang['stop'][1] = 'Die Auswertung nur bis diesem Tag auf der Webseite anzeigen.';
-
+$lang['stop'][0]                = 'Anzeigen bis';
+$lang['stop'][1]                = 'Die Auswertung nur bis diesem Tag auf der Webseite anzeigen.';
+$lang['evaluationPerPointsMin'] = ['Punkteminimum', 'Geben Sie hier das Punkteminimum ein, für die diese Auswertung angezeigt werden soll.'];
+$lang['evaluationPerPointsMax'] = ['Punktemaximum', 'Geben Sie hier das Punktemaximum ein, für die diese Auswertung angezeigt werden soll.'];
 
 // general
 $lang['title'][0] = 'Titel';

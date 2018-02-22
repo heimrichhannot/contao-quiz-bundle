@@ -19,13 +19,14 @@ $lang['addImage'][1] = 'Add an image to the answer.';
 $lang['cssClass'][0] = 'CSS-Class';
 $lang['cssClass'][1] = 'Enter one or more classes.';
 
-$lang['title']          = ['Title', 'Please enter a title.'];
-$lang['published']      = ['Publish Frage', 'Make the Frage publicly visible on the website.'];
-$lang['start']          = ['Show from', 'Do not publish the Frage on the website before this date.'];
-$lang['stop']           = ['Show until', 'Unpublish the Frage on the website after this date.'];
-$lang['tstamp']         = ['Revision date', ''];
-$lang['evaluationText'] = ['Add evaluation', ''];
-
+$lang['title']                  = ['Title', 'Please enter a title.'];
+$lang['published']              = ['Publish Frage', 'Make the Frage publicly visible on the website.'];
+$lang['start']                  = ['Show from', 'Do not publish the Frage on the website before this date.'];
+$lang['stop']                   = ['Show until', 'Unpublish the Frage on the website after this date.'];
+$lang['tstamp']                 = ['Revision date', ''];
+$lang['evaluationText']         = ['Add evaluation', ''];
+$lang['evaluationPerPointsMin'] = ['Evaluation per points minimum', 'Insert the minimum points for the evaluation'];
+$lang['evaluationPerPointsMax'] = ['Evaluation per points maximum', 'Insert the maximum points for the evaluation'];
 
 /**
  * Legends

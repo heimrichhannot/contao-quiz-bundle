@@ -211,4 +211,40 @@ class QuizQuestionManagerTest extends ContaoTestCase
 ';
         $this->assertSame($html, $template);
     }
+
+    public function testGetPointsPerQuestion()
+    {
+        $adapter = $this->mockAdapter(['findBy']);
+        $adapter->method('findBy')->willReturn($this->mockClassWithProperties(QuizQuestionModel::class, ['pointsPerQuestion' => 1]));
+
+        $manager = new QuizQuestionManager($this->mockContaoFramework([QuizQuestionModel::class => $adapter]));
+        $points = $manager->getPointsPerQuestion(1);
+        $this->assertSame(1, $points);
+
+        $adapter = $this->mockAdapter(['findBy']);
+        $adapter->method('findBy')->willReturn(null);
+
+        $manager = new QuizQuestionManager($this->mockContaoFramework([QuizQuestionModel::class => $adapter]));
+        $points = $manager->getPointsPerQuestion(0);
+        $this->assertSame(0, $points);
+    }
+
+    public function testGetMaxReachablePointsPerQuiz()
+    {
+        $adapter = $this->mockAdapter(['findBy', 'getTable']);
+        $adapter->method('findBy')->willReturn([$this->mockClassWithProperties(QuizQuestionModel::class, ['pointsPerQuestion' => 1])]);
+        $adapter->method('getTable')->willReturn('tl_quiz_question');
+
+        $manager = new QuizQuestionManager($this->mockContaoFramework([QuizQuestionModel::class => $adapter]));
+        $points = $manager->getMaxReachablePointsPerQuiz(1);
+        $this->assertSame(1, $points);
+
+        $adapter = $this->mockAdapter(['findBy', 'getTable']);
+        $adapter->method('findBy')->willReturn(null);
+        $adapter->method('getTable')->willReturn('tl_quiz_question');
+
+        $manager = new QuizQuestionManager($this->mockContaoFramework([QuizQuestionModel::class => $adapter]));
+        $points = $manager->getMaxReachablePointsPerQuiz(0);
+        $this->assertSame(0, $points);
+    }
 }

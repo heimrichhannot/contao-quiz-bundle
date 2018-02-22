@@ -48,7 +48,11 @@ class QuizEvaluationManager extends Manager
         }
         $templateData['evaluation'] = '';
         foreach ($quizEvaluationModel as $item) {
-            $templateData['evaluation'] .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable(), $item->cssClass, $item->imgSize);
+            if ($item->evaluationPerPointsMin <= $score && $score <= $item->evaluationPerPointsMax) {
+                $templateData['evaluation'] .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable(), $item->cssClass, $item->imgSize);
+            } elseif ('' === $item->evaluationPerPointsMin && '' === $item->evaluationPerPointsMax) {
+                $templateData['evaluation'] .= System::getContainer()->get('huh.quiz.model.manager')->parseModel($item, $item->evaluationText, QuizEvaluationModel::getTable(), $item->cssClass, $item->imgSize);
+            }
         }
 
         return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_evaluation.html.twig', $templateData);

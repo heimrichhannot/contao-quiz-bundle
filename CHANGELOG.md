@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2018-02-22
+
+### Added
+- Added point system
+- Added custom evaluation per reached points
+- Added points per question, set points per question from 1 to 100
+
 ## [1.2.0] - 2018-02-09
 
 ### Changed

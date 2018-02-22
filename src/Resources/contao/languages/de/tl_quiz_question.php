@@ -37,8 +37,9 @@ $lang['title'][0] = 'Titel';
 $lang['title'][1] = 'Geben Sie hier bitte den Titel ein.';
 
 // question
-$lang['question'][0] = 'Frage Eintragen';
-$lang['question'][1] = 'Geben Sie hier bitte eine Frage ein.';
+$lang['question'][0]       = 'Frage Eintragen';
+$lang['question'][1]       = 'Geben Sie hier bitte eine Frage ein.';
+$lang['pointsPerQuestion'] = ['Punkte pro Frage', 'Wählen Sie aus wie viele Punkte für die richtige Beantwortung dieser Frage vergeben werden sollen.'];
 
 /**
  * Legends

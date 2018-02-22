@@ -94,4 +94,42 @@ class QuizQuestionManager extends Manager
 
         return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_question.html.twig', $templateData);
     }
+
+    /**
+     * @param $id
+     *
+     * @return int
+     */
+    public function getPointsPerQuestion($id)
+    {
+        $question = $this->findBy('id', $id);
+
+        if (null === $question) {
+            return 0;
+        }
+
+        return $question->pointsPerQuestion;
+    }
+
+    /**
+     * @param $quizId
+     *
+     * @return int
+     */
+    public function getMaxReachablePointsPerQuiz($quizId)
+    {
+        $questions = $this->findByPid($quizId);
+
+        if (null === $questions) {
+            return 0;
+        }
+
+        $points = 0;
+
+        foreach ($questions as $question) {
+            $points = $points + $question->pointsPerQuestion;
+        }
+
+        return $points;
+    }
 }

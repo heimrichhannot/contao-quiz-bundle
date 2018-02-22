@@ -58,7 +58,7 @@ $GLOBALS['TL_DCA']['tl_quiz_answer'] = [
             ],
             'copy'          => [
                 'label' => &$GLOBALS['TL_LANG']['tl_quiz_answer']['copy'],
-                'href'  => 'act=copy',
+                'href'  => 'act=paste&amp;mode=copy',
                 'icon'  => 'copy.gif',
             ],
             'delete'        => [

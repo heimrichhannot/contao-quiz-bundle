@@ -5,11 +5,11 @@ $lang = &$GLOBALS['TL_LANG']['tl_quiz'];
 /**
  * Fields
  */
-$lang['title']     = ['Title', 'Please enter a title.'];
-$lang['published'] = ['Publish Quiz', 'Make the Quiz publicly visible on the website.'];
-$lang['start']     = ['Show from', 'Do not publish the Quiz on the website before this date.'];
-$lang['stop']      = ['Show until', 'Unpublish the Quiz on the website after this date.'];
-$lang['tstamp']    = ['Revision date', ''];
+$lang['title']                  = ['Title', 'Please enter a title.'];
+$lang['published']              = ['Publish Quiz', 'Make the Quiz publicly visible on the website.'];
+$lang['start']                  = ['Show from', 'Do not publish the Quiz on the website before this date.'];
+$lang['stop']                   = ['Show until', 'Unpublish the Quiz on the website after this date.'];
+$lang['tstamp']                 = ['Revision date', ''];
 
 /**
  * Legends

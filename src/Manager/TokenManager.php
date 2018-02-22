@@ -87,7 +87,7 @@ class TokenManager
     /**
      * increase the score +1.
      */
-    public function increaseScore($token)
+    public function increaseScore($token, $pointsPerQuestion)
     {
         try {
             $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
@@ -106,10 +106,10 @@ class TokenManager
         }
 
         if (!isset($decoded->score)) {
-            $decoded->score = 1;
+            $decoded->score = $pointsPerQuestion;
         } else {
             $score = $decoded->score;
-            $decoded->score = $score + 1;
+            $decoded->score = $score + $pointsPerQuestion;
         }
 
         return JWT::encode($decoded, System::getContainer()->getParameter('secret'));

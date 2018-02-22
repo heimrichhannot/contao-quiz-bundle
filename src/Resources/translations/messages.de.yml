@@ -2,12 +2,12 @@
 huh.quiz.count.text.default: '{0} Keine Fragen gefunden|{1} 1 von 1 Frage|]1,Inf[ Frage %current% von %count%'
 
 # default solving answer
-huh.quiz.answer.solving.correct: 'Richtig'
-huh.quiz.answer.solving.wrong: 'Falsch'
+huh.quiz.answer.solving.correct: '<div class="quiz-answer-solving-correct">Richtig</div>'
+huh.quiz.answer.solving.wrong: '<div class="quiz-answer-solving-false">Falsch</div>'
 
 huh.quiz.answer.solving.next: 'Nächste Frage'
 huh.quiz.answer.solving.score: 'Zur Auswertung'
-huh.quiz.answer.score: '{0} Sie haben leider keine Frage richtig beantwortet.|{1} Sie haben eine von %possibleScore% Fragen richtig beantwortet.|]1,Inf[ Sie haben %score% von %possibleScore% Fragen richtig beantwortet.'
+huh.quiz.answer.score: '{0} Sie haben leider 0 Punkte.|{1} Sie haben einen von %possibleScore% Punkten.|]1,Inf[ Sie haben %score% von %possibleScore% Punkten.'
 
 # error message
 huh.quiz.error: 'Es ist ein Fehler aufgetreten.'

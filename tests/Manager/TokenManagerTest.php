@@ -106,10 +106,10 @@ class TokenManagerTest extends ContaoTestCase
         $framework = $this->mockContaoFramework($this->createMockAdapter());
         $tokenManager = new TokenManager($framework);
         $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
-        $token = $tokenManager->increaseScore($encode);
+        $token = $tokenManager->increaseScore($encode, 1);
         $score = $tokenManager->getCurrentScore($token);
         $this->assertSame(1, $score);
-        $token = $tokenManager->increaseScore($token);
+        $token = $tokenManager->increaseScore($token, 1);
         $score = $tokenManager->getCurrentScore($token);
         $this->assertSame(2, $score);
     }
@@ -119,17 +119,17 @@ class TokenManagerTest extends ContaoTestCase
         $framework = $this->mockContaoFramework($this->createMockAdapter());
         $tokenManager = new TokenManager($framework);
         $encode = JWT::encode(['session' => ''], System::getContainer()->getParameter('secret'));
-        $token = $tokenManager->increaseScore($encode);
+        $token = $tokenManager->increaseScore($encode, 1);
         $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
 
         $this->assertSame(1, $decoded->score);
-        $token = $tokenManager->increaseScore($token);
+        $token = $tokenManager->increaseScore($token, 1);
         $decoded = JWT::decode($token, System::getContainer()->getParameter('secret'), ['HS256']);
         $this->assertSame(2, $decoded->score);
 
         $tokenManager = new TokenManager($framework);
         try {
-            $token = $tokenManager->increaseScore('');
+            $token = $tokenManager->increaseScore('', 1);
         } catch (\Exception $exception) {
             $this->assertInstanceOf(RedirectResponseException::class, $exception);
             $this->assertSame('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21', $exception->getResponse()->getTargetUrl());
@@ -138,7 +138,7 @@ class TokenManagerTest extends ContaoTestCase
         $encode = JWT::encode(['session' => '123456789'], System::getContainer()->getParameter('secret'));
         $tokenManager = new TokenManager($framework);
         try {
-            $token = $tokenManager->increaseScore($encode);
+            $token = $tokenManager->increaseScore($encode, 1);
         } catch (\Exception $exception) {
             $this->assertInstanceOf(RedirectResponseException::class, $exception);
             $this->assertSame('https://www.anwaltauskunft.dav.hhdev/app_dev.php/rechtsquiz/arbeitsrecht/8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uIjoic2pja3IwZGxvNGJqZm1wZmRpb2hubGZwcWkiLCIxMSI6IjIyIn0.8O6LzSHEk3A-TQ3PRsBuW4TkQasFpzDeM08YO2FKEpE&answer=21', $exception->getResponse()->getTargetUrl());
