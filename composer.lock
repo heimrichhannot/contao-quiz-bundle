@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "573c157bd93a2b8845a630719401b78c",
+    "content-hash": "e1f3c29a17b9f8028f1e003eebd7fdb4",
     "packages": [
         {
             "name": "ausi/slug-generator",
@@ -220,62 +220,6 @@
                 "haste"
             ],
             "time": "2018-02-26T15:16:50+00:00"
-        },
-        {
-            "name": "composer/ca-bundle",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/943b2c4fcad1ef178d16a713c2468bf7e579c288",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288",
-                "shasum": ""
-            },
-            "require": {
-                "ext-openssl": "*",
-                "ext-pcre": "*",
-                "php": "^5.3.2 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35",
-                "psr/log": "^1.0",
-                "symfony/process": "^2.5 || ^3.0 || ^4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Composer\\CaBundle\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
-                }
-            ],
-            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
-            "keywords": [
-                "cabundle",
-                "cacert",
-                "certificate",
-                "ssl",
-                "tls"
-            ],
-            "time": "2017-11-29T09:37:33+00:00"
         },
         {
             "name": "contao-community-alliance/composer-plugin",
@@ -1023,20 +967,20 @@
         },
         {
             "name": "contao/core-bundle",
-            "version": "4.5.4",
+            "version": "4.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contao/core-bundle.git",
-                "reference": "46e97e9f3c906aedd1b3466738cf818915774e06"
+                "reference": "695c169093d1084601260697af8f7a6a48b7f5bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contao/core-bundle/zipball/46e97e9f3c906aedd1b3466738cf818915774e06",
-                "reference": "46e97e9f3c906aedd1b3466738cf818915774e06",
+                "url": "https://api.github.com/repos/contao/core-bundle/zipball/695c169093d1084601260697af8f7a6a48b7f5bf",
+                "reference": "695c169093d1084601260697af8f7a6a48b7f5bf",
                 "shasum": ""
             },
             "require": {
-                "ausi/slug-generator": "^1.0",
+                "ausi/slug-generator": "^1.0.1",
                 "contao-components/ace": "^1.2",
                 "contao-components/chosen": "^1.1.6",
                 "contao-components/colorbox": "^1.6",
@@ -1165,7 +1109,7 @@
                 }
             ],
             "description": "Contao 4 core bundle",
-            "time": "2018-02-14T14:07:49+00:00"
+            "time": "2018-03-06T08:11:32+00:00"
         },
         {
             "name": "contao/image",
@@ -1265,190 +1209,6 @@
             ],
             "description": "Contao Imagine SVG library",
             "time": "2017-09-14T16:47:37+00:00"
-        },
-        {
-            "name": "contao/installation-bundle",
-            "version": "4.5.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/contao/installation-bundle.git",
-                "reference": "a20b3edcfceab7710379c3a74833a9c9c5b40bda"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/contao/installation-bundle/zipball/a20b3edcfceab7710379c3a74833a9c9c5b40bda",
-                "reference": "a20b3edcfceab7710379c3a74833a9c9c5b40bda",
-                "shasum": ""
-            },
-            "require": {
-                "contao/core-bundle": "self.version",
-                "php": "^7.1",
-                "sensio/distribution-bundle": "^5.0",
-                "sensiolabs/ansi-to-html": "^1.1",
-                "symfony/filesystem": "^3.4",
-                "symfony/framework-bundle": "^3.4"
-            },
-            "conflict": {
-                "contao/core": "*",
-                "contao/manager-plugin": "<2.0 || >=3.0"
-            },
-            "require-dev": {
-                "contao/manager-plugin": "^2.0",
-                "friendsofphp/php-cs-fixer": "^2.6",
-                "leofeyer/optimize-native-functions-fixer": "^1.0",
-                "php-http/guzzle6-adapter": "^1.1",
-                "php-http/message-factory": "^1.0.2",
-                "phpunit/phpunit": "^6.1",
-                "satooshi/php-coveralls": "^1.0",
-                "symfony/phpunit-bridge": "^2.8|^3.0"
-            },
-            "type": "contao-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-4.5": "4.5.x-dev"
-                },
-                "contao-manager-plugin": "Contao\\InstallationBundle\\ContaoManager\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Contao\\InstallationBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Leo Feyer",
-                    "homepage": "https://github.com/leofeyer"
-                }
-            ],
-            "description": "Required to install and update Contao 4",
-            "time": "2018-02-14T14:09:42+00:00"
-        },
-        {
-            "name": "contao/manager-bundle",
-            "version": "4.5.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/contao/manager-bundle.git",
-                "reference": "fe7bfb964ff589c0c75ddbd9a50aa5573c3710c8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/contao/manager-bundle/zipball/fe7bfb964ff589c0c75ddbd9a50aa5573c3710c8",
-                "reference": "fe7bfb964ff589c0c75ddbd9a50aa5573c3710c8",
-                "shasum": ""
-            },
-            "require": {
-                "contao/core-bundle": "4.5.*",
-                "contao/installation-bundle": "4.5.*",
-                "contao/manager-plugin": "^2.2",
-                "doctrine/doctrine-bundle": "^1.6",
-                "friendsofsymfony/http-cache": "^2.0",
-                "lexik/maintenance-bundle": "^2.1.3",
-                "nelmio/security-bundle": "^2.2",
-                "php": "^7.1",
-                "php-http/guzzle6-adapter": "^1.1",
-                "sensio/framework-extra-bundle": "^5.0",
-                "symfony/monolog-bundle": "^3.1",
-                "symfony/swiftmailer-bundle": "^3.1.5",
-                "symfony/symfony": "3.4.*",
-                "terminal42/header-replay-bundle": "^1.4.2"
-            },
-            "require-dev": {
-                "composer/composer": "^1.0",
-                "contao/test-case": "^1.1",
-                "friendsofphp/php-cs-fixer": "^2.6",
-                "leofeyer/optimize-native-functions-fixer": "^1.0",
-                "ocramius/proxy-manager": "^2.0",
-                "php-http/message-factory": "^1.0.2",
-                "phpunit/phpunit": "^6.1",
-                "satooshi/php-coveralls": "^1.0",
-                "symfony/console": "^3.3.7",
-                "symfony/phpunit-bridge": "^3.3"
-            },
-            "bin": [
-                "bin/contao-api",
-                "bin/contao-console"
-            ],
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-4.5": "4.5.x-dev"
-                },
-                "contao-manager-plugin": "Contao\\ManagerBundle\\ContaoManager\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Contao\\ManagerBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas Schempp",
-                    "homepage": "https://github.com/aschempp"
-                }
-            ],
-            "description": "Contao 4 manager bundle",
-            "time": "2018-02-14T10:05:57+00:00"
-        },
-        {
-            "name": "contao/manager-plugin",
-            "version": "2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/contao/manager-plugin.git",
-                "reference": "2c20daeb36a9ef94c83e45c7d01538988326ab54"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/contao/manager-plugin/zipball/2c20daeb36a9ef94c83e45c7d01538988326ab54",
-                "reference": "2c20daeb36a9ef94c83e45c7d01538988326ab54",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6|^7.0",
-                "symfony/config": "^2.8|^3.0",
-                "symfony/dependency-injection": "^2.8|^3.0",
-                "symfony/filesystem": "^2.8|^3.0",
-                "symfony/http-kernel": "^2.8|^3.0",
-                "symfony/routing": "^2.8|^3.0"
-            },
-            "require-dev": {
-                "contao/core-bundle": "^4.3.3",
-                "friendsofphp/php-cs-fixer": "^2.0",
-                "phpunit/phpunit": "^5.7",
-                "satooshi/php-coveralls": "^1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-2.2": "2.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Contao\\ManagerPlugin\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas Schempp",
-                    "homepage": "https://github.com/aschempp"
-                }
-            ],
-            "description": "Contao 4 manager plugin",
-            "time": "2017-12-27T16:43:51+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -2963,32 +2723,43 @@
         },
         {
             "name": "heimrichhannot/contao-filter-bundle",
-            "version": "1.0.0-beta1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heimrichhannot/contao-filter-bundle.git",
-                "reference": "6518ef530a80bce0e7bfdfc3d33912f26170c999"
+                "reference": "1a697e0f1e0a9ff36ec16c9269f8208258be44b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heimrichhannot/contao-filter-bundle/zipball/6518ef530a80bce0e7bfdfc3d33912f26170c999",
-                "reference": "6518ef530a80bce0e7bfdfc3d33912f26170c999",
+                "url": "https://api.github.com/repos/heimrichhannot/contao-filter-bundle/zipball/1a697e0f1e0a9ff36ec16c9269f8208258be44b1",
+                "reference": "1a697e0f1e0a9ff36ec16c9269f8208258be44b1",
                 "shasum": ""
             },
             "require": {
                 "codefog/contao-haste": "^4.18",
-                "contao/manager-bundle": "^4.4",
+                "contao/core-bundle": "^4.4",
                 "heimrichhannot/contao-multi_column_editor": "^1.4",
                 "heimrichhannot/contao-utils-bundle": "^1.0",
                 "php": "^7.1",
+                "symfony/framework-bundle": "^3.4",
                 "twig/extensions": "^1.5"
+            },
+            "conflict": {
+                "contao/core": "*",
+                "contao/manager-plugin": "<2.0 || >=3.0"
             },
             "require-dev": {
                 "contao/manager-plugin": "^2.0",
                 "contao/test-case": "^1.1",
                 "friendsofphp/php-cs-fixer": "^2.2",
-                "phpunit/phpunit": "^6.5",
-                "satooshi/php-coveralls": "^1.0"
+                "php-http/guzzle6-adapter": "^1.1",
+                "php-http/message-factory": "^1.0.2",
+                "phpunit/php-token-stream": "^1.4|^2.0|^3.0",
+                "phpunit/phpunit": "^6.1",
+                "phpunit/phpunit-mock-objects": "^4.0|^5.0",
+                "satooshi/php-coveralls": "^2.0",
+                "symfony/form": "~3.4|~4.0",
+                "symfony/phpunit-bridge": "^3.2"
             },
             "type": "contao-bundle",
             "extra": {
@@ -3013,7 +2784,7 @@
                 "LGPL-3.0-or-later"
             ],
             "description": "A generic contao filter.",
-            "time": "2018-03-05T11:01:48+00:00"
+            "time": "2018-03-06T09:59:28+00:00"
         },
         {
             "name": "heimrichhannot/contao-formhybrid",
@@ -3084,16 +2855,16 @@
         },
         {
             "name": "heimrichhannot/contao-formhybrid_list",
-            "version": "5.3.0",
+            "version": "5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heimrichhannot/contao-formhybrid_list.git",
-                "reference": "95124615bc1cc6743007b5197937dad51ca30221"
+                "reference": "bf1419a37ea1c8cec1f06bf5947122b6a0d5a481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heimrichhannot/contao-formhybrid_list/zipball/95124615bc1cc6743007b5197937dad51ca30221",
-                "reference": "95124615bc1cc6743007b5197937dad51ca30221",
+                "url": "https://api.github.com/repos/heimrichhannot/contao-formhybrid_list/zipball/bf1419a37ea1c8cec1f06bf5947122b6a0d5a481",
+                "reference": "bf1419a37ea1c8cec1f06bf5947122b6a0d5a481",
                 "shasum": ""
             },
             "require": {
@@ -3146,7 +2917,7 @@
                 "list",
                 "module"
             ],
-            "time": "2018-03-06T07:50:56+00:00"
+            "time": "2018-03-06T07:58:30+00:00"
         },
         {
             "name": "heimrichhannot/contao-frontendedit",
@@ -3330,16 +3101,16 @@
         },
         {
             "name": "heimrichhannot/contao-list-bundle",
-            "version": "1.0.1-beta",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heimrichhannot/contao-list-bundle.git",
-                "reference": "6df2e7e3fd9e03d2d2da42062f8da06948952ca7"
+                "reference": "b2a8d4a03c4410e69d1134c555953994d3894db6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heimrichhannot/contao-list-bundle/zipball/6df2e7e3fd9e03d2d2da42062f8da06948952ca7",
-                "reference": "6df2e7e3fd9e03d2d2da42062f8da06948952ca7",
+                "url": "https://api.github.com/repos/heimrichhannot/contao-list-bundle/zipball/b2a8d4a03c4410e69d1134c555953994d3894db6",
+                "reference": "b2a8d4a03c4410e69d1134c555953994d3894db6",
                 "shasum": ""
             },
             "require": {
@@ -3347,7 +3118,7 @@
                 "heimrichhannot-contao-components/imagesloaded": "4.1.*",
                 "heimrichhannot-contao-components/jscroll": "2.3.*",
                 "heimrichhannot-contao-components/masonry": ">=4.2, <=4.3",
-                "heimrichhannot/contao-filter-bundle": "^1.0-beta",
+                "heimrichhannot/contao-filter-bundle": "dev-master",
                 "heimrichhannot/contao-request": "^1.2",
                 "heimrichhannot/contao-utils-bundle": "^1.0",
                 "php": "~7.1",
@@ -3383,7 +3154,7 @@
                 "LGPL-3.0-or-later"
             ],
             "description": "This bundle offers a generic list module to use with arbitrary contao entities containing standard list handling like pagination, sorting, and filtering.",
-            "time": "2018-02-28T09:18:54+00:00"
+            "time": "2018-03-05T13:01:26+00:00"
         },
         {
             "name": "heimrichhannot/contao-modal",
@@ -4994,67 +4765,6 @@
             "time": "2017-12-01T12:05:37+00:00"
         },
         {
-            "name": "lexik/maintenance-bundle",
-            "version": "v2.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lexik/LexikMaintenanceBundle.git",
-                "reference": "3a3e916776934a95834235e4a1d71e4595d515f5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikMaintenanceBundle/zipball/3a3e916776934a95834235e4a1d71e4595d515f5",
-                "reference": "3a3e916776934a95834235e4a1d71e4595d515f5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9",
-                "symfony/framework-bundle": "~2.7|~3.0|^4.0",
-                "symfony/translation": "~2.7|~3.0|^4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.7.11",
-                "symfony/phpunit-bridge": "~2.7|~3.0|^4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Lexik\\Bundle\\MaintenanceBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dev Lexik",
-                    "email": "dev@lexik.fr"
-                },
-                {
-                    "name": "Gilles Gauthier",
-                    "email": "g.gauthier@lexik.fr"
-                },
-                {
-                    "name": "Djuri Baars",
-                    "email": "info@djurict.nl"
-                }
-            ],
-            "description": "This bundle allows you to place your website in maintenance mode by calling two commands from your console.",
-            "homepage": "https://github.com/lexik/LexikMaintenanceBundle",
-            "keywords": [
-                "Symfony2",
-                "bundle",
-                "maintenance"
-            ],
-            "time": "2018-02-14T10:18:33+00:00"
-        },
-        {
             "name": "matthiasmullie/minify",
             "version": "1.3.59",
             "source": {
@@ -5210,84 +4920,6 @@
             "time": "2018-01-15T00:49:33+00:00"
         },
         {
-            "name": "monolog/monolog",
-            "version": "1.23.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "psr/log": "~1.0"
-            },
-            "provide": {
-                "psr/log-implementation": "1.0.0"
-            },
-            "require-dev": {
-                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
-                "doctrine/couchdb": "~1.0@dev",
-                "graylog2/gelf-php": "~1.0",
-                "jakub-onderka/php-parallel-lint": "0.9",
-                "php-amqplib/php-amqplib": "~2.4",
-                "php-console/php-console": "^3.1.3",
-                "phpunit/phpunit": "~4.5",
-                "phpunit/phpunit-mock-objects": "2.3.0",
-                "ruflin/elastica": ">=0.90 <3.0",
-                "sentry/sentry": "^0.13",
-                "swiftmailer/swiftmailer": "^5.3|^6.0"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-                "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-                "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "sentry/sentry": "Allow sending log messages to a Sentry server"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Monolog\\": "src/Monolog"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
-                }
-            ],
-            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-            "homepage": "http://github.com/Seldaek/monolog",
-            "keywords": [
-                "log",
-                "logging",
-                "psr-3"
-            ],
-            "time": "2017-06-19T01:22:40+00:00"
-        },
-        {
             "name": "nelmio/cors-bundle",
             "version": "1.5.4",
             "source": {
@@ -5344,67 +4976,6 @@
                 "crossdomain"
             ],
             "time": "2017-12-11T18:41:54+00:00"
-        },
-        {
-            "name": "nelmio/security-bundle",
-            "version": "2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nelmio/NelmioSecurityBundle.git",
-                "reference": "e895e0598d690eca5eff117d68c78fafc0547fcb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioSecurityBundle/zipball/e895e0598d690eca5eff117d68c78fafc0547fcb",
-                "reference": "e895e0598d690eca5eff117d68c78fafc0547fcb",
-                "shasum": ""
-            },
-            "require": {
-                "paragonie/random_compat": "~1.0|~2.0",
-                "symfony/framework-bundle": "~2.3|~3.0|~4.0",
-                "symfony/security": "~2.3|~3.0|~4.0",
-                "ua-parser/uap-php": "^3.4.4"
-            },
-            "require-dev": {
-                "doctrine/cache": "^1.0",
-                "psr/cache": "^1.0",
-                "symfony/phpunit-bridge": "^3.2|~4.0",
-                "symfony/yaml": "~2.3|~3.0|~4.0",
-                "twig/twig": "^1.24"
-            },
-            "suggest": {
-                "ua-parser/uap-php": "To allow adapt CSP directives given the user-agent"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Nelmio\\SecurityBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nelmio",
-                    "homepage": "http://nelm.io"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://github.com/nelmio/NelmioSecurityBundle/contributors"
-                }
-            ],
-            "description": "Extra security-related features for Symfony: signed/encrypted cookies, HTTPS/SSL/HSTS handling, cookie session storage, ...",
-            "keywords": [
-                "security"
-            ],
-            "time": "2018-02-26T10:28:52+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -6690,58 +6261,6 @@
             "time": "2017-08-15T07:59:33+00:00"
         },
         {
-            "name": "sensio/distribution-bundle",
-            "version": "v5.0.21",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "eb6266b3b472e4002538610b28a0a04bcf94891a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/eb6266b3b472e4002538610b28a0a04bcf94891a",
-                "reference": "eb6266b3b472e4002538610b28a0a04bcf94891a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9",
-                "sensiolabs/security-checker": "~3.0|~4.0",
-                "symfony/class-loader": "~2.3|~3.0",
-                "symfony/config": "~2.3|~3.0",
-                "symfony/dependency-injection": "~2.3|~3.0",
-                "symfony/filesystem": "~2.3|~3.0",
-                "symfony/http-kernel": "~2.3|~3.0",
-                "symfony/process": "~2.3|~3.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Sensio\\Bundle\\DistributionBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Base bundle for Symfony Distributions",
-            "keywords": [
-                "configuration",
-                "distribution"
-            ],
-            "time": "2017-08-25T16:55:44+00:00"
-        },
-        {
             "name": "sensio/framework-extra-bundle",
             "version": "v5.1.6",
             "source": {
@@ -6809,95 +6328,6 @@
                 "controllers"
             ],
             "time": "2018-02-14T08:40:54+00:00"
-        },
-        {
-            "name": "sensiolabs/ansi-to-html",
-            "version": "v1.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sensiolabs/ansi-to-html.git",
-                "reference": "8b5d787dca714bd98dd770c078d76528320a8286"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/ansi-to-html/zipball/8b5d787dca714bd98dd770c078d76528320a8286",
-                "reference": "8b5d787dca714bd98dd770c078d76528320a8286",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "suggest": {
-                "twig/twig": "Provides nice templating features"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "SensioLabs\\AnsiConverter": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "A library to convert a text with ANSI codes to HTML",
-            "time": "2017-05-02T00:53:29+00:00"
-        },
-        {
-            "name": "sensiolabs/security-checker",
-            "version": "v4.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "dc270d5fec418cc6ac983671dba5d80ffaffb142"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/dc270d5fec418cc6ac983671dba5d80ffaffb142",
-                "reference": "dc270d5fec418cc6ac983671dba5d80ffaffb142",
-                "shasum": ""
-            },
-            "require": {
-                "composer/ca-bundle": "^1.0",
-                "symfony/console": "~2.7|~3.0|~4.0"
-            },
-            "bin": [
-                "security-checker"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "SensioLabs\\Security": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien.potencier@gmail.com"
-                }
-            ],
-            "description": "A security checker for your composer.lock",
-            "time": "2018-02-28T22:10:01+00:00"
         },
         {
             "name": "simplepie/simplepie",
@@ -7013,69 +6443,6 @@
                 "mailer"
             ],
             "time": "2017-09-30T22:39:41+00:00"
-        },
-        {
-            "name": "symfony/monolog-bundle",
-            "version": "v3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "8781649349fe418d51d194f8c9d212c0b97c40dd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/8781649349fe418d51d194f8c9d212c0b97c40dd",
-                "reference": "8781649349fe418d51d194f8c9d212c0b97c40dd",
-                "shasum": ""
-            },
-            "require": {
-                "monolog/monolog": "~1.22",
-                "php": ">=5.3.2",
-                "symfony/config": "~2.7|~3.0|~4.0",
-                "symfony/dependency-injection": "~2.7|~3.0|~4.0",
-                "symfony/http-kernel": "~2.7|~3.0|~4.0",
-                "symfony/monolog-bridge": "~2.7|~3.0|~4.0"
-            },
-            "require-dev": {
-                "symfony/console": "~2.3|~3.0|~4.0",
-                "symfony/phpunit-bridge": "^3.3|^4.0",
-                "symfony/yaml": "~2.3|~3.0|~4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Bundle\\MonologBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony MonologBundle",
-            "homepage": "http://symfony.com",
-            "keywords": [
-                "log",
-                "logging"
-            ],
-            "time": "2018-03-05T14:51:36+00:00"
         },
         {
             "name": "symfony/polyfill-apcu",
@@ -8084,56 +7451,6 @@
             "time": "2018-03-03T16:23:01+00:00"
         },
         {
-            "name": "ua-parser/uap-php",
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ua-parser/uap-php.git",
-                "reference": "c8b31e5b8215a0c6dab4dd304050526a1907b17c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ua-parser/uap-php/zipball/c8b31e5b8215a0c6dab4dd304050526a1907b17c",
-                "reference": "c8b31e5b8215a0c6dab4dd304050526a1907b17c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/console": "^2.0 || ^3.0 || ^4.0",
-                "symfony/filesystem": "^2.0 || ^3.0 || ^4.0",
-                "symfony/finder": "^2.0 || ^3.0 || ^4.0",
-                "symfony/yaml": "^2.0 || ^3.0 || ^4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0"
-            },
-            "bin": [
-                "bin/uaparser"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "UAParser\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lars Strojny",
-                    "email": "lars@strojny.net"
-                },
-                {
-                    "name": "Dave Olsen",
-                    "email": "dmolsen@gmail.com"
-                }
-            ],
-            "description": "A multi-language port of Browserscope's user agent parser.",
-            "time": "2017-12-13T11:03:50+00:00"
-        },
-        {
             "name": "wa72/htmlpagedom",
             "version": "v1.3.0",
             "source": {
@@ -8348,6 +7665,58 @@
                 "versioning"
             ],
             "time": "2016-08-30T16:08:34+00:00"
+        },
+        {
+            "name": "contao/manager-plugin",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contao/manager-plugin.git",
+                "reference": "2c20daeb36a9ef94c83e45c7d01538988326ab54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contao/manager-plugin/zipball/2c20daeb36a9ef94c83e45c7d01538988326ab54",
+                "reference": "2c20daeb36a9ef94c83e45c7d01538988326ab54",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6|^7.0",
+                "symfony/config": "^2.8|^3.0",
+                "symfony/dependency-injection": "^2.8|^3.0",
+                "symfony/filesystem": "^2.8|^3.0",
+                "symfony/http-kernel": "^2.8|^3.0",
+                "symfony/routing": "^2.8|^3.0"
+            },
+            "require-dev": {
+                "contao/core-bundle": "^4.3.3",
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "phpunit/phpunit": "^5.7",
+                "satooshi/php-coveralls": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.2": "2.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contao\\ManagerPlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Schempp",
+                    "homepage": "https://github.com/aschempp"
+                }
+            ],
+            "description": "Contao 4 manager plugin",
+            "time": "2017-12-27T16:43:51+00:00"
         },
         {
             "name": "contao/test-case",
@@ -10099,8 +9468,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "heimrichhannot/contao-list-bundle": 10,
-        "heimrichhannot/contao-filter-bundle": 10
+        "heimrichhannot/contao-list-bundle": 20,
+        "heimrichhannot/contao-filter-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
