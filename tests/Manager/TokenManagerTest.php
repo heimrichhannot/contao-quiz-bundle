@@ -11,7 +11,6 @@ namespace HeimrichHannot\QuizBundle\Test\Choice;
 use Contao\Config;
 use Contao\Controller;
 use Contao\CoreBundle\Exception\RedirectResponseException;
-use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
@@ -43,7 +42,6 @@ class TokenManagerTest extends ContaoTestCase
 
         $database = $this->createMock(Connection::class);
         $container = $this->mockContainer();
-        $container->set('kernel', $this->createMock(ContaoKernel::class));
         $container->set('request_stack', $requestStack);
         $container->set('router', $router);
         $container->set('session', new Session(new MockArraySessionStorage()));

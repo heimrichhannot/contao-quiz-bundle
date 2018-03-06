@@ -8,7 +8,6 @@
 
 namespace HeimrichHannot\QuizBundle\Test\Entity;
 
-use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
@@ -26,7 +25,6 @@ class QuizSessionTest extends ContaoTestCase
         }
 
         $container = $this->mockContainer();
-        $container->set('kernel', $this->createMock(ContaoKernel::class));
         $container->set('session', new Session(new MockArraySessionStorage()));
         System::setContainer($container);
     }

@@ -9,7 +9,6 @@
 namespace HeimrichHannot\QuizBundle\Test\Manager;
 
 use Contao\ContentModel;
-use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
@@ -38,7 +37,6 @@ class QuizEvaluationManagerTest extends ContaoTestCase
         }
 
         $container = $this->mockContainer();
-        $container->set('kernel', $this->createMock(ContaoKernel::class));
         $container->set('session', new Session(new MockArraySessionStorage()));
 
         // twig

@@ -11,7 +11,6 @@ namespace HeimrichHannot\QuizBundle\Test\Choice;
 use Contao\Config;
 use Contao\ContentModel;
 use Contao\FilesModel;
-use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\Module;
 use Contao\StringUtil;
@@ -21,7 +20,6 @@ use Doctrine\DBAL\Connection;
 use HeimrichHannot\QuizBundle\Manager\ModelManager;
 use HeimrichHannot\QuizBundle\Model\QuizAnswerModel;
 use HeimrichHannot\UtilsBundle\Container\ContainerUtil;
-use Monolog\Logger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -63,7 +61,7 @@ class ModelManagerTest extends ContaoTestCase
         $database = $this->createMock(Connection::class);
         $container->set('database_connection', $database);
 
-        $container->set('monolog.logger.contao', new Logger('test'));
+        $container->set('monolog.logger.contao', new \Symfony\Component\HttpKernel\Tests\Logger());
 
         // twig
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../src/Resources/views/');
@@ -80,7 +78,6 @@ class ModelManagerTest extends ContaoTestCase
         $container->set('huh.utils.container', $utilsContainer);
 
         $container->setParameter('secret', Config::class);
-        $container->set('kernel', $this->createMock(ContaoKernel::class));
         $container->set('session', new Session(new MockArraySessionStorage()));
         System::setContainer($container);
     }

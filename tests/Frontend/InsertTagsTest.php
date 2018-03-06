@@ -10,7 +10,6 @@ namespace HeimrichHannot\QuizBundle\Test\Frontend;
 
 use Contao\Config;
 use Contao\Controller;
-use Contao\ManagerBundle\HttpKernel\ContaoKernel;
 use Contao\Model;
 use Contao\ModuleModel;
 use Contao\System;
@@ -22,9 +21,9 @@ use HeimrichHannot\QuizBundle\Manager\QuizQuestionManager;
 use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use HeimrichHannot\QuizBundle\Model\QuizQuestionModel;
 use HeimrichHannot\Request\Request;
-use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Tests\Logger;
 
 class InsertTagsTest extends ContaoTestCase
 {
@@ -53,11 +52,10 @@ class InsertTagsTest extends ContaoTestCase
 
         $database = $this->createMock(Connection::class);
         $container = $this->mockContainer();
-        $container->set('kernel', $this->createMock(ContaoKernel::class));
         $container->set('session', new Session(new MockArraySessionStorage()));
         $container->set('database_connection', $database);
         $container->set('huh.quiz.question.manager', $quizQuestionManager);
-        $container->set('monolog.logger.contao', new Logger('test'));
+        $container->set('monolog.logger.contao', new Logger());
         $container->set('contao.framework', $this->mockContaoFramework($this->createMockAdapter()));
         $container->setParameter('secret', Config::class);
 
