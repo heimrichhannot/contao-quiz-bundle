@@ -17,7 +17,6 @@ use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\ListBundle\HeimrichHannotContaoListBundle;
 use HeimrichHannot\QuizBundle\ContaoManager\Plugin;
 use HeimrichHannot\QuizBundle\HeimrichHannotContaoQuizBundle;
-use PHPUnit\Framework\MockObject\Matcher\Invocation;
 
 /**
  * Test the plugin class
@@ -79,12 +78,12 @@ class PluginTest extends ContaoTestCase
     /**
      * Mocks the plugin loader.
      *
-     * @param Invocation $expects
-     * @param array      $plugins
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expects
+     * @param array                                              $plugins
      *
      * @return PluginLoader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function mockPluginLoader(Invocation $expects, array $plugins = [])
+    private function mockPluginLoader(\PHPUnit_Framework_MockObject_Matcher_InvokedCount $expects, array $plugins = [])
     {
         $pluginLoader = $this->createMock(PluginLoader::class);
         $pluginLoader->expects($expects)->method('getInstancesOf')->with(PluginLoader::EXTENSION_PLUGINS)->willReturn($plugins);
