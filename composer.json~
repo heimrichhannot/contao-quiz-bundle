@@ -9,6 +9,7 @@
     "heimrichhannot/contao-submissions_creator": "^3.0",
     "heimrichhannot/contao-list-bundle": "^1.0-beta"
   },
+  "minimum-stability": "beta",
   "require-dev": {
     "contao/test-case": "^1.1",
     "contao/manager-plugin": "^2.0",
