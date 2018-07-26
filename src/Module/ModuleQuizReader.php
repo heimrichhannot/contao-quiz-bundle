@@ -82,6 +82,10 @@ class ModuleQuizReader extends Module
             System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
         }
 
+        if (System::getContainer()->get('huh.utils.container')->isBundleActive('HeimrichHannotContaoHeadBundle')) {
+            System::getContainer()->get('huh.head.tag.link_canonical')->setContent(System::getContainer()->get('huh.utils.url')->getCurrentUrl(['skipParams' => 'token']));
+        }
+
         return parent::generate();
     }
 
