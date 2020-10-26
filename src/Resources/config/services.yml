@@ -1,7 +1,11 @@
 parameters:
   huh.quiz.backend.content-table: tl_quiz_question
   huh.quiz.backend.content-ptable: tl_quiz
+
 services:
+  _defaults:
+    public: true
+
   huh.quiz.backend.content:
       class: HeimrichHannot\QuizBundle\Backend\Content
       arguments:
