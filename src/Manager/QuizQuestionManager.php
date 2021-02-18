@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Heimrich & Hannot GmbH
+ * Copyright (c) 2021 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
@@ -18,8 +18,6 @@ class QuizQuestionManager extends Manager
 {
     /**
      * Constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
@@ -82,7 +80,11 @@ class QuizQuestionManager extends Manager
         $this->session->addCurrentQuestionToSession($question->id);
 
         // item count text
-        $templateData['itemsFoundText'] = System::getContainer()->get('translator')->transChoice('huh.quiz.count.text.default', $count, ['%current%' => count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)), '%count%' => $count]);
+        $templateData['itemsFoundText'] = System::getContainer()->get('translator')
+            ->transChoice('huh.quiz.count.text.default', $count, [
+                '%current%' => \count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)),
+                '%count%' => $count, ]
+            );
         $templateData['text'] = $quiz->text;
         $templateData['title'] = $quiz->title;
         $templateData['question'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($question, $question->question, QuizQuestionModel::getTable(), $question->cssClass, $imgSize);

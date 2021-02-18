@@ -16,8 +16,9 @@ services:
         - "@contao.framework"
   huh.quiz.question.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizQuestionManager
-      arguments:
-        - "@contao.framework"
+      public: true
+      autowire: true
+  HeimrichHannot\QuizBundle\Manager\QuizQuestionManager: "@huh.quiz.question.manager"
   huh.quiz.answer.manager:
       class: HeimrichHannot\QuizBundle\Manager\QuizAnswerManager
       arguments:

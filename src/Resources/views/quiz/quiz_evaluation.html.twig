@@ -1,4 +1,4 @@
 <div class="quiz-evaluation">
     <div class="quiz-score">{{ score }}</div>
-    {{ evaluation|raw }}
+    {{ evaluation|default|raw }}
 </div>

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Heimrich & Hannot GmbH
+ * Copyright (c) 2021 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
@@ -18,8 +18,6 @@ class QuizAnswerManager extends Manager
 {
     /**
      * Constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {
@@ -46,8 +44,6 @@ class QuizAnswerManager extends Manager
     /**
      * parse the answer and return twig template as string.
      *
-     * @param QuizAnswerModel $answerModel
-     *
      * @return string
      */
     public function parseAnswer(QuizAnswerModel $answerModel)
@@ -56,7 +52,9 @@ class QuizAnswerManager extends Manager
          * @var \Twig_Environment
          */
         $twig = System::getContainer()->get('twig');
-        $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')->parseModel($answerModel, $answerModel->answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $answerModel->imgSize);
+        $answer = $answerModel->answer ?: $answerModel->title;
+        $templateData['answer'] = System::getContainer()->get('huh.quiz.model.manager')
+            ->parseModel($answerModel, $answer, QuizAnswerModel::getTable(), $answerModel->cssClass, $answerModel->imgSize);
         $templateData['href'] = $this->framework->getAdapter(Url::class)->addQueryString('answer='.$answerModel->id, $this->getUri());
 
         return $twig->render('@HeimrichHannotContaoQuiz/quiz/quiz_answer_item.html.twig', $templateData);
