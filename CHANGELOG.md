@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.0.0-beta7] - 2021-02-22
-- added french translations ([#4], [tjaulin])
+- added french translations (#4, @tjaulin)
 
 ## [1.0.0-beta6] - 2021-02-18
 - fixes exception when no answer text given (now title is used instead)
