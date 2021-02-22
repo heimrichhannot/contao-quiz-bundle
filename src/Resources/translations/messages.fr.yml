@@ -1,0 +1,15 @@
+# count questions text
+huh.quiz.count.text.default: '{0} Pas de question trouvée|{1} Question 1 sur 1|]1,Inf[ Question %current% sur %count%'
+
+# default solving answer
+huh.quiz.answer.solving.correct: '<div class="quiz-answer-solving-correct">Bonne réponse</div>'
+huh.quiz.answer.solving.wrong: '<div class="quiz-answer-solving-false">Mauvaise réponse</div>'
+
+huh.quiz.answer.solving.next: 'Question suivante'
+huh.quiz.answer.solving.score: 'Voir les résultats'
+huh.quiz.answer.score: "{0} Malheureusement, vous avez 0 point.|{1} Vous avez 1/%possibleScore% points.|]1,Inf[ Vous avez %score% sur %possibleScore% points."
+
+# error message
+huh.quiz.error: 'Il y a eu une erreur.'
+huh.quiz.question.error: "La question n'a pas pu être trouvée."
+huh.quiz.answer.error: "La réponse n'a pas pu être trouvée."
