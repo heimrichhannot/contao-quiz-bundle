@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.0-beta8] - 2022-04-28
+- Changed: allow php 8
+
 ## [1.0.0-beta7] - 2021-02-22
 - added french translations (#4, @tjaulin)
 
