@@ -1,14 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2018 Heimrich & Hannot GmbH
+ * Copyright (c) 2022 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Manager;
 
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Model;
 use Contao\System;
 use Haste\Util\Url;
@@ -16,10 +16,7 @@ use HeimrichHannot\QuizBundle\Entity\QuizSession;
 
 abstract class Manager
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    protected $framework;
+    protected ContaoFramework $framework;
 
     /**
      * @var QuizSession
@@ -31,12 +28,7 @@ abstract class Manager
      */
     protected $class;
 
-    /**
-     * Constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
-     */
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
         $this->session = new QuizSession();
@@ -48,7 +40,6 @@ abstract class Manager
      *
      * @param mixed $column
      * @param mixed $value
-     * @param array $options
      *
      * @return Model|null
      */
@@ -61,8 +52,6 @@ abstract class Manager
     }
 
     /**
-     * @param array $options
-     *
      * @return Model\Collection|null
      */
     public function findAll(array $options)
@@ -78,7 +67,6 @@ abstract class Manager
      *
      * @param mixed $column
      * @param mixed $value
-     * @param array $options
      *
      * @return \Contao\Model\Collection|Model|null
      */
@@ -174,8 +162,7 @@ abstract class Manager
     }
 
     /**
-     * @param       $pid
-     * @param array $arrOptions
+     * @param $pid
      *
      * @return int
      */

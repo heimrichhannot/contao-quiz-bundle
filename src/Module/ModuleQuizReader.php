@@ -1,13 +1,15 @@
 <?php
 
 /*
- * Copyright (c) 2018 Heimrich & Hannot GmbH
+ * Copyright (c) 2022 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Module;
 
+use Contao\BackendTemplate;
+use Contao\Config;
 use Contao\Controller;
 use Contao\Module;
 use Contao\System;
@@ -15,7 +17,6 @@ use Haste\Util\Url;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use HeimrichHannot\Request\Request;
-use Patchwork\Utf8;
 
 class ModuleQuizReader extends Module
 {
@@ -44,19 +45,19 @@ class ModuleQuizReader extends Module
     public function generate()
     {
         if (TL_MODE === 'BE') {
-            $objTemplate = new \BackendTemplate('be_wildcard');
-            $objTemplate->wildcard = '### '.Utf8::strtoupper($GLOBALS['TL_LANG']['FMD'][$this->type][0]).' ###';
+            $objTemplate = new BackendTemplate('be_wildcard');
+            $objTemplate->wildcard = '### '.strtoupper($GLOBALS['TL_LANG']['FMD'][$this->type][0]).' ###';
             $objTemplate->title = $this->headline;
             $objTemplate->id = $this->id;
             $objTemplate->link = $this->name;
-            $objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id='.$this->id;
+            $objTemplate->href = 'contao?do=themes&amp;table=tl_module&amp;act=edit&amp;id='.$this->id;
 
             return $objTemplate->parse();
         }
         $this->session = new QuizSession();
 
         // Set the item from the auto_item parameter
-        if (!isset($_GET['items']) && \Config::get('useAutoItem') && isset($_GET['auto_item'])) {
+        if (!isset($_GET['items']) && Config::get('useAutoItem') && isset($_GET['auto_item'])) {
             Request::setGet('items', Request::getGet('auto_item'));
         }
 

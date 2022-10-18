@@ -1,14 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2021 Heimrich & Hannot GmbH
+ * Copyright (c) 2022 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
 
 namespace HeimrichHannot\QuizBundle\Manager;
 
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Model\QuizModel;
@@ -19,7 +19,7 @@ class QuizQuestionManager extends Manager
     /**
      * Constructor.
      */
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         parent::__construct($framework);
         $this->class = QuizQuestionModel::class;
@@ -81,9 +81,10 @@ class QuizQuestionManager extends Manager
 
         // item count text
         $templateData['itemsFoundText'] = System::getContainer()->get('translator')
-            ->transChoice('huh.quiz.count.text.default', $count, [
-                '%current%' => \count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)),
-                '%count%' => $count, ]
+            ->trans('huh.quiz.count.text.default', [
+                    '%current%' => \count($this->session->getData(QuizSession::USED_QUESTIONS_NAME)),
+                    '%count%' => $count,
+                ]
             );
         $templateData['text'] = $quiz->text;
         $templateData['title'] = $quiz->title;
