@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2024-01-30
+- Fixed: PHP8 warnings
+
 ## [1.0.0] - 2022-10-18
 - Changed: dropped support for php <7.4, contao <4.9, symfony <4.4
 - Fixed: compatibility issues with symfony 5
