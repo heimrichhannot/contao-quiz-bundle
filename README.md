@@ -2,8 +2,6 @@
 
 [![](https://img.shields.io/packagist/v/heimrichhannot/contao-quiz-bundle.svg)](https://packagist.org/packages/heimrichhannot/contao-quiz-bundle)
 ![](https://img.shields.io/packagist/dt/heimrichhannot/contao-quiz-bundle.svg)
-[![](https://img.shields.io/travis/heimrichhannot/contao-quiz-bundle/master.svg)](https://travis-ci.org/heimrichhannot/contao-quiz-bundle/)
-[![](https://img.shields.io/coveralls/heimrichhannot/contao-quiz-bundle/master.svg)](https://coveralls.io/github/heimrichhannot/contao-quiz-bundle)
 
 This bundle offers a simple quiz with submission (if needed).
 
