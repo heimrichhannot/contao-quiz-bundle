@@ -11,9 +11,11 @@ namespace HeimrichHannot\QuizBundle\Module;
 use Contao\BackendTemplate;
 use Contao\Config;
 use Contao\Controller;
+use Contao\Input;
 use Contao\Module;
 use Contao\System;
 use Haste\Util\Url;
+use HeimrichHannot\HeadBundle\Manager\HtmlHeadTagManager;
 use HeimrichHannot\QuizBundle\Entity\QuizSession;
 use HeimrichHannot\QuizBundle\Manager\TokenManager;
 use HeimrichHannot\Request\Request;
@@ -57,8 +59,9 @@ class ModuleQuizReader extends Module
         $this->session = new QuizSession();
 
         // Set the item from the auto_item parameter
-        if (!isset($_GET['items']) && Config::get('useAutoItem') && isset($_GET['auto_item'])) {
-            Request::setGet('items', Request::getGet('auto_item'));
+        if (!isset($_GET['items']) && isset($_GET['auto_item']) && Config::get('useAutoItem'))
+        {
+            Input::setGet('items', Input::get('auto_item'));
         }
 
         if ($this->singleQuiz) {
@@ -71,16 +74,22 @@ class ModuleQuizReader extends Module
             $this->quiz = $this->quizArchive;
         }
 
+        $tokenManager = System::getContainer()->get('huh.quiz.token.manager');
         if (Request::hasGet('token')) {
             $this->token = Request::getGet('token');
-            $data = System::getContainer()->get('huh.quiz.token.manager')->getDataFromJwtToken($this->token);
+            $data = $tokenManager->getDataFromJwtToken($this->token);
             if (!$data->quizId) {
-                $token = System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
+                $token = $tokenManager->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
                 $url = System::getContainer()->get('contao.framework')->getAdapter(Url::class)->addQueryString('token='.$token, System::getContainer()->get('request_stack')->getCurrentRequest()->getUri());
                 System::getContainer()->get('contao.framework')->getAdapter(Controller::class)->redirect($url);
             }
         } else {
-            System::getContainer()->get('huh.quiz.token.manager')->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
+            $tokenManager->addDataToJwtToken($this->token, $this->quiz, TokenManager::QUIZ_NAME);
+        }
+
+        if (System::getContainer()->has(HtmlHeadTagManager::class)) {
+            $headTagManager = System::getContainer()->get(HtmlHeadTagManager::class);
+
         }
 
         if (System::getContainer()->get('huh.utils.container')->isBundleActive('HeimrichHannotContaoHeadBundle')) {

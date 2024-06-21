@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2024-06-21
+- Fixed: incorrect auto_item handling
+
 ## [1.0.1] - 2024-01-30
 - Fixed: PHP8 warnings
 
